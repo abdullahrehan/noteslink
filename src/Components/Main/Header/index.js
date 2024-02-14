@@ -18,7 +18,7 @@ function Index({setOpenMenu}) {
             </div>
           </div>
           <div className="text-2xl font-medium center text-white">
-            NotesLink
+            NotesLink 1
           </div>
         </div>
         <div className="bg-blue-00 flex ">
