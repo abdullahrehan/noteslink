@@ -36,12 +36,12 @@ function index({openMenu}) {
     {
       name: "Deleted Files",
       icon: <img src={recycleBinIcon} className="w-[30px]" />,
-      path: "/",
+      path: "/deletefiles",
     },
     {
       name: "Service Center",
       icon: <img src={ServiceCenter} className="w-[28px]" />,
-      path: "/",
+      path: "/service-center",
     },
     {
       name: "Storage",
@@ -51,7 +51,7 @@ function index({openMenu}) {
   ];
 
   return (
-    <div className="bg-[#2D2D2D] h-full pt-2 pb-2 rounded-r-[5px] flex flex-col">
+    <div className=" h-full w-full pt-2 pb-2 rounded-r-[5px] flex flex-col transition-all delay-700 duration-300 ease-in-out ">
       <div className="h-1/2 w-full gap-2 flex flex-col items-center pt-[6px]">
         {menuIcons.map((data) => (
           <MenuButton name={data.name} icon={data.icon} path={data.path} openMenu={openMenu}/>

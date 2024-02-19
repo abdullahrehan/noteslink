@@ -15,6 +15,16 @@ code {
   @apply flex justify-center items-center; 
 }
 
+@layer utilities {
+  .minus-65px {
+    height: calc(100% - 65px);
+  }
+  .w-minus-60px{
+    width: calc(100% - 60px);
+
+  }
+}
+
 
 @tailwind base;
 @tailwind components;

@@ -2,7 +2,7 @@ import React from "react";
 
 function index() {
   return (
-    <div>
+    <div className="w-full h-full bg-green-200 center font-medium text-4xl">
       <h4>Settings</h4>
     </div>
   );
