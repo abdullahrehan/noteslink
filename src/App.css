@@ -5,3 +5,7 @@
 body{
   overflow: hidden;
 }
+
+.transition-height {
+  transition: height 0.4s ease-in-out, opacity 0.4s ease-in-out, margin-top 0.4s ease-in-out;
+}

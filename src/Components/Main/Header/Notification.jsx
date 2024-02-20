@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import profile from "../../../Assets/Images/profile.png";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { PiConfetti } from "react-icons/pi";
@@ -13,6 +13,7 @@ import { TiCloudStorage } from "react-icons/ti";
 import { LuFileEdit } from "react-icons/lu";
 import { RiFolderAddLine } from "react-icons/ri";
 import { RxCross2 } from "react-icons/rx";
+import { IoMdNotificationsOutline } from "react-icons/io";
 import "./style.css"
 
 function Notification() {
@@ -31,26 +32,53 @@ function Notification() {
         { icon: <LuSave size={24} />, text: "Saved Change in the mern file (Public)", details: null },
     ]
 
+    const notificationRef = useRef([])
+    const notificationRemove = useRef()
+
+    const closeNotification = (index) => {
+
+        notificationRef.current[index].style.height = "100px"
+        notificationRef.current[index].style.transition = "height 2s"
+        notificationRef.current[index].style.height = "0px"
+        notificationRef.current[index].style.overflow = "hidden"
+        setTimeout(() => { notificationRef.current[index].style.display = "none"; }, 20);
+        notificationRemove.current.style.display = "flex"
+        setTimeout(() => { notificationRemove.current.style.display = "none" }, 1000);
+    }
+
+    const closeAllNotification = () => {
+        notifications.map((data, index) => {
+            notificationRef.current[index].style.transition = "height 2s"
+            notificationRef.current[index].style.height = "0%"
+            notificationRef.current[index].style.overflow = "hidden"
+            notificationRef.current[index].style.display = "none"
+        })
+    }
+
     return (
-        // border-black border-t-[2px] border-r-[2px]
 
         <div className='w-[320px] h-[385px] flex flex-col  gap-[0px]'>
 
 
             <div className='w-full h-full relative shadow-lg center bg-[#EAEAEA]  bg-gradient-to--tr from-[#A9A9A9] to-white rounded-[4px] rounded-[2px] flex flex-col items-center gap-1'>
-                {/* <div class="w-0 h-0  absolute right-0 top-[-14px]
-            border-l-[11px] border-l-transparent
-            border-b-[13px] border-b-[#EAEAEA]
-            border-r-[11px] border-r-transparent">
-                </div> */}
+
                 <div className='w-[98%] h-[98%] bg-white flex items-center flex-col gap-[5px]'>
                     <div className='w-[95%] h-[10%] flex justify-between items-center  border-b-[1px] border-gray-300'>
                         <div className='font-medium textlg'>Notification</div>
-                        <div className='text-sm text-red-400 hover:underline hover:underline-offset-1 hover:cursor-pointer'>Clear All</div>
+                        <div className='text-sm text-red-400 hover:underline hover:underline-offset-1 hover:cursor-pointer ' onClick={closeAllNotification}>Clear All</div>
                     </div>
-                    <div className='w-[98%] h-[90%] flex flex-col gap-[5px] scrollbar  overflow-auto'>
-                        {notifications.map(data =>
-                            <div className='w-[99%] h-auto bg-gradient-to-tr from-[#A9A9A9]  to-white rounded-[4px] center'>
+                    <div className='w-[98%] h-[90%] relative flex justify-start flex-col gap-[5px] scrollbar  overflow-auto'>
+                        <div className='w-[320px] h-[330px] flex flex-col gap-4 absolute top-0 left-0 center bg-red-00'>
+                            <div>
+                                <IoMdNotificationsOutline size={80} color="#9aa3af" />
+                            </div>
+                            <div className='text-xl font-medium text-gray-400'>
+                                Notifications
+                            </div>
+                        </div>
+                        <div className='w-full h-auto text-sm text-red-400 opacity-70 center hidden' ref={notificationRemove}>Notification Removed</div>
+                        {notifications.map((data, index) =>
+                            <div className={`w-[99%] relative transition-all duration-500 ease-in-out bg-gradient-to-tr from-[#A9A9A9]  to-white rounded-[4px] center`} ref={(element) => notificationRef.current[index] = element}>
                                 <div className='w-[98%] h-[94%] hover:bg-[#F4F4F4] hover:cursor-pointer flex  rounded-[2px] bg-white  shadow-md shadow-gray-300'>
                                     <div className='px-[6px] h-[80px] w-[16%] flex center'>
                                         {data.icon}
@@ -58,7 +86,7 @@ function Notification() {
                                     <div className='w-[2px] h-auto bg-gray-400 my-2'></div>
                                     <div className={`p-[10px] w-[74%] bg-red-00 flex flex-col items-start justify-between   text-sm`}>
                                         <div className={`${data.details !== null ? "pb-4" : null} bg-green-00`}> {data.text}</div>
-                                        <div className={`w-full text-end  items-end bg-red-00 text-xs text-medium text-gray-400 flex ${data.details !== null ? "justify-between " : "justify-end" }`}>
+                                        <div className={`w-full text-end  items-end bg-red-00 text-xs text-medium text-gray-400 flex ${data.details !== null ? "justify-between " : "justify-end"}`}>
                                             {data.details !== null ?
                                                 <div className={`flex items-center gap-[5px] `}>
                                                     <div className='w-[20px] h-[20px] center rounded-full bg-red-00'>{data.details.userImage}</div>
@@ -68,11 +96,8 @@ function Notification() {
                                         </div>
                                     </div>
 
-                                    {/* <div className='h-auto pt-2 w-[10%] flex justify-center'></div> */}
-                                    <div className='h-auto pt-2 w-[10%] flex justify-center'>
-                                    
-                                        {/* <BsThreeDotsVertical size={20} /> */}
-                                        <RxCross2 size={16} color='gray' className='hover:cursor-pointer'/>
+                                    <div className='h-auto pt-2 w-[10%] flex justify-center' onClick={() => closeNotification(index)}>
+                                        <RxCross2 size={16} color='gray' className='hover:cursor-pointer' />
                                     </div>
                                 </div>
                             </div>
