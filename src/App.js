@@ -51,7 +51,7 @@ const App = () => {
 
         </div>
 
-        <div className="h-full w-full w-minus-60px">
+        <div className="h-full w-full w-minus-60px flex justify-end items-end">
 
           <Routes>
         
@@ -61,7 +61,6 @@ const App = () => {
             <Route path="/seachfiles" element={<SeachFiles />} />
             
             <Route path="/deletefiles" element={<DeleteFiles />} />
-            {/* <Route path="/complaints" element={<Complaints />} /> */}
             <Route path="/service-center" element={<ServiceCenter />} />
             <Route path="/storage" element={<Storage />} />
 
