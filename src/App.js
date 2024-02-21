@@ -55,7 +55,7 @@ const App = () => {
 
           <Routes>
         
-            <Route path="/" element={<Home />} />
+            <Route path="/noteslink/" element={<Home />} />
             <Route path="/savedfiles" element={<SavedFiles />} />
             <Route path="/publicfiles" element={<PublicFiles />} />
             <Route path="/seachfiles" element={<SeachFiles />} />

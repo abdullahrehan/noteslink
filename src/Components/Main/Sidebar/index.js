@@ -13,7 +13,7 @@ function index({openMenu}) {
     {
       name: "Home",
       icon: <img src={HomeIcon} className="w-[28px]" />,
-      path: "/",
+      path: "/noteslink/",
     },
     {
       name: "Saved Files",
