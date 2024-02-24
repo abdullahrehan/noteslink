@@ -1,0 +1,50 @@
+[
+    {
+        "name":"react",
+        "type":"folder",
+        "content":"react",
+        "parent":"My Folders"
+    },
+    {
+        "name":"Node",
+        "type":"folder",
+        "content":"react",
+        "parent":"My Folders"
+    },
+    {
+        "name":"Express",
+        "type":"folder",
+        "content":"react",
+        "parent":"My Folders"
+    },
+    {
+        "name":"MongoDb",
+        "type":"folder",
+        "content":"react",
+        "parent":"react"
+    },
+    {
+        "name":"Hooks",
+        "type":"folder",
+        "content":"react",
+        "parent":"react"
+    },
+    {
+        "name":"React Router",
+        "type":"folder",
+        "content":"react",
+        "parent":"react"
+    },
+    {
+        "name":"Context Api",
+        "type":"folder",
+        "content":"react",
+        "parent":"react"
+    },
+    {
+        "name":"Redux",
+        "type":"folder",
+        "content":"react",
+        "parent":"react"
+    }
+]
