@@ -28,8 +28,8 @@ code {
   .w-minus-25px{
     width: calc(100% - 25px);
   }
-  .h-minus-110px{
-    height: calc(100% - 110px);
+  .h-minus-150px{
+    height: calc(100% - 150px);
   }
   .h-full-minus-6{
     height: calc(100% - 6px);

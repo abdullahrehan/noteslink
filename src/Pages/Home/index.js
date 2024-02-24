@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import AllTabs from './Components/AllTabs'
 import NavigationFolder from './Components/NavigationFolder'
 import TabFolderIcon from '../../Assets/Images/tabFolderIcon.png'
-
+import FolderPath from './Components/FolderPath'
+import AddFilesButton from './Components/AddFilesButton'
 function Index() {
 
   const [closeFolderPath,setCloseFolderPath] = useState(false)
@@ -21,8 +22,15 @@ function Index() {
 
           </div>
         </div>
-        <div className="w-full h-minus-110px bg-green-00 center">Home</div>
-        <div className="w-full h-[70px] bg-green-00"></div>
+        <div className="w-full h-[45px]"><FolderPath/></div>
+        <div className="w-full h-minus-150px bg-green-00 center">Home</div>
+        <div className="w-full h-[70px] flex bg-green-00 relative justify-between items-end px-2 pb-2">
+          <div className="flex gap-2 text-sm font-medium ">
+            <span>5 Folders</span>
+            <span>Size 1.5Gb</span>
+          </div>
+          <div className="absolute bottom-2 right-2"><AddFilesButton/></div>
+        </div>
       </div>
 
       <div className={`${ closeFolderPath ?  "w-[0px]":"w-[250px]" } transition-all delay-70 duration-400 ease-in-out h-full ${closeFolderPath ? null : "border-l-[1.5px] border-[#B3B3B3]"} `} >
