@@ -4,6 +4,8 @@ import NavigationFolder from './Components/NavigationFolder'
 import TabFolderIcon from '../../Assets/Images/tabFolderIcon.png'
 import FolderPath from './Components/FolderPath'
 import AddFilesButton from './Components/AddFilesButton'
+import AllFolders from './Components/AllFolders'
+
 function Index() {
 
   const [closeFolderPath,setCloseFolderPath] = useState(false)
@@ -23,7 +25,11 @@ function Index() {
           </div>
         </div>
         <div className="w-full h-[45px]"><FolderPath/></div>
-        <div className="w-full h-minus-150px bg-green-00 center">Home</div>
+        <div className="w-full h-minus-150px bg-green-00 px-1 ">
+            <AllFolders/>
+            {/* <Folder type={"public"} name={"React Js"}/> */}
+            {/* <Folder type={"Private"} name={"Node Js"} /> */}
+        </div>
         <div className="w-full h-[70px] flex bg-green-00 relative justify-between items-end px-2 pb-2">
           <div className="flex gap-2 text-sm font-medium ">
             <span>5 Folders</span>
