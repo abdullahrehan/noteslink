@@ -1,0 +1,1 @@
+path of folder should be store in the folder in the form of array.
