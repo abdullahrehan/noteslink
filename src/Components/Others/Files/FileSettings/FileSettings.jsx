@@ -1,6 +1,6 @@
 import React from 'react'
 
-function FolderSettings({ settings, closeFolderSetting }) {
+function FileSettings({ settings, closeFolderSetting }) {
 
     return (
 
@@ -20,4 +20,4 @@ function FolderSettings({ settings, closeFolderSetting }) {
     )
 }
 
-export default FolderSettings
+export default FileSettings
