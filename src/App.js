@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useEffect,useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Increment, Decrement } from "./Redux/Actions/index.js";
 import { Route, Routes } from "react-router-dom";
@@ -20,10 +20,24 @@ import ServiceCenter from "./Pages/ServiceCenter/index.js";
 import Settings from "./Pages/Settings/index.js";
 import Feedback from "./Pages/Feedback/index.js";
 import Help from "./Pages/Help/index.js";
-
 import "./App.css";
 
+import {addData} from './Firebase/firebase.js'
+
 const App = () => {
+
+
+//   const fetchData = async () => {
+//   addData()    
+//   console.log("fetch Data");
+// };
+
+//   useEffect(()=>{
+//     fetchData()
+//   },[])
+
+
+
   const myState = useSelector((state) => state.IncrementDecrement);
   const dispatch = useDispatch();
   const [openMenu, setOpenMenu] = useState(false);

@@ -49,7 +49,7 @@ const Files = [{
     content: null,
     parent:"My Folder",
     path:["My Folder"],
-    inteactions:null,
+    inteactions:{likedby:[],viewedby:[]},
     strikeStatus:1,
     report:[{reason:"lorem ipsum dolor sit amet, consectetur adipiscing"}],
     createdAt:Date.now(),
@@ -65,6 +65,7 @@ export const UserData={
   name:"Muhammad Abdullah",
   username:"abdullah81",
   email:"abdullahrehan8118@gmail.com",
+  type:"admin", // admin or user
   picture:null,
   files:Files,
   tabs:[],

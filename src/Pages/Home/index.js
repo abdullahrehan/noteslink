@@ -1,16 +1,39 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import AllTabs from "./Components/AllTabs";
 import NavigationFolder from "./Components/NavigationFolder";
 import TabFolderIcon from "../../Assets/Images/tabFolderIcon.png";
 import FolderPath from "./Components/FolderPath";
 import AddFilesButton from "./Components/AddFilesButton";
 import AllFiles from "../../Components/Others/Files/index.js";
+import PageSettings from './Components/PageSettings.jsx'
 import {HomeFiles} from '../../Apis/Api.js'
 
 function Index() {
 
   const [closeFolderPath, setCloseFolderPath] = useState(false);
+  const [openSettings,setOpenSettings]=useState(false);
+  
+  // const [coords, setCoords] = useState({x: 0, y: 0});
+  const homeSettingsRef=useRef()
 
+    const handleWindowMouseMove = event => {
+      const x = event.clientX;
+      const y = event.clientY;
+
+      event.preventDefault();
+      setOpenSettings(true);
+      console.log(homeSettingsRef,x,y);
+      homeSettingsRef.current.style.left=`${x-210}px`;
+      homeSettingsRef.current.style.top=`${y}px`;
+      // setCoords({
+      //   x: event.clientX,
+      //   y: event.clientY,
+      // });
+    };
+
+
+    
+  
   return (
   
   <div className="w-full h-full bg-green-00 flex justify-end  text-4xl">
@@ -35,9 +58,13 @@ function Index() {
       
         </div>
       
-        <div className="w-full h-minus-150px bg-green-00 px-1 ">
+        <div className="w-full h-minus-150px bg-green-00 px-1 bg-red-000 "  onContextMenu={handleWindowMouseMove} >
       
           <AllFiles data={HomeFiles}/>
+      
+          <div className={`absolute ${ openSettings ? "flex" : "hidden" }`} ref={homeSettingsRef}>
+            <PageSettings closeSetting={()=>setOpenSettings(false)}/>
+          </div>
       
         </div>
       
@@ -50,6 +77,7 @@ function Index() {
             <span>Size 1.5Gb</span>
       
           </div>
+
       
           <div className="absolute bottom-2 right-2">
       

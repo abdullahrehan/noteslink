@@ -1,0 +1,4 @@
+root: C:\Users\LENOVO\Desktop\NotesApp\notes-app 
+path: C:\Program Files\nodejs 
+arch: 64 
+proxy: none
