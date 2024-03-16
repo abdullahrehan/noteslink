@@ -78,7 +78,7 @@ function Notification() {
                         </div>
                         <div className='w-full h-auto text-sm text-red-400 opacity-70 center hidden' ref={notificationRemove}>Notification Removed</div>
                         {notifications.map((data, index) =>
-                            <div className={`w-[99%] relative transition-all duration-500 ease-in-out bg-gradient-to-tr from-[#A9A9A9]  to-white rounded-[4px] center`} ref={(element) => notificationRef.current[index] = element}>
+                            <div key={index} className={`w-[99%] relative transition-all duration-500 ease-in-out bg-gradient-to-tr from-[#A9A9A9]  to-white rounded-[4px] center`} ref={(element) => notificationRef.current[index] = element}>
                                 <div className='w-[98%] h-[94%] hover:bg-[#F4F4F4] hover:cursor-pointer flex  rounded-[2px] bg-white  shadow-md shadow-gray-300'>
                                     <div className='px-[6px] h-[80px] w-[16%] flex center'>
                                         {data.icon}

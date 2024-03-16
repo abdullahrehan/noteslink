@@ -12,10 +12,16 @@ function MainFiles({ content , visibility, name , index , settingsRef }) {
         index:null
     })
 
+    const FolderSetting=(event)=>{
+        event.stopPropagation()
+        event.preventDefault();
+        setOpenFileSettings({ value: true, event: event, index: index })
+    }
+
 
     return (
     
-    <div className='w-[120px] center flex-col text-sm h-auto py-2 gap-0  rounded-[4px] hover:cursor-pointer hover:bg-gray-200 relative'  onContextMenu={(e)=>setOpenFileSettings({value:true,event:e,index:index})} >
+    <div className='w-[120px] center flex-col text-sm h-auto py-2 gap-0  rounded-[4px] hover:cursor-pointer hover:bg-gray-200 relative'  onContextMenu={FolderSetting} >
     
           <div className='bg-gray-00 w-[110px] h-[86px] flex items-center justify-center'>  
     

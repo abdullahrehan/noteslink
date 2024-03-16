@@ -4,7 +4,7 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { MdLogout } from "react-icons/md";
 import { LuHelpCircle } from "react-icons/lu";
 import { MdOutlineFeedback } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 function Account() {
     return (
@@ -14,7 +14,7 @@ function Account() {
                     <div className='flex gap-2 w-full pl-2'>
                         <div className='flex center flex-col gap-2'>
                             <div className='w-[65px] h-[65px] border-2 border-red-400 rounded-full '>
-                                <img src={profile} className='w-full h-full' />
+                                <img alt='null' src={profile} className='w-full h-full' />
                             </div>
                             <div className='text-sm text-red-400 font-medium'>
                                 1 Strike
@@ -39,32 +39,33 @@ function Account() {
                 <div className='w-full h-[52%]  pl-6 pr-6 flex flex-col justify-around pt-4'>
                     <div className='flex items-center bg-red-00 hover:bg-[#E1E1E1] hover:cursor-pointer py-2 rounded-[4px]'>
                         <div className='pl-2 pr-2'><IoSettingsOutline size={22} /></div>
-                        <Link to={"/account-setting"}>
+                        <NavLink  activeClass={"bg-red-200"} to={"/account-setting"}>
                             <div className='pl-4'>Account Setting</div>
-                        </Link>
+                        </NavLink>
 
                     </div>
                     <div className='flex items-center hover:bg-[#E1E1E1] hover:cursor-pointer py-2 rounded-[4px]'>
                         <div className='pl-2 pr-2'><MdLogout size={22} /></div>
-                        <Link to={"/account-setting"}>
+                        <NavLink  activeClass={"bg-red-200"} to={"/account-setting"}>
                             <div className='pl-4'>logout</div>
-                        </Link>
+                        </NavLink>
                     </div>
 
                     <div className='flex items-center hover:bg-[#E1E1E1] hover:cursor-pointer py-2 rounded-[4px] '>
                         <div className='pl-2 pr-2'><MdOutlineFeedback size={22} /></div>
-                        <Link to={"/send-feedback"}>
+                        <NavLink  activeClass={"bg-red-200"} to={"/send-feedback"}>
                             <div className='pl-4'>Send Feedback</div>
-                        </Link>
+                        </NavLink>
                     </div>
                     <div className='flex items-center hover:bg-[#E1E1E1] hover:cursor-pointer py-2 rounded-[4px]'>
                         <div className='pl-2 pr-2'><LuHelpCircle size={22} /></div>
-                        <Link to={"/help"}>
+                        <NavLink  activeClass={"bg-red-200"} to={"/help"}>
                             <div className='pl-4'>Help</div>
-                        </Link>
+                        </NavLink>
                     </div>
 
                 </div>
+          
             </div>
         </div>
     )

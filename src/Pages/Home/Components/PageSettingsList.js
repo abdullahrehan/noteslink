@@ -14,7 +14,8 @@ import { FaRegPaste } from "react-icons/fa6";
 import { FaSort } from "react-icons/fa";
 import { IoMdRadioButtonOff } from "react-icons/io";
 import { IoIosRadioButtonOn } from "react-icons/io";
-          {/* Go Back ,View , Select All , New  , Paste , Sort By ,   */}
+import { FaRegFileAlt } from "react-icons/fa";
+// import { FaRegFolderOpen } from "react-icons/fa";
 
 export const PageSettingsList = [
   {
@@ -38,7 +39,12 @@ export const PageSettingsList = [
   {
     name: "New",
     Icon: <RiAddFill size={20} />,
-  },
+    child:[
+      {name:"New File",Icon:<FaRegFileAlt size={18}/>},
+      {name:"New Folder",Icon:<FaRegFolderOpen size={18}/>},
+    
+    ]  },
+  
   {
     name: "Paste",
     Icon: <FaRegPaste size={20} />,

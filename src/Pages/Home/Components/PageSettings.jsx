@@ -1,33 +1,46 @@
 import React, { useState } from 'react'
 import Settings from './HomeSettings'
+import SubSettings from './SubSettings'
 import { PageSettingsList } from './PageSettingsList'
 
-function PageSettings({ closeSetting }) {
+function PageSettings({ closeSetting , menuDimension }) {
 
-    const [openView, setOpenView] = useState({ value: false, locationX: "right", locationY: "bottom" })
-    const [openSortBy, setOpenSortBy] = useState({ value: false, locationX: "left", locationY: "bottom" })
+    const [openView, setOpenView] = useState(false)
+    const [openSortBy, setOpenSortBy] = useState(false)
+    const [openNewFiles, setOpenNewFiles] = useState(false)
 
-    console.log(openView,openSortBy);
     return (
-        <div className='relative flex w-[600px] bg-red-000 h-[240px]'>
 
-            {/*45 or 123 bottom*/}
-            {/* 0 or 420 left */}
-            <div className='flex order-2 absolute left-0 bottom-[45px] w-[210px] h-auto bg-red-00'>
-                {openSortBy.value ?
-                    <Settings backSreen={false} settings={PageSettingsList[5].child} closeFolderSetting={closeSetting} />
-                    : null}
-            </div>
+    <div className='relative flex w-[650px] bg-red-000 h-[240px]'>
+             
+
+            {openNewFiles || openView || openSortBy ?
+
+                <div className={`z-20 flex ${ menuDimension.horizontal=="right" ? "left-[424px]" : menuDimension.horizontal=="left" ? "left-[0px]" : null  } absolute ${ menuDimension.vertical=="top" ? "bottom-[123px]" : menuDimension.vertical=="bottom" ? "bottom-[162px]" : null  }  ${openNewFiles ? "top-[115px]":openView ? "top-[38px]" : null }  w-[210px] h-auto bg-red-00`}>
+                    
+                    <SubSettings settings= { PageSettingsList[openView ? 1 : openNewFiles ? 3 : openSortBy ? 5 : null ].child }  /> 
+
+                </div>
+            
+            : null}
 
             <div className='flex order-1 absolute left-[212px]'>
-                <Settings backSreen={true} settings={PageSettingsList} closeFolderSetting={closeSetting} openView={openView.value} viewFunction={(value) => setOpenView(value)} openSortBy={openSortBy.value} sortByFunction={(value) => setOpenSortBy(value)} />
+                
+                <Settings 
+                    settings={PageSettingsList}
+                    openView={openView}
+                    viewFunction={(value) => setOpenView(value)}
+                    openSortBy={openSortBy}
+                    sortByFunction={(value) => setOpenSortBy(value)}
+                    openNewFiles={openNewFiles}
+                    newFilesFunction={(value) => setOpenNewFiles(value)}
+                />
+            
             </div>
-            {/* left 0 or 420 */}
-            <div className='flex absolute left-[425px] top-[38px] w-[210px] h-auto bg-red-00'>
-                {openView.value ?
-                    <Settings backSreen={false} settings={PageSettingsList[1].child} closeFolderSetting={closeSetting} />
-                    : null} 
-            </div>
+
+            <div className={`w-[100vw] z-0 h-[100vh] fixed top-0 left-0`} onClick={closeSetting} ></div>
+
+        
         </div>
     )
 }

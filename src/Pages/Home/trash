@@ -1,0 +1,123 @@
+import React, { useEffect, useRef, useState ,useContext } from "react";
+import AllTabs from "./Components/AllTabs";
+import NavigationFolder from "./Components/NavigationFolder";
+import TabFolderIcon from "../../Assets/Images/tabFolderIcon.png";
+import FolderPath from "./Components/FolderPath";
+import AddFilesButton from "./Components/AddFilesButton";
+import AllFiles from "../../Components/Others/Files/index.js";
+import PageSettings from './Components/PageSettings.jsx'
+import {HomeFiles} from '../../Apis/Api.js'
+// import LogOut from '../../Components/Main/Header/LogOut.jsx'
+import AppContext from '../../Context_Api/AppContext.js'
+
+function Index() {
+
+  const [openSettings,setOpenSettings]=useState(false);
+  const [dimension,setDimension]=useState({x:null,y:null,width:null});
+  const [allowedWidth,setAllowWidth]=useState(null)
+  const {state,dispatch}=useContext(AppContext)
+  const {openFoldersPath , openSideBar}=state
+  const homeSettingsRef=useRef()
+  const homeDivRef=useRef()
+
+  
+  useEffect(()=>{
+    const screenWidth=homeDivRef?.current.offsetWidth
+    setAllowWidth(screenWidth - (openSideBar ? 250 : 60) - (openFoldersPath ? 250 : 0))
+  })
+
+  const handleWindowMouseMove = event => {
+    const x = event.clientX;
+    const y = event.clientY;
+
+    // console.log(homeDivRef?.current.offsetWidth,"allowedWidth",x+210-(openSideBar ? 250 : 60));
+    console.log(x,y);
+    event.preventDefault();
+    setOpenSettings(true);
+    homeSettingsRef.current.style.left=`${x-210}px`;
+    homeSettingsRef.current.style.top=`${y}px`;
+  };
+
+  
+
+
+
+    
+  
+  return (
+  
+  <div className="w-full h-full bg-green-00 flex justify-end  text-4xl">
+      
+      <div className={`${ openFoldersPath ? "w-minus-250px" : "w-full" } h-full bg-red-00 transition-all delay-70 duration-400 ease-in-out`}>
+      
+        <div className="w-full h-[35px] bg-green-00 flex items-center ">
+      
+          <AllTabs />
+
+          <div className="w-[40px] h-full hover:cursor-pointer rounded-full bg-#0002] center">
+      
+            <img src={TabFolderIcon} className="h-[18px] hover:h-[19px]" onClick={() =>dispatch({ type: 'setFolderPath', folderPath:true})} />
+      
+          </div>
+      
+        </div>
+      
+        <div className="w-full h-[45px]">
+      
+          <FolderPath />
+      
+        </div>
+      
+        <div className="w-full h-minus-150px bg-green-00 px-1 bg-red-200 z-20 relative"  ref={homeDivRef} onContextMenu={handleWindowMouseMove}>
+      
+          <AllFiles data={HomeFiles}/>
+
+          {/* <div className={`w-[1056px] bg-blue-200 absolute top-0 left-0 z-10 h-[426px]`}  onContextMenu={handleWindowMouseMove}>
+
+          </div> */}
+      
+          <div className={`absolute ${ openSettings ? "flex" : "hidden" }`} ref={homeSettingsRef}>
+
+            <PageSettings closeSetting={()=>setOpenSettings(false)}/>
+
+          </div>
+      
+        </div>
+      
+        <div className="w-full h-[70px] flex bg-green-00 relative justify-between items-end px-2 pb-2">
+      
+          <div className="flex gap-2 text-sm font-medium ">
+      
+            <span>5 Folders</span>
+      
+            <span>Size 1.5Gb</span>
+      
+          </div>
+
+      
+          <div className="absolute bottom-2 right-2">
+      
+            <AddFilesButton />
+      
+          </div>
+      
+        </div>
+      
+      </div>
+
+      <div className={`${ openFoldersPath ? "w-[250px]" : "w-[0px]" } transition-all delay-70 duration-400 ease-in-out h-full ${ openFoldersPath ?  "border-l-[1.5px] border-[#B3B3B3]" : null } `} >
+ 
+        <NavigationFolder closeFolders={() =>dispatch({ type: 'setFolderPath', folderPath:false})} />
+      
+      </div>
+
+      {/* <div>
+        <LogOut/>
+      </div> */}
+    
+    </div>
+  
+  );
+}
+
+export default Index;

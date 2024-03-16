@@ -4,11 +4,11 @@ function FileSettings({ settings, closeFolderSetting }) {
 
     return (
 
-        <div className='w-[220px] z-20 h-auto bg-[#F0F0F0] rounded-[4px] gap-1 text-sm flex flex-col items-center p-1 pb-2'>
+        <div className='w-[220px] h-auto bg-[#F0F0F0] rounded-[4px] gap-1 text-sm flex flex-col items-center p-1 pb-2'>
 
             {settings.map((data, index) =>
                 <>
-                    <div className='flex z-20 h-[35px] w-[95%] gap-2 hover:bg-[#D9D9D9] rounded-[2px] flex items-center pl-2' >
+                    <div className='flex z-20  h-[35px] w-[95%] gap-2 hover:bg-[#D9D9D9] rounded-[2px] flex items-center pl-2' >
                         <div className=''>{data.Icon}</div>
                         <div className=''>{data.name}</div>
                     </div>

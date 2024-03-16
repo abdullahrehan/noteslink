@@ -5,7 +5,7 @@ import profile from "../../../Assets/Images/profile.png";
 import Account from "./Account";
 import Notification from './Notification'
 
-function Index({setOpenMenu,menuButton}) {
+function Index({menuButton}) {
   const [showAccountSetting, setShowAccountSetting] = useState(false)
   const [showNotifications, setShowNotifications] = useState(false)
  

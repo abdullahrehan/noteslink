@@ -5,8 +5,8 @@ function Index({settingsRef,openFileSettings,index,FolderSettingsData,closeFileS
 
     const openFolderSettingFunc = (e) => {
         e.preventDefault();
-        settingsRef.current[openFileSettings?.index].style.display = "flex"
-        console.log(settingsRef?.current,index,'a');        
+        settingsRef.current[openFileSettings?.index].style.display = "flex";
+        e.stopPropagation()
     }
 
     const closeFolderSetting = () => {
@@ -16,12 +16,8 @@ function Index({settingsRef,openFileSettings,index,FolderSettingsData,closeFileS
 
     useEffect(()=>{
 
-        if(openFileSettings?.value){
-            openFolderSettingFunc(openFileSettings?.event)
-        }
-        else{
-            closeFolderSetting()
-        }
+        if(openFileSettings?.value) { openFolderSettingFunc(openFileSettings?.event) }
+        else{ closeFolderSetting() }
 
     },[openFileSettings?.value])
 

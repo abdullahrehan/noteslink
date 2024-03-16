@@ -1,0 +1,203 @@
+import React, { useEffect, useRef, useState ,useContext } from "react";
+import AllTabs from "./Components/AllTabs";
+import NavigationFolder from "./Components/NavigationFolder";
+import TabFolderIcon from "../../Assets/Images/tabFolderIcon.png";
+import FolderPath from "./Components/FolderPath";
+import AddFilesButton from "./Components/AddFilesButton";
+import AllFiles from "../../Components/Others/Files/index.js";
+import PageSettings from './Components/PageSettings.jsx'
+import {HomeFiles} from '../../Apis/Api.js'
+// import LogOut from '../../Components/Main/Header/LogOut.jsx'
+import AppContext from '../../Context_Api/AppContext.js'
+
+function Index() {
+
+  const [openSettings,setOpenSettings]=useState(false);
+  const {state,dispatch}=useContext(AppContext)
+  const {openFoldersPath,openSideBar}=state
+  const homeSettingsRef=useRef()
+  
+  const homeRef=useRef()
+  const { offsetWidth, offsetHeight } = homeRef?.current;
+
+  const [settingArea,setSettingArea]=useState(
+    {
+      totalWidth:null,
+      totalHeight:null,
+      startWidthAt:null,
+      endWidthAt:null,
+      startHeightAt:null,
+      endHeightAt:null,
+    }
+  )
+  const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
+
+  const HomeFileWidth=window.innerWidth- (openSideBar ? 250 : 60) - (openFoldersPath ? 250 : 0)
+  const menuPixels=openSideBar ? 250 : 60;
+
+  const [cursor,setCursor]=useState('null')
+
+  useEffect(()=>{
+
+  },[])
+  const HorizontalRange=
+  {
+    
+    leftTop:{
+      top:0,
+      bottom:offsetHeight/2,
+      left:0,
+      right:offsetWidth/2
+    },
+
+    leftBottom:{
+      top:(offsetHeight/2)+1,
+      bottom:offsetHeight,
+      left:0,
+      right:offsetWidth/2
+    },
+    
+    rightTop:{
+      top:0,
+      bottom:offsetHeight/2,
+      left:(offsetWidth/2)+1,
+      right:offsetWidth
+    },
+
+    rightBottom:{
+      top:(offsetHeight/2)+1,
+      bottom:offsetHeight,
+      left:(offsetWidth/2)+1,
+      right:offsetWidth
+    },
+  }
+
+  const checkPosition=()=>{
+  
+    if(cursorPosition.x >= HorizontalRange.leftTop.left &&  cursorPosition.x <= HorizontalRange.leftTop.right){
+  
+      console.log("Left");
+  
+      if(cursorPosition.y >= HorizontalRange.leftTop.top &&  cursorPosition.y <= HorizontalRange.leftTop.bottom){
+
+        console.log("Top beacuse it > than " , HorizontalRange.leftTop.top,"and <= ",HorizontalRange.leftTop.bottom);  
+        setCursor("Left Top");
+      
+      }
+      else if(cursorPosition.y >= HorizontalRange.leftBottom.top &&  cursorPosition.y <= HorizontalRange.leftBottom.bottom){
+
+        console.log("Bottom beacuse it > than " , HorizontalRange.leftBottom.top,"and <= ",HorizontalRange.leftBottom.bottom);  
+        setCursor("Left Bottom");
+      
+      }
+
+      
+    
+  }
+
+
+
+    else if(cursorPosition.x >= HorizontalRange.rightTop.left &&  cursorPosition.x <= HorizontalRange.rightTop.right){
+      console.log("Right Top");
+      setCursor("Right Top");
+    }
+
+  }
+  
+
+  const handleWindowMouseMove = event => {
+    const x = event.clientX;
+    const y = event.clientY;
+
+    
+
+    event.preventDefault();
+    setOpenSettings(true);
+    homeSettingsRef.current.style.left=`${x-210}px`;
+    homeSettingsRef.current.style.top=`${y}px`;
+  };
+
+  const handleMouseMove = (e) => {
+    setCursorPosition({ x: e.clientX, y: e.clientY });
+    checkPosition()
+
+  };
+
+  return (
+  
+  <div className="w-full h-full bg-green-00 flex justify-end  text-4xl" onMouseMove={handleMouseMove}>
+      
+      <div className={`${ openFoldersPath ? "w-minus-250px" : "w-full" } h-full bg-red-00 transition-all delay-70 duration-400 ease-in-out`}>
+      
+        <div className="w-full h-[35px] bg-green-00 flex items-center ">
+      
+          <AllTabs />
+
+          <div className="w-[40px] h-full hover:cursor-pointer rounded-full bg-#0002] center">
+      
+            <img src={TabFolderIcon} className="h-[18px] hover:h-[19px]" onClick={() =>dispatch({ type: 'setFolderPath', folderPath:true})} />
+      
+          </div>
+      
+        </div>
+      
+        <div className="w-full h-[45px]">
+      
+          <FolderPath />
+      
+        </div>
+      
+        <div className="w-full h-minus-150px bg-green-00 px-1 bg-red-200 "  onContextMenu={handleWindowMouseMove} ref={homeRef}>
+      
+          <AllFiles data={HomeFiles}/>
+      
+        <h2>
+          {cursorPosition.x }
+          /
+          {cursorPosition.y}
+          /
+          {cursor}
+        </h2>
+          <div className={`absolute ${ openSettings ? "flex" : "hidden" }`} ref={homeSettingsRef}>
+            <PageSettings closeSetting={()=>setOpenSettings(false)}/>
+          </div>
+      
+        </div>
+      
+        <div className="w-full h-[70px] flex bg-green-00 relative justify-between items-end px-2 pb-2">
+      
+          <div className="flex gap-2 text-sm font-medium ">
+      
+            <span>5 Folders</span>
+      
+            <span>Size 1.5Gb</span>
+      
+          </div>
+
+      
+          <div className="absolute bottom-2 right-2">
+      
+            <AddFilesButton />
+      
+          </div>
+      
+        </div>
+      
+      </div>
+
+      <div className={`${ openFoldersPath ? "w-[250px]" : "w-[0px]" } transition-all delay-70 duration-400 ease-in-out h-full ${ openFoldersPath ?  "border-l-[1.5px] border-[#B3B3B3]" : null } `} >
+ 
+        <NavigationFolder closeFolders={() =>dispatch({ type: 'setFolderPath', folderPath:false})} />
+      
+      </div>
+
+      {/* <div>
+        <LogOut/>
+      </div> */}
+    
+    </div>
+  
+  );
+}
+
+export default Index;

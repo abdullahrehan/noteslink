@@ -51,19 +51,24 @@ function index({openMenu}) {
   ];
 
   return (
+    
     <div className=" h-full w-full pt-2 pb-2 rounded-r-[5px] flex flex-col transition-all delay-700 duration-300 ease-in-out ">
+    
       <div className="h-1/2 w-full gap-2 flex flex-col items-center pt-[6px]">
-        {menuIcons.map((data) => (
-          <MenuButton name={data.name} icon={data.icon} path={data.path} openMenu={openMenu}/>
-        ))}
+    
+        { menuIcons.map((data , index) => ( <MenuButton key={index} name={data.name} icon={data.icon} path={data.path} openMenu={openMenu}/> ))}
+      
       </div>
+      
       <div className="h-1/2 w-full flex flex-col gap-2 justify-end items-center pb-2">
-        {menuSettingsIcons.map((data) => (
-          <MenuButton name={data.name} icon={data.icon} path={data.path} openMenu={openMenu}/>
-        ))}
+      
+        { menuSettingsIcons.map((data,index) => ( <MenuButton key={index} name={data.name} icon={data.icon} path={data.path} openMenu={openMenu}/> ))}
+
       </div>
+
     </div>
-  );
+
+);
 }
 
 export default index;
