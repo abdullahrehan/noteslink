@@ -1,12 +1,15 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import profile from "../../../Assets/Images/profile.png";
 import { IoSettingsOutline } from "react-icons/io5";
 import { MdLogout } from "react-icons/md";
 import { LuHelpCircle } from "react-icons/lu";
 import { MdOutlineFeedback } from "react-icons/md";
 import { NavLink } from "react-router-dom";
+import AppContext from '../../../Context_Api/AppContext.js'
 
 function Account() {
+    const {state,dispatch}=useContext(AppContext)
+
     return (
         <div className='w-[260px] h-[310px] shadow-lg center bg-[#EAEAEA]  bg-gradient-to-tr from-[#A9A9A9] to-white rounded-[4px] rounded-[2px] flex flex-col items-center gap-1 '>
             <div className='w-[98%] h-[98%] bg-white'>
@@ -46,9 +49,9 @@ function Account() {
                     </div>
                     <div className='flex items-center hover:bg-[#E1E1E1] hover:cursor-pointer py-2 rounded-[4px]'>
                         <div className='pl-2 pr-2'><MdLogout size={22} /></div>
-                        <NavLink  activeClass={"bg-red-200"} to={"/account-setting"}>
-                            <div className='pl-4'>logout</div>
-                        </NavLink>
+                        {/* <NavLink  activeClass={"bg-red-200"} to={"/account-setting"}> */}
+                            <div className='pl-4' onClick={()=>dispatch({ type: 'setLogoutPopup', logoutPopupAction:true})}>logout</div>
+                        {/* </NavLink> */}
                     </div>
 
                     <div className='flex items-center hover:bg-[#E1E1E1] hover:cursor-pointer py-2 rounded-[4px] '>

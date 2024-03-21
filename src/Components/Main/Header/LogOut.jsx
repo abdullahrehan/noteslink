@@ -1,20 +1,23 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { RxCross2 } from "react-icons/rx";
+import AppContext from '../../../Context_Api/AppContext.js'
+import PopUp from '../../Others/PopUp.jsx'
+function LogOut({Function}) {
+    const { state, dispatch } = useContext(AppContext)
 
-function LogOut() {
     return (
-        <div className='w-[100vw] h-[100vh] bg-[#0009] z- absolute left-0 top-0 center'>
-            <div className='w-[400px] h-[200px] bg-white rounded-[4px] flex flex-col justify-between items-center pb-5'>
-                <div className='w-full flex justify-end pl-2 pt-0'>
-                    <RxCross2 size={25}/>
+        <PopUp title={"Log Out"} width='w-[350px]' height='h-[200px]' crossFunction={Function}>
+                <div className={`flex flex-col justify-around items-center h-full w-[90%]`}>
+                    <div className='flex flex-col gap-3'>
+                        <div className='w- full text-lg '>
+                            Are you sure to want to Logout your Account.
+                        </div>
+                    </div>
+                    <div className='w- full center text-base font-medium'>
+                        <button className='p-3 bg-red-400 hover:bg-[#2D2D2D] text-white rounded-[5px]' onClick={Function}>Log Out</button>
+                    </div>
                 </div>
-                <div className='text-base px-10'>Are you sure to want to Log Out your Account </div>
-                <div className='px-10 flex gap-10'>
-                    <button className='bg-red-400 w-[100px] h-[45px] rounded-[4px] text-base font-medium'>Go Back</button>
-                    <button className='bg-red-400 w-[100px] h-[45px] rounded-[4px] text-base font-medium'>Yes</button>
-                </div>
-            </div>
-        </div>
+        </PopUp>
     )
 }
 

@@ -7,21 +7,32 @@ import AddFilesButton from "./Components/AddFilesButton";
 import AllFiles from "../../Components/Others/Files/index.js";
 import PageSettings from './Components/PageSettings.jsx'
 import {HomeFiles} from '../../Apis/Api.js'
-// import LogOut from '../../Components/Main/Header/LogOut.jsx'
+import LogOut from '../../Components/Main/Header/LogOut.jsx'
+import NewFolder from './Components/NewFolder.jsx'
+import RenameFile from './Components/RenameFile.jsx'
+import NewFile from './Components/NewFile.jsx'
+import DeleteFile from '../../Components/Others/DeleteFile.jsx'
 import AppContext from '../../Context_Api/AppContext.js'
 
 function Index() {
 
   const [openSettings,setOpenSettings]=useState(false);
   const {state,dispatch}=useContext(AppContext)
+  const {logoutPopup,newFolderNamePopup,renameFilePopup,renameFolderPopup,deletFilePopup,addNewTextfile}=state
   const [offsetHeightHome,setOffsetHeightHome]=useState(null);
   const [offsetWidthHome,setOffsetWidthHome]=useState(null);
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
   const [menuDimension,setMenuDimension]=useState({horizontal:"right",vertical:"bottom"})
 
-  const {openFoldersPath,openSideBar}=state
+
+  const {openFoldersPath,openHomeSetings,openFileSettings}=state
+
   const homeSettingsRef=useRef()
   const homeRef=useRef()
+  const homeFilesSettingRef = useRef([])
+
+
+  const [newFolderPopup,setNewFolderPopup]=useState(false)
 
   useEffect(()=>{
 
@@ -67,6 +78,11 @@ function Index() {
     },
   }
 
+  const closePopUp=()=>{
+    dispatch({ type: 'setOpenAccountSettings', openAccountSettingsAction:false})
+    dispatch({ type: 'setOpenNotifications', openNotificationsAction:false})
+
+  }
   const checkPosition=()=>{
   
     if(cursorPosition.x >= HorizontalRange.leftTop.left &&  cursorPosition.x <= HorizontalRange.leftTop.right){
@@ -94,7 +110,7 @@ function Index() {
 
     setCursorPosition({ x: event.clientX - rect.left, y: event.clientY - rect.top });
     checkPosition()    
-    setOpenSettings(true);
+    dispatch({ type: 'setOpenHomeSetings', openHomeSetingsAction:true})
 
     homeSettingsRef.current.style.left=`${X-210}px`;
 
@@ -109,7 +125,7 @@ function Index() {
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
   
-    if(!openSettings){
+    if(!openHomeSetings){
   
       setCursorPosition({ x: x, y: y });
       checkPosition()
@@ -117,9 +133,22 @@ function Index() {
 
   };
 
+  const closeFileSettings=()=>{
+    if(homeFilesSettingRef.current[openFileSettings?.index]!==undefined){
+    homeFilesSettingRef.current[openFileSettings?.index].style.display="none"}
+    dispatch({ type: 'setOpenFileSettings', openFileSettingsAction:{ value: false, event: null, index: null }})
+  }
+
+  
+  useEffect(()=>{
+    closeFileSettings()
+
+  },[renameFilePopup,renameFolderPopup,deletFilePopup])
+
+
   return (
   
-  <div className="w-full h-full bg-green-00 flex justify-end  text-4xl" >
+  <div className="w-full h-full bg-green-00 flex justify-end  text-4xl" onClick={closeFileSettings}>
       
       <div className={`${ openFoldersPath ? "w-minus-220px" : "w-full" } h-full bg-red-00 transition-all delay-70 duration-400 ease-in-out`}>
       
@@ -141,17 +170,29 @@ function Index() {
       
         </div>
       
-        <div className="w-full h-minus-150px bg-green-00 px-1 bg-red-00 relative"  onContextMenu={handleWindowMouseMove} ref={homeRef} onMouseMove={handleMouseMove}>
+        <div className="w-full h-minus-150px bg-green-00 px-1 bg-red-00 relative"  onContextMenu={handleWindowMouseMove} ref={homeRef} onMouseMove={handleMouseMove} onClick={closePopUp}>
       
-          <AllFiles data={HomeFiles}/>
+          <AllFiles data={HomeFiles} homeFilesSettingRef={homeFilesSettingRef}/>
       
-          <div className={`absolute ${ openSettings ? "flex" : "hidden" }`} ref={homeSettingsRef}>
+          <div className={`absolute ${ openHomeSetings ? "flex" : "hidden" }`} ref={homeSettingsRef}>
           
-            <PageSettings closeSetting={()=>setOpenSettings(false)} menuDimension={menuDimension}/>
+            <PageSettings closeSetting={()=>dispatch({ type: 'setOpenHomeSetings', openHomeSetingsAction:false})} menuDimension={menuDimension}/>
           
           </div>
       
         </div>
+
+        
+
+    {logoutPopup ? <LogOut Function={() =>dispatch({ type: 'setLogoutPopup', logoutPopupAction:false})}/> : null }
+    {newFolderNamePopup ? <NewFolder/> : null }
+    {renameFilePopup ? <RenameFile type="File" Function={() =>dispatch({ type: 'setRenameFilePopup', renameFilePopupAction:false})}/> : null }
+    {renameFolderPopup ? <RenameFile type="Folder" Function={() =>dispatch({ type: 'setRenameFolderPopup', renameFolderPopupAction:false})}/> : null }
+    {deletFilePopup ? <DeleteFile type="File" Function={() =>dispatch({ type: 'setDeletFilePopup', deletFilePopupAction:false})}/> : null }
+    
+    {addNewTextfile?<NewFile/>:null}
+
+    
       
         <div className="w-full h-[70px] flex bg-green-00 relative justify-between items-end px-2 pb-2">
       
@@ -180,9 +221,6 @@ function Index() {
       
       </div>
 
-      {/* <div>
-        <LogOut/>
-      </div> */}
     
     </div>
   

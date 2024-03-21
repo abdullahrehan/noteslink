@@ -1,32 +1,52 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import FolderSettings from './FileSettings'
+import AppContext from '../../../../Context_Api/AppContext.js'
 
-function Index({settingsRef,openFileSettings,index,FolderSettingsData,closeFileSettings}) {
 
+
+function Index({homeFilesSettingRef,index,FolderSettingsData,closeFileSettings}) {
+
+    const {state,dispatch}=useContext(AppContext)
+    const {openFileSettings}=state
     const openFolderSettingFunc = (e) => {
         e.preventDefault();
-        settingsRef.current[openFileSettings?.index].style.display = "flex";
-        e.stopPropagation()
+        if(homeFilesSettingRef.current){
+            // console.log(homeFilesSettingRef.current[openFileSettings?.index],"open");
+
+        // console.log(homeFilesSettingRef.current[openFileSettings?.index],"open");
+        homeFilesSettingRef.current[openFileSettings?.index].style.display = "flex";
+        
+    }
+    
+    e.stopPropagation()
     }
 
     const closeFolderSetting = () => {
-        settingsRef.current[openFileSettings?.index].style.display = "none";
-        closeFileSettings();
-    }
+        if(homeFilesSettingRef.current[openFileSettings?.index]!==undefined){
+            homeFilesSettingRef.current[openFileSettings?.index].style.display = "none";
+            closeFileSettings();
+            }
+        }
 
     useEffect(()=>{
+        // console.log(openFileSettings);
 
         if(openFileSettings?.value) { openFolderSettingFunc(openFileSettings?.event) }
         else{ closeFolderSetting() }
 
     },[openFileSettings?.value])
 
-    
+    const settingRef=(element)=>{
+        if(homeFilesSettingRef.current){
+            homeFilesSettingRef.current[index] = element
+        }
+
+    }
   return (
     <>
-        <div className='absolute top-[40%] left-[40%] z-20  hidden' ref={(element) => settingsRef.current[openFileSettings?.index] = element}>
+        <div className='absolute top-[40%] left-[40%] z-20 hidden' ref={(element) => settingRef(element)}>
       
-            <FolderSettings settings={FolderSettingsData} closeFolderSetting={() => closeFolderSetting()} />
+            <FolderSettings settings={FolderSettingsData} closeFileSettings={() => closeFolderSetting()} />
       
         </div>
     </>

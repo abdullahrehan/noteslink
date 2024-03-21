@@ -8,7 +8,7 @@ function NavigationFolder({ closeFolders }) {
 
   return (
 
-    <div className='w-full h-full flex flex-col relative overflow-hidden'>
+    <div className='w-full  h-full flex flex-col relative overflow-hidden'>
 
       <div className='h-[95%] bg-red-00'>
 

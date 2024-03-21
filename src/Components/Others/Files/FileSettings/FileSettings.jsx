@@ -1,6 +1,7 @@
 import React from 'react'
 
-function FileSettings({ settings, closeFolderSetting }) {
+function FileSettings({ settings, closeFileSettings }) {
+
 
     return (
 
@@ -8,14 +9,14 @@ function FileSettings({ settings, closeFolderSetting }) {
 
             {settings.map((data, index) =>
                 <>
-                    <div className='flex z-20  h-[35px] w-[95%] gap-2 hover:bg-[#D9D9D9] rounded-[2px] flex items-center pl-2' >
+                    <div className='flex z-20  h-[35px] w-[95%] gap-2 hover:bg-[#D9D9D9] rounded-[2px] flex items-center pl-2' onClick={()=>data.Function()} >
                         <div className=''>{data.Icon}</div>
                         <div className=''>{data.name}</div>
                     </div>
                     <div className='w-[95%] bg-gray-400 h-[1px]'></div>
                 </>
             )}
-            <div className='w-[100vw] z-10 h-[100vh] fixed top-0 left-0' onClick={closeFolderSetting} onContextMenu={() => closeFolderSetting()}></div>
+            <div className='w-[100vw] z-10 h-[100vh] fixed top-0 left-0' onClick={closeFileSettings} onContextMenu={() => closeFileSettings()}></div>
         </div>
     )
 }

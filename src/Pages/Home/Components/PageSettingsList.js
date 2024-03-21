@@ -16,11 +16,33 @@ import { IoMdRadioButtonOff } from "react-icons/io";
 import { IoIosRadioButtonOn } from "react-icons/io";
 import { FaRegFileAlt } from "react-icons/fa";
 // import { FaRegFolderOpen } from "react-icons/fa";
+import AppContext from '../../../Context_Api/AppContext.js'
+import { useContext } from "react";
 
-export const PageSettingsList = [
+export const PageSettingsList=()=>{
+  const {state,dispatch}=useContext(AppContext)
+
+return ([
   {
     name: "Go Back",
     Icon: <IoMdArrowRoundBack size={20} />,
+    Function:()=>{},
+  },
+  {
+    name: "New",
+    Icon: <RiAddFill size={20} />,
+    Function:()=>{},
+
+    child:[
+      {name:"New File",Icon:<FaRegFileAlt size={18}/>,Function:()=>{dispatch({ type: 'setAddNewTextfile', addNewTextfileAction:true})}},
+      {name:"New Folder",Icon:<FaRegFolderOpen size={18}/>,Function:()=>{dispatch({ type: 'setNewFolderNamePopup', newFolderNamePopupAction:true})}},
+    
+    ]  },
+  {
+    name: "Select All",
+    Icon: <GrSelect size={20} />,
+    Function:()=>{},
+
   },
   {
     name: "View",
@@ -30,28 +52,25 @@ export const PageSettingsList = [
       {name:"Large",Icon:<IoIosRadioButtonOn size={16}/>},
       {name:"Small",Icon:<IoMdRadioButtonOff size={16}/>}
     
-    ]
+    ],
+    Function:()=>{},
+
   },
-  {
-    name: "Select All",
-    Icon: <GrSelect size={20} />,
-  },
-  {
-    name: "New",
-    Icon: <RiAddFill size={20} />,
-    child:[
-      {name:"New File",Icon:<FaRegFileAlt size={18}/>},
-      {name:"New Folder",Icon:<FaRegFolderOpen size={18}/>},
-    
-    ]  },
+
+
+
+
   
   {
     name: "Paste",
     Icon: <FaRegPaste size={20} />,
+    Function:()=>{},
+
   },
   {
     name: "Sort By",
     Icon: <FaSort size={20} />,
+    Function:()=>{},
     child:[
       {name:"Created Date",Icon:<IoIosRadioButtonOn size={16}/>},
       {name:"Last Update",Icon:<IoMdRadioButtonOff size={16}/>},
@@ -60,5 +79,6 @@ export const PageSettingsList = [
     
     ]  },
 
-];
-
+]
+)
+}

@@ -10,6 +10,8 @@ function FileSettings({ settings, openView, viewFunction, openSortBy, sortByFunc
         const sortByConditions=data.name === "Sort By" ? !openSortBy ? true : false : false;
         const newFilesConditions=data.name === "New" ? !openNewFiles ? true : false : false;
   
+        data.Function()
+        // console.log(data);
         viewFunction(viewFilesConditions)
         sortByFunction(sortByConditions)
         newFilesFunction(newFilesConditions)

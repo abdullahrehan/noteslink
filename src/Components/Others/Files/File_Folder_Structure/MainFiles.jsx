@@ -1,21 +1,26 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { MdPublic } from "react-icons/md";
 import FileSettings from '../FileSettings/index'
 import { FileSettingsData } from '../MapList/SettingsList'
+import AppContext from '../../../../Context_Api/AppContext.js'
 
 
-function MainFiles({ content , visibility, name , index , settingsRef }) {
+function MainFiles({ content , visibility, name , index , homeFilesSettingRef }) {
     
-    const [openFileSettings,setOpenFileSettings]=useState({
-        value:false,
-        event:null,
-        index:null
-    })
+
+    const {state,dispatch}=useContext(AppContext)
+
+    // const [openFileSettings,setOpenFileSettings]=useState({
+    //     value:false,
+    //     event:null,
+    //     index:null
+    // })
 
     const FolderSetting=(event)=>{
         event.stopPropagation()
         event.preventDefault();
-        setOpenFileSettings({ value: true, event: event, index: index })
+        dispatch({ type: 'setOpenFileSettings', openFileSettingsAction:{ value: true, event: event, index: index }})
+
     }
 
 
@@ -46,12 +51,11 @@ function MainFiles({ content , visibility, name , index , settingsRef }) {
             </div>
 
             <FileSettings 
-                settingsRef={settingsRef}
+                homeFilesSettingRef={homeFilesSettingRef}
                 index={index} 
-                FolderSettingsData={FileSettingsData}
-                openFileSettings={openFileSettings}
-                closeFileSettings={() => setOpenFileSettings({ ...openFileSettings, value: false })}/>
-
+                FolderSettingsData={FileSettingsData()}
+                closeFileSettings={() =>dispatch({ type: 'setOpenFileSettings', openFileSettingsAction:{ value: false, event: null, index: null }})}
+/>
         </div>
 
     )

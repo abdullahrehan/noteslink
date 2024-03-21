@@ -1,9 +1,32 @@
-const appMainReducer=
+const initialState=
     {
       openSideBar:false,
       openFoldersPath:true,
+     
+      openAccountSettings:false,
+      openNotifications:false,
+
       currentTab:null,
       currentFolder:null,
+
+      addNewTextfile:false,
+      openHomeSetings:false,
+
+      //  popups
+      logoutPopup:false,
+      newFolderNamePopup:false,
+      renameFilePopup:false,
+      renameFolderPopup:false,
+      deletFilePopup:false,
+      deleteFolderPopup:false,
+
+      openFileSettings:{
+        value: false,
+        event: null,
+        index: null
+      },
+      homeFilesRef:[],
+
     }
 
-export default appMainReducer;
+export default initialState;
