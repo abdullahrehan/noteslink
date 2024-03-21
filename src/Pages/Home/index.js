@@ -81,6 +81,7 @@ function Index() {
   const closePopUp=()=>{
     dispatch({ type: 'setOpenAccountSettings', openAccountSettingsAction:false})
     dispatch({ type: 'setOpenNotifications', openNotificationsAction:false})
+    dispatch({ type: 'setOpenHomeSetings', openHomeSetingsAction:false})
 
   }
   const checkPosition=()=>{
@@ -100,23 +101,18 @@ function Index() {
 
   const handleWindowMouseMove = event => {
 
+    dispatch({ type: 'setOpenHomeSetings', openHomeSetingsAction:false})
+
     event.preventDefault();
   
-    const target = event.target;
-    const rect = target.getBoundingClientRect();
-
-    const X = event.clientX - rect.left;
-    const Y = event.clientY - rect.top;
-
-    setCursorPosition({ x: event.clientX - rect.left, y: event.clientY - rect.top });
-    checkPosition()    
     dispatch({ type: 'setOpenHomeSetings', openHomeSetingsAction:true})
 
-    homeSettingsRef.current.style.left=`${X-210}px`;
+    homeSettingsRef.current.style.left=`${cursorPosition.x-210}px`;
+    console.log(cursorPosition.x-210);
 
     if(offsetHeightHome-cursorPosition.y<243){ homeSettingsRef.current.style.top = ''; homeSettingsRef.current.style.bottom=`2px`; }
 
-    else{ homeSettingsRef.current.style.top=`${Y}px` }
+    else{ homeSettingsRef.current.style.top=`${cursorPosition.y}px` }
 };
 
   const handleMouseMove = (e) => {
@@ -124,12 +120,12 @@ function Index() {
     const rect = target.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-  
+    console.log(x,'x',y,'y');
     if(!openHomeSetings){
   
       setCursorPosition({ x: x, y: y });
       checkPosition()
-    }
+    } 
 
   };
 
@@ -176,7 +172,7 @@ function Index() {
       
           <div className={`absolute ${ openHomeSetings ? "flex" : "hidden" }`} ref={homeSettingsRef}>
           
-            <PageSettings closeSetting={()=>dispatch({ type: 'setOpenHomeSetings', openHomeSetingsAction:false})} menuDimension={menuDimension}/>
+            <PageSettings menuDimension={menuDimension}/>
           
           </div>
       
@@ -198,7 +194,7 @@ function Index() {
       
           <div className="flex gap-2 text-sm font-medium ">
       
-            <span>5 Folders</span>
+            <span>5 Folders {cursorPosition.x} / {cursorPosition.y}</span>
       
             <span>Size 1.5Gb</span>
       

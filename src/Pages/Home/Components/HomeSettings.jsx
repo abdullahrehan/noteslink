@@ -4,14 +4,14 @@ import { IoIosArrowForward } from "react-icons/io";
 
 function FileSettings({ settings, openView, viewFunction, openSortBy, sortByFunction ,openNewFiles ,newFilesFunction }) {
 
-    const openSetting = (data) => {
+    const openSetting = (e,data) => {
 
         const viewFilesConditions=data.name === "View" ? !openView ? true : false : false;
         const sortByConditions=data.name === "Sort By" ? !openSortBy ? true : false : false;
         const newFilesConditions=data.name === "New" ? !openNewFiles ? true : false : false;
-  
+        e.stopPropagation()
+
         data.Function()
-        // console.log(data);
         viewFunction(viewFilesConditions)
         sortByFunction(sortByConditions)
         newFilesFunction(newFilesConditions)
@@ -35,7 +35,7 @@ function FileSettings({ settings, openView, viewFunction, openSortBy, sortByFunc
 
                 <>
 
-                    <div key={index} className='flex z-20 w-[95%] h-[30px] bg-red-00  hover:bg-[#D9D9D9] hover:cursor-pointer rounded-[2px] flex items-center pl-2' onClick={() => openSetting(data)} onMouseEnter={closeSubSettings} >
+                    <div key={index} className='flex z-20 w-[95%] h-[30px] bg-red-00  hover:bg-[#D9D9D9] hover:cursor-pointer rounded-[2px] flex items-center pl-2' onClick={(e) => openSetting(e,data)} onMouseEnter={closeSubSettings} >
 
                         <div className='flex gap-2 w-[90%]'>
 

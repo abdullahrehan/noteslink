@@ -50,7 +50,7 @@ function PageSettings({ closeSetting, menuDimension }) {
 
             </div>
 
-            <div className={`w-[100vw] z-0 h-[100vh] fixed top-0 left-0`} onClick={closeSetting} ></div>
+            {/* <div className={`w-[100vw] z-0 h-[100vh] fixed top-0 left-0`} onClick={closeSetting} ></div> */}
 
 
         </div>
