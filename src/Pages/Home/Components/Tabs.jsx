@@ -50,7 +50,7 @@ function Tabs({ name, tabsInnerRef,tabs,setTabs, index, currentTabIndex, setCurr
         
                         <img src={TabFolderIcon} className='h-[18px]' />
         
-                        <a className="pl-2 text-sm font-[system-ui]">{name} </a>
+                        <div className="pl-2 text-sm font-[system-ui]">{name} </div>
         
                     </div>
                 

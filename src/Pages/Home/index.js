@@ -193,8 +193,8 @@ function Index() {
         <div className="w-full h-[70px] flex bg-green-00 relative justify-between items-end px-2 pb-2">
       
           <div className="flex gap-2 text-sm font-medium ">
-      
-            <span>5 Folders {cursorPosition.x} / {cursorPosition.y}</span>
+          {/* {cursorPosition.x} / {cursorPosition.y} */}
+            <span>5 Folders </span>
       
             <span>Size 1.5Gb</span>
       
