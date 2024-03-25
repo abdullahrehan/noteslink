@@ -10,6 +10,11 @@ import AppContext from '../../../Context_Api/AppContext.js'
 function Account() {
     const {state,dispatch}=useContext(AppContext)
 
+    const logOutFunc=()=>{
+        dispatch({ type: 'setOpenAccountSettings', setOpenAccountSettings:false})        
+        dispatch({ type: 'setLogoutPopup', logoutPopupAction:true})
+    }
+
     return (
         <div className='w-[260px] h-[310px] shadow-lg center bg-[#EAEAEA]  bg-gradient-to-tr from-[#A9A9A9] to-white rounded-[4px] rounded-[2px] flex flex-col items-center gap-1 '>
             <div className='w-[98%] h-[98%] bg-white'>
@@ -50,7 +55,7 @@ function Account() {
                     <div className='flex items-center hover:bg-[#E1E1E1] hover:cursor-pointer py-2 rounded-[4px]'>
                         <div className='pl-2 pr-2'><MdLogout size={22} /></div>
                         {/* <NavLink  activeClass={"bg-red-200"} to={"/account-setting"}> */}
-                            <div className='pl-4' onClick={()=>dispatch({ type: 'setLogoutPopup', logoutPopupAction:true})}>logout</div>
+                            <div className='pl-4' onClick={logOutFunc}>logout</div>
                         {/* </NavLink> */}
                     </div>
 

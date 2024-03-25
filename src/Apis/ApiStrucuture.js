@@ -4,7 +4,7 @@ const Files = [
       id:1,
       name: "React Js",
       type: "folder",
-      status: "private",
+      status: "private", 
       keywords:[],
       content: null,
       parent:"My Folder",

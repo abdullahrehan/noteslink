@@ -20,15 +20,15 @@ function Index({menuButton}) {
   }
  
   const openAccountSettingFunction=()=>{
-    // console.log(openNotifications,openAccountSettings,'asd');
+
     openAccountSettings ?    dispatch({ type: 'setOpenAccountSettings', openAccountSettingsAction:false})
     :    dispatch({ type: 'setOpenAccountSettings', openAccountSettingsAction:true})
  
     dispatch({ type: 'setOpenNotifications', openNotificationsAction:false})
     }
 
-    // console.log(openNotifications,openAccountSettings);
 
+    
 
   return (
     <>

@@ -24,8 +24,8 @@ function AddFilesButton() {
             addFolderRef.current.style.bottom="0px"
                 }
         else{
-            addFileRef.current.style.bottom="55px"            
-            addFolderRef.current.style.bottom="105px"   
+            addFileRef.current.style.bottom="105px"            
+            addFolderRef.current.style.bottom="55px"   
         }
 
     },[openAddFiles])
@@ -33,15 +33,19 @@ function AddFilesButton() {
 
     return (
         <div className='h-[170px] w-[65px] items-center justify-end overflow-hidden flex flex-col gap-2  bg-red-00 pb-100px] relative'>
-            <div className='w-[45px] h-[45px] rounded-full center bg-[#2D2D2D] hover:bg-[#202020] hover:cursor-pointer z-10 transition-all delay-70 duration-400 ease-in-out absolute bottom-[105px]' ref={addFolderRef} onClick={() =>dispatch({ type: 'setNewFolderNamePopup', newFolderNamePopupAction:true})}>
-                <img src={CreateFolderImg} className='w-[23px] hover:w-[24px]'/>
-            </div>
-            <div className='w-[45px] h-[45px] rounded-full center bg-[#2D2D2D] hover:bg-[#202020] hover:cursor-pointer z-10 transition-all delay-70 duration-400 ease-in-out absolute bottom-[55px]' ref={addFileRef} onClick={() =>dispatch({ type: 'setAddNewTextfile', addNewTextfileAction:true})}>
+            
+            <div className='w-[45px] h-[45px] rounded-full center bg-[#2D2D2D] hover:bg-[#202020] hover:cursor-pointer z-10 transition-all delay-70 duration-400 ease-in-out absolute bottom-[105px]' ref={addFileRef} onClick={() =>dispatch({ type: 'setAddNewTextfile', addNewTextfileAction:true})}>
                 <img src={CreateDocImg} className='w-[23px] hover:w-[24px]'/>
             </div>
+
+            <div className='w-[45px] h-[45px] rounded-full center bg-[#2D2D2D] hover:bg-[#202020] hover:cursor-pointer z-10 transition-all delay-70 duration-400 ease-in-out absolute bottom-[55px]' ref={addFolderRef} onClick={() =>dispatch({ type: 'setNewFolderNamePopup', newFolderNamePopupAction:true})}>
+                <img src={CreateFolderImg} className='w-[23px] hover:w-[24px]'/>
+            </div>
+
             <div className={`w-[50px] h-[50px] rounded-full center ${openAddFiles ? "bg-[#2D2D2D]" : "bg-black"}  hover:bg-[#202020] hover:cursor-pointer z-20 absolute bottom-0`} onClick={addbutton}>
                 <IoMdAdd size={30} color='white' />
             </div>
+
         </div>
     )
 }

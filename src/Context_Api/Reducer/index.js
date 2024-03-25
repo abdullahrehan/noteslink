@@ -21,6 +21,9 @@ const Reducer = (state, action) => {
     case "setAddNewTextfile":
       return { ...state, addNewTextfile: action.addNewTextfileAction };
 
+    case "setSaveFilePopup":
+      return { ...state, saveFilePopup: action.saveFilePopupAction };
+
     case "setLogoutPopup":
       return { ...state, logoutPopup: action.logoutPopupAction };
 
@@ -44,8 +47,8 @@ const Reducer = (state, action) => {
 
     case "setHomeFilesRefInitialValue":
       return { ...state, homeFilesRef: action.homeFilesRefAction };
-    
-      case "setHomeFilesRef":
+
+    case "setHomeFilesRef":
       return { ...state, homeFilesRef: action.homeFilesRefAction };
   }
 };

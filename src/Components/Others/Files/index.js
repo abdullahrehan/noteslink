@@ -6,14 +6,7 @@
   function AllFiles({data,homeFilesSettingRef}) {
   
     const {state,dispatch}=useContext(AppContext)
-    // const {homeFilesRef}=state    
-    // const settingsRef = useRef(homeFilesRef)
 
-    
-    // useEffect(()=>{
-    //   // dispatch({ type: 'setHomeFilesRefInitialValue', homeFilesRefAction:settingsRef})    
-
-    // },[])
   
     return (
       <div className='flex items-start'>

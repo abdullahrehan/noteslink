@@ -2,7 +2,7 @@ export const HomeFiles = [
   {
     id:1,
     name: "React Js",
-    visibility: "private",
+    visibility: "saved",
     type: "folder",
     content: null,
   },
@@ -34,6 +34,13 @@ export const HomeFiles = [
   {
     name: "Event Loop",
     visibility: "public",
+    type: "file",
+    content:
+      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ducimus accusamus harum expedita et magnam eius minus itaque quam sit qui adipisci architecto, atque porro quasi. Voluptatem maiores aut corrupti quaerat.",
+  },
+  {
+    name: "useEffect",
+    visibility: "saved",
     type: "file",
     content:
       "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ducimus accusamus harum expedita et magnam eius minus itaque quam sit qui adipisci architecto, atque porro quasi. Voluptatem maiores aut corrupti quaerat.",

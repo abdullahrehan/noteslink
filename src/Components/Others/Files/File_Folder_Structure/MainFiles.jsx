@@ -1,7 +1,8 @@
 import React, { useContext, useState } from 'react'
 import { MdPublic } from "react-icons/md";
 import FileSettings from '../FileSettings/index'
-import { FileSettingsData } from '../MapList/SettingsList'
+import { FileSettingsData , SavedFileSettingsData } from '../MapList/SettingsList'
+import { FaBookmark } from "react-icons/fa";
 import AppContext from '../../../../Context_Api/AppContext.js'
 
 
@@ -38,7 +39,13 @@ function MainFiles({ content , visibility, name , index , homeFilesSettingRef })
             
                 </div>
             
-                <div className={`absolute bottom-0 right-0 ${visibility=="public"?"flex":"hidden"}`}><MdPublic size={17}/></div>
+                <div className={`absolute bottom-0 right-0 ${visibility=="public" || visibility=="saved" ?"flex":"hidden"}`}>
+                    {visibility=="public" ?
+                    <MdPublic size={17}/> :
+                    visibility=="saved" ?
+                    <FaBookmark size={14}/>:
+                    null}
+                    </div>
             
             </div>
     
@@ -53,7 +60,7 @@ function MainFiles({ content , visibility, name , index , homeFilesSettingRef })
             <FileSettings 
                 homeFilesSettingRef={homeFilesSettingRef}
                 index={index} 
-                FolderSettingsData={FileSettingsData()}
+                FolderSettingsData={ visibility=="public" || visibility=="private" ? FileSettingsData() : visibility=="saved" ? SavedFileSettingsData() : null }
                 closeFileSettings={() =>dispatch({ type: 'setOpenFileSettings', openFileSettingsAction:{ value: false, event: null, index: null }})}
 />
         </div>

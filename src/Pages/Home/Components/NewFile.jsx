@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { RxCross2 } from "react-icons/rx";
 import AppContext from '../../../Context_Api/AppContext.js'
 import { MdKeyboardDoubleArrowUp } from "react-icons/md";
@@ -8,11 +8,24 @@ import { GoBold } from "react-icons/go";
 import { RiItalic } from "react-icons/ri";
 import { AiOutlineUnderline } from "react-icons/ai";
 import { HiMiniListBullet } from "react-icons/hi2";
+import { MdOutlineModeEditOutline } from "react-icons/md";
+import { FaRegFileAlt } from "react-icons/fa";
+import { IoIosArrowDown } from "react-icons/io";
+import { MdPublic } from "react-icons/md";
+import { MdPublicOff } from "react-icons/md";
+import { AiOutlineLike } from "react-icons/ai";
+import { AiOutlineDislike } from "react-icons/ai";
+import { LuEye } from "react-icons/lu";
+import { MdSaveAlt } from "react-icons/md";
 
 function NewFile() {
 
     const { state, dispatch } = useContext(AppContext)
+    const { renameFilePopup , saveFilePopup } = state
     const [openSaveOptions, setSaveOptions] = useState(true)
+    const [fileSaved, setFileSaved] = useState(false)
+    const [openFileTypeSetting, setOpenFileTypeSetting] = useState(false)
+    const [fileTypeSetting, setFileTypeSetting] = useState(false)
     const settingsIcon = [
         { icon: <GoBold size={18} />, function: () => { } },
         { icon: <RiItalic size={18} />, function: () => { } },
@@ -20,13 +33,28 @@ function NewFile() {
         { icon: <HiMiniListBullet size={18} />, function: () => { } },
     ]
 
+    useEffect(() => {
+        if (fileSaved) {
+            setTimeout(() => {
+                setFileSaved(false)
+            }, 1500);
+        }
+    }, [fileSaved])
+
+    const changeFileType = (value) => {
+        if (value !== fileTypeSetting) {
+            setFileTypeSetting(value)
+            setOpenFileTypeSetting(false)
+        }
+    }
+
     return (
-        <div className='fixed z-40 top-0 left-0 w-[100vw] h-[100vh] bg-[#0009] backdrop-blur-s center '>
+        <div className='fixed z-40 top-0 left-0 w-[100vw] h-[100vh] bg-[#0009]  center '>
 
-            <div className={`h-[92%]  w-[50%] bg-[#EAEAEA] rounded-[5px] relative  flex flex-col center`}>
+            <div className={`h-[92%]  w-[50%] bg-[#EAEAEA] relative rounded-[5px] relative  flex flex-col center`}>
 
 
-                <div className='pt-1 absolute top-0 -right-8 hover:cursor-pointer' onClick={() => dispatch({ type: 'setAddNewTextfile', addNewTextfileAction: false })}>
+                <div className='pt-1 absolute -top-2 -right-8 hover:cursor-pointer' onClick={() => dispatch({ type: 'setAddNewTextfile', addNewTextfileAction: false })}>
 
                     <RxCross2 color='white' size={24} />
 
@@ -36,7 +64,7 @@ function NewFile() {
 
                     <div className='w-[33%] h-full flex items-end justify-start gap-1'>
 
-                        {settingsIcon.map(data => 
+                        {settingsIcon.map(data =>
 
                             <div className={`w-[30px] h-[30px] bg-gray-00 hover:cursor-pointer shadow-[inset_-12px_-8px_40px_#46464620]  center rounded-full `} onClick={() => setSaveOptions(!openSaveOptions)}>
 
@@ -51,14 +79,34 @@ function NewFile() {
 
                     <div className='w-[33%] text-lg font-medium center flex-col '>
 
-                        <div className='pt-2 pb-1 font-medium text-2xl bg-red-00 center'>React Js</div>
-
+                        <div className='flex gap-5 items-center bg-red-00'>
+                            <div className=' h-full '></div>
+                            <div className='pt-2 pb-1 font-medium text-2xl bg-red-00 center'>React Js</div>
+                            <div className=' h-full -5 flex justify-end items-center text-gray-500 hover:text-black hover:cursor-pointer' onClick={() => dispatch({ type: 'setRenameFilePopup', renameFilePopupAction: true })}><MdOutlineModeEditOutline /></div>
+                        </div>
                         <div className='h-[1px] w-[90%] bg-black  text-lg font-medium'></div>
 
                     </div>
 
-                    <div className='w-[33%] '>
+                    <div className='w-[33%] h-full flex justify-end items-end pr-1 pb-2 bg-red-00 gap-3 '>
 
+                        <div className='w-[30px] h-[30px] bg-red-00 hover:cursor-pointer rounded-full center shadow-[inset_-12px_-8px_40px_#46464620] ' onClick={()=>dispatch({ type: 'setSaveFilePopup', saveFilePopupAction:true})}>
+                                    <MdSaveAlt size={18}/>
+                        </div> 
+
+                        <div className='w-[100px] h-[25px] relative rounded-[2px] borde border-gray-500 center hover:cursor-pointer shadow-[0_3px_10px_rgb(0,0,0,0.2)] ' onClick={() => setOpenFileTypeSetting(!openFileTypeSetting)}>
+                            <div className='w-[70%] center text-base gap-1'><MdPublic size={15} />{fileTypeSetting == "public" ? "Public" : "Private"}</div>
+                            <div className='w-[30%] h-full  center bg-red-00' >
+                                <IoIosArrowDown size={16} />
+                            </div>
+
+                            <div className={`absolute center ${openFileTypeSetting ? "flex" : "hidden"} flex-col shadow-[0_3px_10px_rgb(0,0,0,0.2)] justify-around w-full h-[60px] bg-[#EAEAEA] rounded-[2px]  borde border-gray-500 z-50 top-[30px]`}>
+                                <button className='w-[90%] h-[45%] flex items-center pl-1 gap-1 hover:cursor-pointer hover:bg-gray-200 text-base' disabled={fileTypeSetting == "public" ? true : false} onClick={() => changeFileType("public")}><MdPublic size={15} />Public</button>
+                                <div className='w-[90%] h-[1px] bg-gray-500'></div>
+                                <button className='w-[90%] h-[45%] flex items-center pl-1 gap-1 hover:cursor-pointer hover:bg-gray-200 text-base' disabled={fileTypeSetting == "private" ? true : false} onClick={() => changeFileType("private")}><MdPublicOff size={15} />Private</button>
+
+                            </div>
+                        </div>
                     </div>
 
 
@@ -66,14 +114,14 @@ function NewFile() {
 
                 <div className='w-[95%] h-full  items-center flex flex-col'>
 
-                    <div className='w-full h-[96%] mt-1 relative overflow-hidden bg-red-00 shadow-[inset_-12px_-8px_40px_#46464620] overflow-none' >
+                    <div className={`w-full relative h-[96%] mt-1 relative overflow-hidden  bg-red-00 shadow-[inset_-12px_-8px_40px_#46464620] overflow-none`} >
 
                         <textarea className='bg-[#0000] w-full h-[100%] overflow-y-auto scroll-style text-sm p-2 outline-none' spellCheck={false} style={{ resize: 'none' }} value={"Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of de Finibus Bonorum et Malorum (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, Lorem ipsum dolor sit amet.., comes from a line in section 1.10.32. The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from de Finibus Bonorum et Malorum by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham."} />
+                        <div className={`w-full h-full z-60 top-0 left-0 absolute  ${openFileTypeSetting || saveFilePopup ? "bg-[#0000] backdrop-blur-sm" : null}`}></div>
 
-                        {/* <div> */}
-                        <div className={`flex text-base gap-2 absolute right-[10px] shadow-[inset_-12px_-8px_40px_#46464620]  transition-all hover:text-black text-white duration-200 ease-linear ${openSaveOptions ? "-bottom-[70px]" : "delay-200 bottom-[45px]"}  w-[32px] h-[32px] bg-[#2D2D2D] hover:bg-gray-300 hover:cursor-pointer center rounded-full `} onClick={() => setSaveOptions(!openSaveOptions)}>
+                        <div className={`flex text-base gap-2 absolute right-[10px] shadow-[inset_-12px_-8px_40px_#46464620]  transition-all hover:text-black text-white duration-200 ease-linear ${openSaveOptions ? "-bottom-[70px]" : "delay-200 bottom-[45px]"}  w-[32px] h-[32px] bg-[#2D2D2D] hover:bg-gray-300 hover:cursor-pointer center rounded-full `} onClick={() => setFileSaved(true)}>
 
-                            <div className='font-medium '><FiSave size={16} className='' /></div>
+                            <div className='font-medium' ><FiSave size={16} className='' /></div>
 
                         </div>
 
@@ -81,7 +129,7 @@ function NewFile() {
 
                             <div className='font-medium '><GoLink size={16} className='' /></div>
 
-                            {/* </div> */}
+
                         </div>
 
                     </div>
@@ -100,15 +148,44 @@ function NewFile() {
                             </div>
 
                         </div>
-                        <div className='w-full h-[60%] bg-red-00 center'>
-                            <div className='text-base bg-[#2D2D2D] py-3 px-8 rounded-[5px] text-white w-auto' onClick={() => setSaveOptions(!openSaveOptions)}>Save</div>
+                        <div className='w-full h-[60%] bg-red-00 flex center justify-between'>
 
+                            <div className={`w-[150px] bg-red-00  `}>
+                                {fileTypeSetting == "public" ? 
+                              <div className='flex gap-2'>  <div className='font-medium flex items-center text-[14px] gap-1 center'>
+                                    30 <LuEye size={19} />
+                                </div>
+                                <div className='font-medium flex items-center text-[14px] gap-1 center'>
+                                    14 <AiOutlineLike size={19} />
+                                </div>
+                                <div className='font-medium flex items-center text-[14px] gap-1 center'>
+                                    15 <AiOutlineDislike size={19} />
+                                </div>
+                                </div>    : null}
+                            </div>
+
+                            <div className='text-base bg-[#2D2D2D] py-3 px-8 rounded-[5px] text-white w-auto hover:cursor-pointer hover:bg-[#434343] ' onClick={() => setFileSaved(true)}>Save</div>
+                            <div className='w-[150px]'></div>
                         </div>
+
+
+
 
                     </div>
                 </div>
-            </div>
 
+                <div className={`h-full ${renameFilePopup || fileSaved ? "flex" : "hidden"} center w-full absolute top-0 left-0 bg-[#0002] backdrop-blur-sm  rounded-[5px] flex flex-col center`}>
+
+                    <div className='text-base gap-2 items-center flex font-medium'>
+                        <div><FaRegFileAlt /></div>
+                        <div>File Saved</div>
+                    </div>
+
+                </div>
+
+
+
+            </div>
 
         </div>
     )

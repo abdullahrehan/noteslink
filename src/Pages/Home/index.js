@@ -12,13 +12,14 @@ import NewFolder from './Components/NewFolder.jsx'
 import RenameFile from './Components/RenameFile.jsx'
 import NewFile from './Components/NewFile.jsx'
 import DeleteFile from '../../Components/Others/DeleteFile.jsx'
+import SaveFile from '../../Components/Others/SaveFile.jsx'
 import AppContext from '../../Context_Api/AppContext.js'
 
 function Index() {
 
   const [openSettings,setOpenSettings]=useState(false);
   const {state,dispatch}=useContext(AppContext)
-  const {logoutPopup,newFolderNamePopup,renameFilePopup,renameFolderPopup,deletFilePopup,addNewTextfile}=state
+  const {logoutPopup,newFolderNamePopup,renameFilePopup,renameFolderPopup,deletFilePopup,addNewTextfile,saveFilePopup}=state
   const [offsetHeightHome,setOffsetHeightHome]=useState(null);
   const [offsetWidthHome,setOffsetWidthHome]=useState(null);
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
@@ -185,7 +186,7 @@ function Index() {
     {renameFilePopup ? <RenameFile type="File" Function={() =>dispatch({ type: 'setRenameFilePopup', renameFilePopupAction:false})}/> : null }
     {renameFolderPopup ? <RenameFile type="Folder" Function={() =>dispatch({ type: 'setRenameFolderPopup', renameFolderPopupAction:false})}/> : null }
     {deletFilePopup ? <DeleteFile type="File" Function={() =>dispatch({ type: 'setDeletFilePopup', deletFilePopupAction:false})}/> : null }
-    
+    {saveFilePopup ? <SaveFile type="File" Function={() =>dispatch({ type: 'setSaveFilePopup', saveFilePopupAction:false})}/> : null }
     {addNewTextfile?<NewFile/>:null}
 
     
@@ -193,7 +194,7 @@ function Index() {
         <div className="w-full h-[70px] flex bg-green-00 relative justify-between items-end px-2 pb-2">
       
           <div className="flex gap-2 text-sm font-medium ">
-          {/* {cursorPosition.x} / {cursorPosition.y} */}
+
             <span>5 Folders </span>
       
             <span>Size 1.5Gb</span>

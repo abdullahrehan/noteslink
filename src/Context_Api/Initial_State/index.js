@@ -13,6 +13,7 @@ const initialState=
       openHomeSetings:false,
 
       //  popups
+      saveFilePopup:true,
       logoutPopup:false,
       newFolderNamePopup:false,
       renameFilePopup:false,
