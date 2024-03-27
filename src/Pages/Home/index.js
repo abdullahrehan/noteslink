@@ -17,7 +17,6 @@ import AppContext from '../../Context_Api/AppContext.js'
 
 function Index() {
 
-  const [openSettings,setOpenSettings]=useState(false);
   const {state,dispatch}=useContext(AppContext)
   const {logoutPopup,newFolderNamePopup,renameFilePopup,renameFolderPopup,deletFilePopup,addNewTextfile,saveFilePopup}=state
   const [offsetHeightHome,setOffsetHeightHome]=useState(null);
@@ -25,15 +24,12 @@ function Index() {
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
   const [menuDimension,setMenuDimension]=useState({horizontal:"right",vertical:"bottom"})
 
-
   const {openFoldersPath,openHomeSetings,openFileSettings}=state
+  // const [setLoader,]
 
   const homeSettingsRef=useRef()
   const homeRef=useRef()
   const homeFilesSettingRef = useRef([])
-
-
-  const [newFolderPopup,setNewFolderPopup]=useState(false)
 
   useEffect(()=>{
 
@@ -109,7 +105,6 @@ function Index() {
     dispatch({ type: 'setOpenHomeSetings', openHomeSetingsAction:true})
 
     homeSettingsRef.current.style.left=`${cursorPosition.x-210}px`;
-    console.log(cursorPosition.x-210);
 
     if(offsetHeightHome-cursorPosition.y<243){ homeSettingsRef.current.style.top = ''; homeSettingsRef.current.style.bottom=`2px`; }
 
@@ -117,11 +112,12 @@ function Index() {
 };
 
   const handleMouseMove = (e) => {
+
     const target = e.target;
     const rect = target.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-    console.log(x,'x',y,'y');
+
     if(!openHomeSetings){
   
       setCursorPosition({ x: x, y: y });

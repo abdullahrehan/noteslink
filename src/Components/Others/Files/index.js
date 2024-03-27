@@ -1,15 +1,14 @@
-  import React, { useContext, useEffect, useRef } from 'react'
+  import React from 'react'
   import Folder from './File_Folder_Structure/Folder'
   import MainFiles from './File_Folder_Structure/MainFiles'
-  import AppContext from '../../../Context_Api/AppContext.js'
+  import FileLoader from '../Loaders/FileLoader'
   
   function AllFiles({data,homeFilesSettingRef}) {
   
-    const {state,dispatch}=useContext(AppContext)
 
-  
     return (
-      <div className='flex items-start'>
+
+      <div className='flex items-start gap-2'>
   
         {data.map((data, index) =>
   
@@ -21,9 +20,9 @@
                 index={index}
                 homeFilesSettingRef={homeFilesSettingRef}
                 />
-    
+  // <FileLoader/>  
           :
-        // null
+
           <MainFiles 
                 content={data.content}
                 visibility={data.visibility}

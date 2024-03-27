@@ -9,6 +9,14 @@ import SavedFiles from "./Pages/SavedFiles/index.js";
 import PublicFiles from "./Pages/PublicFiles/index.js";
 import SeachFiles from "./Pages/SeachFiles/index.js";
 import DeleteFiles from "./Pages/DeleteFiles/index.js";
+
+import EnterEmail from './Pages/Authentication/ForgotPassword/EnterEmail'
+import AuthPages from './Pages/Authentication/AuthPages/index'
+import VerificationCode from './Pages/Authentication/ForgotPassword/VerificationCode'
+import UpdatePassword from './Pages/Authentication/ForgotPassword/UpdatePassword'
+import PasswordChanges from './Pages/Authentication/ForgotPassword/PasswordChanges.jsx'
+
+import AuthenticationPage from './Pages/Authentication/Index.js'
 // import Complaints from "./Pages/Complaints/index.js";
 
 import Storage from "./Pages/Storage/index.js";
@@ -19,6 +27,7 @@ import Settings from "./Pages/Settings/index.js";
 import Feedback from "./Pages/Feedback/index.js";
 import Help from "./Pages/Help/index.js";
 import AppContext from './Context_Api/AppContext.js'
+
 import "./App.css";
 
 // import { collection, getDocs } from "firebase/firestore";
@@ -87,6 +96,13 @@ const App = () => {
     
           <Routes>
     
+            <Route path="/auth"  element={<AuthenticationPage><AuthPages/></AuthenticationPage>} />
+            <Route path="/email" element={<AuthenticationPage><EnterEmail/></AuthenticationPage>} />
+            <Route path="/verificationcode" element={<AuthenticationPage><VerificationCode/></AuthenticationPage>} />
+            <Route path="/updatepassword" element={<AuthenticationPage><UpdatePassword/></AuthenticationPage>} />
+            <Route path="/passwordchanged" element={<AuthenticationPage><PasswordChanges/></AuthenticationPage>} />
+
+            
             <Route path="/noteslink/" element={<Home />} />
             <Route path="/savedfiles" element={<SavedFiles />} />
             <Route path="/publicfiles" element={<PublicFiles />} />
