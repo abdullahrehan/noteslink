@@ -54,11 +54,13 @@ const App = () => {
 
   // useEffect(() => {
   //   fetchData();
+  //asdasdadasdasasdadasdasds
+  //asdad
   // }, []);
 
   const {state,dispatch}=useContext(AppContext)
   const {openSideBar}=state
-
+//console
   
   const menuref = useRef();
 
