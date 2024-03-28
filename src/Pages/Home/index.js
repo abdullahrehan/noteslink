@@ -1,8 +1,10 @@
  import React, { useEffect, useRef, useState ,useContext } from "react";
 import AllTabs from "./Components/AllTabs";
 import NavigationFolder from "./Components/NavigationFolder";
+import NavigationFolderPath from "./Components/Loaders/NavigationFolderPath.jsx";
 import TabFolderIcon from "../../Assets/Images/tabFolderIcon.png";
 import FolderPath from "./Components/FolderPath";
+import FolderPathLoader from './Components/Loaders/FolderPathLoader.jsx'
 import AddFilesButton from "./Components/AddFilesButton";
 import AllFiles from "../../Components/Others/Files/index.js";
 import PageSettings from './Components/PageSettings.jsx'
@@ -25,7 +27,7 @@ function Index() {
   const [menuDimension,setMenuDimension]=useState({horizontal:"right",vertical:"bottom"})
 
   const {openFoldersPath,openHomeSetings,openFileSettings}=state
-  // const [setLoader,]
+  const [loading,setLoading]=useState(true)
 
   const homeSettingsRef=useRef()
   const homeRef=useRef()
@@ -132,6 +134,16 @@ function Index() {
     dispatch({ type: 'setOpenFileSettings', openFileSettingsAction:{ value: false, event: null, index: null }})
   }
 
+  const loadingAnnimation=()=>{
+
+    setTimeout(() => {
+
+      setLoading(false)  
+      
+    }, 1500);
+
+  }
+
   
   useEffect(()=>{
     closeFileSettings()
@@ -141,13 +153,13 @@ function Index() {
 
   return (
   
-  <div className="w-full h-full bg-green-00 flex justify-end  text-4xl" onClick={closeFileSettings}>
+  <div className="w-full h-full bg-green-00 flex justify-end  text-4xl" onClick={closeFileSettings} onLoad={loadingAnnimation}>
       
       <div className={`${ openFoldersPath ? "w-minus-220px" : "w-full" } h-full bg-red-00 transition-all delay-70 duration-400 ease-in-out`}>
       
         <div className="w-full h-[35px] bg-green-00 flex items-center ">
       
-          <AllTabs />
+          <AllTabs loading={loading}/>
 
           <div className="w-[40px] h-full hover:cursor-pointer rounded-full bg-#0002] center">
       
@@ -159,13 +171,22 @@ function Index() {
       
         <div className="w-full h-[45px]">
       
-          <FolderPath />
-      
-        </div>
+          {
+            loading ?
+          
+            <FolderPathLoader/>
+          
+          :
+          
+          <FolderPath /> 
+          
+          }
+
+          </div>
       
         <div className="w-full h-minus-150px bg-green-00 px-1 bg-red-00 relative"  onContextMenu={handleWindowMouseMove} ref={homeRef} onMouseMove={handleMouseMove} onClick={closePopUp}>
       
-          <AllFiles data={HomeFiles} homeFilesSettingRef={homeFilesSettingRef}/>
+          <AllFiles data={HomeFiles} homeFilesSettingRef={homeFilesSettingRef} loading={loading}/>
       
           <div className={`absolute ${ openHomeSetings ? "flex" : "hidden" }`} ref={homeSettingsRef}>
           
@@ -189,17 +210,29 @@ function Index() {
       
         <div className="w-full h-[70px] flex bg-green-00 relative justify-between items-end px-2 pb-2">
       
+          {loading ? 
+          
+          
           <div className="flex gap-2 text-sm font-medium ">
 
-            <span>5 Folders </span>
-      
-            <span>Size 1.5Gb</span>
-      
-          </div>
+            <div className="bg-slate-400 animate-pulse w-[80px] h-[15px] rounded-full "></div>
 
+            <div className="bg-slate-400 animate-pulse w-[80px] h-[15px] rounded-full "></div>
+
+          </div>
+          
+          :
+          <div className="flex gap-2 text-sm font-medium ">
+
+            <div>5 Folders </div>
       
+            <div>Size 1.5Gb</div>
+      
+          </div> 
+          
+          }
           <div className="absolute bottom-2 right-2">
-      
+          
             <AddFilesButton />
       
           </div>
@@ -210,9 +243,14 @@ function Index() {
 
       <div className={`${ openFoldersPath ? "w-[220px]" : "w-[0px]" } transition-all delay-70 duration-400 ease-in-out h-full ${ openFoldersPath ?  "border-l-[1.5px] border-[#B3B3B3]" : null } `} >
  
-        <NavigationFolder closeFolders={() =>dispatch({ type: 'setFolderPath', folderPath:false})} />
-      
-      </div>
+      {
+        loading
+      ?
+      <NavigationFolderPath/>
+      :
+      <NavigationFolder closeFolders={() =>dispatch({ type: 'setFolderPath', folderPath:false})} />
+      }
+</div>
 
     
     </div>

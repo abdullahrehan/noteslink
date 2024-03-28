@@ -1,6 +1,6 @@
 {
   "name": "notes-app",
-  "homepage": "http://abdullahrehan.github.io/noteslink",
+  "homepage": "http://abdullahrehan.github.io/auth",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

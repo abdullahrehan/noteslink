@@ -2,7 +2,6 @@ import React from 'react'
 import PathFolder from './PathFolder'
 import Data from "../../../Apis/Folder.json";
 import { RxCross2 } from "react-icons/rx";
-import { RxCross1 } from "react-icons/rx";
 
 function NavigationFolder({ closeFolders }) {
 

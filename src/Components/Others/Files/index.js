@@ -1,10 +1,10 @@
   import React from 'react'
   import Folder from './File_Folder_Structure/Folder'
   import MainFiles from './File_Folder_Structure/MainFiles'
-  import FileLoader from '../Loaders/FileLoader'
+  import FileLoader from '../../../Pages/Home/Components/Loaders/FileLoader'
   
-  function AllFiles({data,homeFilesSettingRef}) {
-  
+  function AllFiles({data,homeFilesSettingRef,loading}) {
+   
 
     return (
 
@@ -14,16 +14,16 @@
   
           data.type == "folder" ?
         
-          <Folder 
+          loading ? <FileLoader/> : <Folder 
                 visibility={data.visibility}
                 name={data.name}
                 index={index}
                 homeFilesSettingRef={homeFilesSettingRef}
                 />
-  // <FileLoader/>  
+ 
           :
 
-          <MainFiles 
+          loading ? <FileLoader/> : <MainFiles 
                 content={data.content}
                 visibility={data.visibility}
                 name={data.name}
