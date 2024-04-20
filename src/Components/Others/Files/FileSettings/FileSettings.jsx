@@ -1,17 +1,17 @@
 import React from 'react'
 
-function FileSettings({ settings, closeFileSettings }) {
+function FileSettings({ settings , id , data, closeFileSettings }) {
 
 
     return (
 
         <div className='w-[220px] h-auto bg-[#F0F0F0] rounded-[4px] gap-1 text-sm flex flex-col items-center p-1 pb-2'>
 
-            {settings.map((data, index) =>
+            {settings.map((Data, index) =>
                 <>
-                    <div className='flex z-20  h-[35px] w-[95%] gap-2 hover:bg-[#D9D9D9] rounded-[2px] flex items-center pl-2' onClick={()=>data.Function()} >
-                        <div className=''>{data.Icon}</div>
-                        <div className=''>{data.name}</div>
+                    <div className='flex z-20  h-[35px] w-[95%] gap-2 hover:bg-[#D9D9D9] rounded-[2px] flex items-center pl-2' onClick={()=>Data.Function(id,data)} >
+                        <div className=''>{Data.Icon}</div>
+                        <div className=''>{Data.name}</div>
                     </div>
                     <div className='w-[95%] bg-gray-400 h-[1px]'></div>
                 </>

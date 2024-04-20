@@ -1,40 +1,55 @@
-  import React from 'react'
-  import Folder from './File_Folder_Structure/Folder'
-  import MainFiles from './File_Folder_Structure/MainFiles'
-  import FileLoader from '../../../Pages/Home/Components/Loaders/FileLoader'
-  
-  function AllFiles({data,homeFilesSettingRef,loading}) {
-   
+import React from "react";
+import Folder from "./File_Folder_Structure/Folder";
+import MainFiles from "./File_Folder_Structure/MainFiles";
+import FileLoader from "../../../Pages/Home/Components/Loaders/FileLoader";
 
-    return (
-
-      <div className='flex items-start gap-2'>
-  
-        {data.map((data, index) =>
-  
-          data.type == "folder" ?
-        
-          loading ? <FileLoader/> : <Folder 
-                visibility={data.visibility}
-                name={data.name}
-                index={index}
-                homeFilesSettingRef={homeFilesSettingRef}
-                />
+function AllFiles({ data, homeFilesSettingRef, loading }) {
  
-          :
-
-          loading ? <FileLoader/> : <MainFiles 
-                content={data.content}
-                visibility={data.visibility}
-                name={data.name}
-                index={index}
-                homeFilesSettingRef={homeFilesSettingRef}
-                />
+  const Array = Object.keys(data).map((key) => ({ id: key, ...data[key] }));
+ 
+  const sortByType = (a, b) => {
+    if (a.type < b.type) return 1;
+    if (a.type > b.type) return -1;
+    return 0;
+  };
+ 
+  const dataArray = Array.sort(sortByType);
+  // console.log(data);
+  return (
+    <div className="flex items-start gap-2 flex flex-wrap h-auto">
+      {dataArray.map((data, index) =>
+        data.type == "folder" ? 
         
-        )}
-  
-      </div>
-    )
-  }
-  
-  export default AllFiles
+          loading ? 
+            <FileLoader />
+          : 
+            <Folder
+              id={data.id}
+              visibility={data.status}
+              data={data}
+              name={data.name}
+              index={index}
+              homeFilesSettingRef={homeFilesSettingRef}
+            />
+          
+        
+        // null: 
+        :loading ? 
+          <FileLoader />
+        :
+        // null
+          <MainFiles
+            content={data.content}
+            visibility={data.status}
+            data={data}
+            name={data.name}
+            index={index}
+            homeFilesSettingRef={homeFilesSettingRef}
+          />
+        
+      )}
+    </div>
+  );
+}
+
+export default AllFiles;

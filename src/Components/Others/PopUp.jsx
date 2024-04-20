@@ -2,7 +2,6 @@ import React from 'react'
 import { RxCross2 } from "react-icons/rx";
 
 function PopUp({ title, width, height, crossFunction,children  }) {
-    console.log(width,height);
     return (
         <div className='fixed z-50 top-0 left-0 w-[100vw] h-[100vh] bg-[#0007] center '>
             <div className={`${width} ${height} bg-[#EAEAEA] rounded-[5px]  flex flex-col`}>

@@ -6,16 +6,9 @@ import { FaBookmark } from "react-icons/fa";
 import AppContext from '../../../../Context_Api/AppContext.js'
 
 
-function MainFiles({ content , visibility, name , index , homeFilesSettingRef }) {
+function MainFiles({ content , visibility, data,name , index , homeFilesSettingRef }) {
     
-
     const {state,dispatch}=useContext(AppContext)
-
-    // const [openFileSettings,setOpenFileSettings]=useState({
-    //     value:false,
-    //     event:null,
-    //     index:null
-    // })
 
     const FolderSetting=(event)=>{
         event.stopPropagation()
@@ -24,6 +17,7 @@ function MainFiles({ content , visibility, name , index , homeFilesSettingRef })
 
     }
 
+    // console.log(data,'20');
 
     return (
     
@@ -60,7 +54,7 @@ function MainFiles({ content , visibility, name , index , homeFilesSettingRef })
             <FileSettings 
                 homeFilesSettingRef={homeFilesSettingRef}
                 index={index} 
-                FolderSettingsData={ visibility=="public" || visibility=="private" ? FileSettingsData() : visibility=="saved" ? SavedFileSettingsData() : null }
+                FolderSettingsData={ visibility=="public" || visibility=="private" ? FileSettingsData(data) : visibility=="saved" ? SavedFileSettingsData() : null }
                 closeFileSettings={() =>dispatch({ type: 'setOpenFileSettings', openFileSettingsAction:{ value: false, event: null, index: null }})}
 />
         </div>

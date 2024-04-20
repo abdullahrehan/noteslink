@@ -1,5 +1,25 @@
 const Reducer = (state, action) => {
   switch (action.type) {
+   
+   
+    case "setEmail":
+      return { ...state, email: action.Email };
+
+    case "setName":
+      return { ...state, name: action.Name };
+
+    case "setHomeCurrentFoler":
+      return { ...state, homeCurrentFoler:action.openHomeSetingsAction };
+
+    case "setHomeFolderPath":
+
+    return { ...state, homeFolderPath:[...state.homeFolderPath ,action.homeFolderPathAction] };
+
+    case "setFileViewerContent":
+
+    return { ...state, fileViewerContent:action.fileViewerContentAction };
+
+    
     case "setSideBar":
       return { ...state, openSideBar: action.sideBar };
 

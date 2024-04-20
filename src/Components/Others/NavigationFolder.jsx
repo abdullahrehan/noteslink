@@ -1,9 +1,9 @@
 import React from 'react'
-import PathFolder from './PathFolder'
-import Data from "../../../Apis/Folder.json";
+import PathFolder from '../../Pages/Home/Components/PathFolder'
+import Data from "../../Apis/Folder.json";
 import { RxCross2 } from "react-icons/rx";
 
-function NavigationFolder({ closeFolders }) {
+function NavigationFolder({ closeFolders ,folderName }) {
 
   return (
 
@@ -13,7 +13,7 @@ function NavigationFolder({ closeFolders }) {
 
         <div className='w-full bg-red-00 flex justify-between center pr-2'>
 
-          <PathFolder name={"My Folders"} />
+          <PathFolder name={folderName} />
 
           <div className=' absolute  bg-red-00 right-[2px] top-[2px]'>
             <RxCross2 size={20} className='hover:cursor-pointer ' color={"black"} onClick={closeFolders} />

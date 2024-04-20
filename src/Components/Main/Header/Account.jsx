@@ -4,15 +4,19 @@ import { IoSettingsOutline } from "react-icons/io5";
 import { MdLogout } from "react-icons/md";
 import { LuHelpCircle } from "react-icons/lu";
 import { MdOutlineFeedback } from "react-icons/md";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import AppContext from '../../../Context_Api/AppContext.js'
  
 function Account() {
     const {state,dispatch}=useContext(AppContext)
 
+    const navigate = useNavigate();
+
     const logOutFunc=()=>{
         dispatch({ type: 'setOpenAccountSettings', setOpenAccountSettings:false})        
         dispatch({ type: 'setLogoutPopup', logoutPopupAction:true})
+        navigate("/auth")
+
     }
 
     return (
@@ -31,8 +35,8 @@ function Account() {
                         <div className='pl-2'>
 
                             <div className='  flex flex-col'>
-                                <div className='font-medium text-lg'>Abdullah Rehan</div>
-                                <div className='text-sm text-[#4F4F4F]'>abdullahrehan8118....</div>
+                                <div className='font-medium text-lg'>{state.name?.split(" ")[0]+" "+state.name?.split(" ")[1]}</div>
+                                <div className='text-sm text-[#4F4F4F]'>{state.email}</div>
                                 <div className='text-sm text-[#4F4F4F]'>100 Follower</div>
                             </div>
 

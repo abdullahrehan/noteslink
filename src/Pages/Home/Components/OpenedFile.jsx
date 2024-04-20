@@ -20,7 +20,7 @@ import { MdSaveAlt } from "react-icons/md";
 import { setDoc, doc } from 'firebase/firestore';
 import { fdb } from '../../../Firebase/firebaseConfig.js';
 
-function NewFile() {
+function OpenedFile() {
 
     const { state, dispatch } = useContext(AppContext)
     const { renameFilePopup, saveFilePopup } = state
@@ -31,7 +31,7 @@ function NewFile() {
     const [fileName, setFileName] = useState(null)
     const [fileContent, setFileContent] = useState(null)
     const [fileLink, setFileLink] = useState(null)
-    // const [fileType, setFileType] = useState("private")
+
     const settingsIcon = [
         { icon: <GoBold size={18} />, function: () => { } },
         { icon: <RiItalic size={18} />, function: () => { } },
@@ -39,13 +39,16 @@ function NewFile() {
         { icon: <HiMiniListBullet size={18} />, function: () => { } },
     ]
 
-    // useEffect(() => {
-    //     if (fileSaved) {
-    //         setTimeout(() => {
-    //             setFileSaved(false)
-    //         }, 1500);
-    //     }
-    // }, [fileSaved])
+    useEffect(()=>{
+
+        setFileName(state.fileViewerContent.name);
+        setFileLink(state.fileViewerContent.urls!==undefined?state.fileViewerContent.urls[0]:undefined);
+        setFileContent(state.fileViewerContent.content);
+
+        console.log(state.fileViewerContent);
+    },[state.fileViewerContent])
+
+   
 
     const changeFileType = (value) => {
         if (value !== fileTypeSetting) {
@@ -54,51 +57,10 @@ function NewFile() {
         }
     }
     function makeId(length) {
-        let result = ''
-        const characters =
-            'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-        const charactersLength = characters.length
-        let counter = 0
-        while (counter < length) {
-            result += characters.charAt(Math.floor(Math.random() * charactersLength))
-            counter += 1
-        }
-        return result
+        
     }
-    const createFile = async () => {
-        setFileSaved(true)
-        const data = {
-            id: makeId(40),
-            name: fileName,
-            type: "file",
-            status: fileTypeSetting,
-            keywords: [],
-            content: [fileContent],
-            parent: state.homeCurrentFoler.data[0]?.parent,
-            path: [""],
-            interactions: 0,
-            likes: 0,
-            likedBy: [],
-            strikeStatus: 0,
-            createdAt: Date.now(),
-            deleteAt: null,
-            modifiedAt: Date.now(),
-            owner: state.email.split('@')[0].toLowerCase(),
-            sharedWith: [],
-            size: null,
-            bookmarks: [],
-            editors: [],
-            viewers: [],
-            urls: [fileLink],
-        }
-        await setDoc(doc(fdb, "files", data.id), data).then(() => {
-            console.log("data sent ", data.id,state.homeCurrentFoler.data[0]?.parent);
-            setFileSaved(false)
-            setTimeout(() => {
-                dispatch({ type: 'setAddNewTextfile', addNewTextfileAction: false })
-            }, 100)
-
-        })
+    const saveFile = async () => {
+        
     }
     return (
         <div className='fixed z-40 top-0 left-0 w-[100vw] h-[100vh] bg-[#0009]  center '>
@@ -106,7 +68,7 @@ function NewFile() {
             <div className={`h-[92%]  w-[50%] bg-[#EAEAEA] relative rounded-[5px] relative  flex flex-col center`}>
 
 
-                <div className='pt-1 absolute -top-2 -right-8 hover:cursor-pointer' onClick={() => dispatch({ type: 'setAddNewTextfile', addNewTextfileAction: false })}>
+                <div className='pt-1 absolute -top-2 -right-8 hover:cursor-pointer' onClick={() =>dispatch({ type: "setFileViewerContent", fileViewerContentAction: {value:false,id:null,name:null,content:null,url:null} })}>
 
                     <RxCross2 color='white' size={24} />
 
@@ -175,7 +137,6 @@ function NewFile() {
                             onChange={(e) => setFileContent(e.target.value)}
                         />
 
-                        {/* <div className={`w-full h-full z-60 top-0 left-0 absolute  ${openFileTypeSetting || saveFilePopup ? "bg-[#0000] backdrop-blur-sm" : null}`}></div> */}
 
                         <div className={`flex text-base gap-2 absolute right-[10px] shadow-[inset_-12px_-8px_40px_#46464620]  transition-all hover:text-black text-white duration-200 ease-linear ${openSaveOptions ? "-bottom-[70px]" : "delay-200 bottom-[45px]"}  w-[32px] h-[32px] bg-[#2D2D2D] hover:bg-gray-300 hover:cursor-pointer center rounded-full `} onClick={() => setFileSaved(true)}>
 
@@ -223,7 +184,7 @@ function NewFile() {
                             </div>
 
                             <div className='text-base bg-[#2D2D2D] py-3 px-8 rounded-[5px] text-white w-auto hover:cursor-pointer hover:bg-[#434343] '
-                                onClick={createFile}>Save</div>
+                                onClick={saveFile}>Save</div>
                             <div className='w-[150px]'></div>
                         </div>
 
@@ -250,4 +211,4 @@ function NewFile() {
     )
 }
 
-export default NewFile
+export default OpenedFile

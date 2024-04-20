@@ -1,5 +1,13 @@
 const initialState=
     {
+      email:"",
+      name:null,
+
+      homeCurrentFoler:{name:"My Computer",data:[]},
+      homeFolderPath:["My Computer"],
+
+      fileViewerContent:[],
+
       openSideBar:false,
       openFoldersPath:true,
      
@@ -29,43 +37,43 @@ const initialState=
 
     }
 
-    const authReducerVar={ 
-      tab:"signin",
-      showpassword:false,
-      resetkeys:false,
-      chooseContext:1,
+  //   const authReducerVar={ 
+  //     tab:"signin",
+  //     showpassword:false,
+  //     resetkeys:false,
+  //     chooseContext:1,
   
-      }
+  //     }
   
-      const signinReducerVar={ 
-      signinusername:"",
-      signinuseremail:"",
-      signinuserpassword:"",
-      errorsigninusername:false,
-      errorsigninuseremail:false,
-      errorsigninuserpassword:false,
-      allFieldMandatorySigninErrror:false,
-      signinErrorsEmailDBCheck:false,
-      confirmCode:false,
-      confirmationCodeInput:{},
-      signupmessage:null,
-      inCompleteCodeError:false,
-      signinInputNo:1,
+  //     const signinReducerVar={ 
+  //     signinusername:"",
+  //     signinuseremail:"",
+  //     signinuserpassword:"",
+  //     errorsigninusername:false,
+  //     errorsigninuseremail:false,
+  //     errorsigninuserpassword:false,
+  //     allFieldMandatorySigninErrror:false,
+  //     signinErrorsEmailDBCheck:false,
+  //     confirmCode:false,
+  //     confirmationCodeInput:{},
+  //     signupmessage:null,
+  //     inCompleteCodeError:false,
+  //     signinInputNo:1,
   
-  }
+  // }
   
-  const loginReducerVar={ 
-      loginuserimage:"",
-      loginusername:null,
-      loginuseremail:null,
-      loginuserpassword:null,
-      passwordIncorrectDiv:false,
-      emailIncorrectPageError:false,
-      passwordIncorrectPageError:false,
-      allFieldMandatoryLoginErrror:false,
-      signinInputNo:1,
+  // const loginReducerVar={ 
+  //     loginuserimage:"",
+  //     loginusername:null,
+  //     loginuseremail:null,
+  //     loginuserpassword:null,
+  //     passwordIncorrectDiv:false,
+  //     emailIncorrectPageError:false,
+  //     passwordIncorrectPageError:false,
+  //     allFieldMandatoryLoginErrror:false,
+  //     signinInputNo:1,
   
-  }    
+  // }    
 
 export default initialState;
-export {signinReducerVar,loginReducerVar,authReducerVar}
+// export {signinReducerVar,loginReducerVar,authReducerVar}

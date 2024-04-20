@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 
 import Header from "./Components/Main/Header/index.js";
 import Sidabar from "./Components/Main/Sidebar/index.js";
+import AdminSidebar from "./Components/Main/Sidebar/AdminSidebar.jsx";
 
 import Home from "./Pages/Home/index.js";
 import SavedFiles from "./Pages/SavedFiles/index.js";
@@ -23,8 +24,13 @@ import Storage from "./Pages/Storage/index.js";
 import NotFound from "./Pages/NotFound/index.js";
 import ServiceCenter from "./Pages/ServiceCenter/index.js";
 
+import AllUsers from "./Pages/Admin/AllUsers.jsx";
+import Complaints from "./Pages/Admin/Complaints.jsx";
+import Feedback from "./Pages/Admin/Feedback.jsx";
+
+
 import Settings from "./Pages/Settings/index.js";
-import Feedback from "./Pages/Feedback/index.js";
+// import Feedback from "./Pages/Feedback/index.js";
 import Help from "./Pages/Help/index.js";
 import AppContext from './Context_Api/AppContext.js'
 
@@ -38,7 +44,7 @@ import "./App.css";
 // import {AppContextProvider} from './Context_Api/AppContext.js';
 // import Reducer from './Context_Api/Reducer/index.js'
 // import InitialState from './Context_Api/Initial_State/index.js'
-
+import { auth } from "./Firebase/firebaseConfig.js";
 const App = () => {
   // const fetchData = async () => {
   //   const querySnapshot = await getDocs(collection(fdb, "users"));
@@ -77,6 +83,9 @@ const App = () => {
     }
     }
 
+    console.log(state.fileViewerContent);
+    
+
   return (
 
 <div className="bg-red-00 w-full h-[100vh] selection:bg-red-300 select-none">
@@ -92,6 +101,8 @@ const App = () => {
         <div className={`w-[60px] h-[90vh] t-[10vh] transition-all delay-70 duration-400 ease-in-out bg-[#2D2D2D] rounded-r-lg `} ref={menuref} >
          
           <Sidabar openMenu={openSideBar} />
+          {/* <AdminSidebar openMenu={openSideBar} /> */}
+          
         
         </div>
 
@@ -99,6 +110,10 @@ const App = () => {
     
           <Routes>
     
+            <Route path="/admin"  element={<AllUsers/>} />
+            <Route path="/complaints"  element={<Complaints/>} />
+            <Route path="/feedback"  element={<Feedback/>} />
+
             <Route path="/auth"  element={<AuthenticationPage><AuthPages/></AuthenticationPage>} />
             <Route path="/email" element={<AuthenticationPage><EnterEmail/></AuthenticationPage>} />
             <Route path="/verificationcode" element={<AuthenticationPage><VerificationCode/></AuthenticationPage>} />

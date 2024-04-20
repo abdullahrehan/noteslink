@@ -1,51 +1,77 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { CiWarning } from "react-icons/ci";
-import { NavLink , useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 // import { redirect } from 'react-router-dom';
+import { auth, fdb } from '../../../Firebase/firebaseConfig'
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { collection, getDoc, getDocs, query, where } from 'firebase/firestore';
+import AppContext from "../../../Context_Api/AppContext.js";
 
 function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginErrors, setLoginErrors] = useState(null);
-  const navigate = useNavigate ();
+  const { state, dispatch } = useContext(AppContext);
+  const navigate = useNavigate();
   const errors = ["All Fields Are Mandatory", "Invalid Username or Password"];
 
   const onEmailChange = (event) => {
-  
+
     setEmail(event.target.value);
-  
+
   };
 
   const onPasswordChange = (event) => {
-  
+
     setPassword(event.target.value);
-  
+
   };
 
   const onLogin = () => {
-  
-    if(email.length==0 || password.length==0){
-  
+
+    if (email.length == 0 || password.length == 0) {
+
       setLoginErrors(0)
 
     }
-  
-    else{
-  
+
+    else {
+
       setLoginErrors(null)
-      navigate("/noteslink")
-  
+      signInWithEmailAndPassword(auth, email, password).then(async (data) => {
+        console.log('Login successful', data.user.email)
+        const q = await getDocs(
+          query(
+            collection(fdb, "users"),
+            where("emailAddress", "==", data.user.email)
+          )
+        )
+          .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              // setData((prev) => [...prev, doc.data()]);
+              console.log(doc.data())
+              const {name,emailAddress}=doc.data();
+              dispatch({ type: "setName", Name: name });
+              dispatch({ type: "setEmail", Email: emailAddress });
+              navigate("/noteslink")
+
+            });
+          })
+          .catch((e) => console.log(e));
+
+      }).catch((e) => { console.log(e) })
+
     }
-  
+
   };
 
   return (
-  
-  <div className='w-[90%] center flex flex-col'>
-  
+
+    <div className='w-[90%] center flex flex-col'>
+
       <div className='py-2 w-full flex flex-col gap-4'>
-  
+
         <input
           type="text"
           id="email"
@@ -55,7 +81,7 @@ function Login() {
           onChange={onEmailChange}
           required
         />
-  
+
         <input
           type="password"
           id="password"
@@ -65,11 +91,11 @@ function Login() {
           onChange={onPasswordChange}
           required
         />
-  
+
       </div>
 
       <div className='w-full text-sm underline underline-offset-1 text-gray-500 py-2 hover:cursor-pointer'>
-  
+
         <NavLink to="/email">
 
           Forgot Password?
@@ -79,21 +105,21 @@ function Login() {
       </div>
 
       <div className={`flex gap-1 py-3 px-1 text-red-500 w-full center text-sm ${loginErrors !== null ? "center" : "hidden"}`}>
-  
+
         <CiWarning color='red' /> {errors[loginErrors]}
-  
+
       </div>
 
       <div className='w-full center py-1 pb-4 flex-col'>
-  
+
         <button className='px-5 py-3 bg-[#535353] hover:cursor-pointer hover:bg-[#2D2D2D] rounded-[4px] text-white text-base' onClick={onLogin}>
-  
+
           LogIn
-  
+
         </button>
-  
+
       </div>
-  
+
     </div>
   );
 }

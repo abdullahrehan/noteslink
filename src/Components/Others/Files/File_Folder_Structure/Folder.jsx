@@ -6,9 +6,10 @@ import FileSettings from '../FileSettings/index'
 import { FolderSettingsData , SavedFolderSettingsData  } from '../MapList/SettingsList'
 import AppContext from '../../../../Context_Api/AppContext.js'
 
-function Folder({ visibility, name, index, homeFilesSettingRef }) {
+function Folder({ id,visibility,data,name,index, homeFilesSettingRef }) {
 
     const {state,dispatch}=useContext(AppContext)
+
 
     const FileSetting=(event)=>{
         event.stopPropagation()
@@ -40,6 +41,8 @@ function Folder({ visibility, name, index, homeFilesSettingRef }) {
                 <FileSettings
                     homeFilesSettingRef={homeFilesSettingRef}
                     index={index}
+                    id={id}
+                    data={data}
                     FolderSettingsData={visibility=="public" || visibility=="private" ? FolderSettingsData() : visibility=="saved" ? SavedFolderSettingsData():null}
                     closeFileSettings={() =>dispatch({ type: 'setOpenFileSettings', openFileSettingsAction:{ value: false, event: null, index: null }})}
                 />
