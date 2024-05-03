@@ -1,13 +1,12 @@
 import React, { useContext, useState } from 'react';
 import { CiWarning } from "react-icons/ci";
 import { NavLink, useNavigate } from "react-router-dom";
-// import { redirect } from 'react-router-dom';
 import { auth, fdb } from '../../../Firebase/firebaseConfig'
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { collection, getDoc, getDocs, query, where } from 'firebase/firestore';
 import AppContext from "../../../Context_Api/AppContext.js";
-
-function Login() {
+import Cookies from 'js-cookie';
+function Login({setLoginSuccessfull}) {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -40,7 +39,9 @@ function Login() {
 
       setLoginErrors(null)
       signInWithEmailAndPassword(auth, email, password).then(async (data) => {
-        console.log('Login successful', data.user.email)
+        setLoginSuccessfull(true)
+        Cookies.set('userEmail', JSON.stringify(email), { expires: 7 });
+
         const q = await getDocs(
           query(
             collection(fdb, "users"),
@@ -49,11 +50,13 @@ function Login() {
         )
           .then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
-              // setData((prev) => [...prev, doc.data()]);
               console.log(doc.data())
               const {name,emailAddress}=doc.data();
               dispatch({ type: "setName", Name: name });
               dispatch({ type: "setEmail", Email: emailAddress });
+              setLoginSuccessfull(false)
+              dispatch({ type: "setRefreshData", refreshDataAction: true });
+
               navigate("/noteslink")
 
             });

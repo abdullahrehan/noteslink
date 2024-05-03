@@ -6,6 +6,8 @@ const initialState=
       homeCurrentFoler:{name:"My Computer",data:[]},
       homeFolderPath:["My Computer"],
 
+      refreshData:false,
+
       fileViewerContent:[],
 
       openSideBar:false,

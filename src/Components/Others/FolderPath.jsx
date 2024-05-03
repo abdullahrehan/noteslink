@@ -5,10 +5,28 @@ function FolderPath({folderdata}) {
 
     const { state, dispatch } = useContext(AppContext);
 
+    function removeAfterIndex(arr, index) {
+        if (index < 0 || index >= arr.length) {
+          console.error('Invalid index');
+          return arr; // return the original array if index is invalid
+        }
+        
+        return arr.slice(0, index + 1); // return a new array containing elements up to the specified index
+      }
+
     const setFolder=(data)=>{
 
-        console.log(folderdata,data);
-        // dispatch({ type: "setHomeCurrentFoler", openHomeSetingsAction: { name: data.name, data: data.data } });
+        // if(data!=="My Computer"){
+            const filteredIndex=state.homeFolderPath.findIndex((Data)=>Data==data)
+
+            console.log(removeAfterIndex(state.homeFolderPath,filteredIndex),state.homeFolderPath);
+
+            dispatch({ type: "setHomeCurrentFoler", openHomeSetingsAction: { name: data, data: folderdata } });
+            dispatch({ type: "resetHomeFolderPath", homeFolderPathAction:  removeAfterIndex(state.homeFolderPath,filteredIndex)});
+        // }
+
+        
+        
         // alert(data)
     }
 

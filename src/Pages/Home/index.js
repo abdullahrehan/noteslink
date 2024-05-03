@@ -19,11 +19,14 @@ import SaveFile from "../../Components/Others/SaveFile.jsx";
 import AppContext from "../../Context_Api/AppContext.js";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { fdb, rdb } from "../../Firebase/firebaseConfig.js";
+import NotesVector from '../../Assets/Images/Notes.gif'
+import Cookies from 'js-cookie';
 
 function Index() {
   const { state, dispatch } = useContext(AppContext);
   const {
     logoutPopup,
+    refreshData,
     newFolderNamePopup,
     renameFilePopup,
     renameFolderPopup,
@@ -36,6 +39,7 @@ function Index() {
   const [currentFolder,setCurrentFolder]=useState(null)
   const [offsetWidthHome, setOffsetWidthHome] = useState(null);
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
+  const [accountCookie,setAccountCookie]=useState(false)
   const [menuDimension, setMenuDimension] = useState({
     horizontal: "right",
     vertical: "bottom",
@@ -49,6 +53,40 @@ function Index() {
   const homeFilesSettingRef = useRef([]);
 
   const user = "mahed442@gmail.com";
+  
+  useEffect(() => {
+    if(Cookies.get("userEmail")){
+      setAccountCookie(true)
+      console.log(Cookies.get("userEmail").slice(1,-1))
+    }
+    else{
+      setAccountCookie(false)
+    }
+  },[state.logoutPopup])
+
+  const getUserData=async()=>{
+    console.log("66");
+    await getDocs(
+      query(
+        collection(fdb, "users"),
+        where("emailAddress", "==",Cookies.get("userEmail").slice(1,-1))
+      )
+    )
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          console.log(doc.data())
+          const {name,emailAddress}=doc.data();
+          
+
+          dispatch({ type: "setName", Name: name });
+          dispatch({ type: "setEmail", Email: emailAddress });
+
+
+        });
+      })
+      console.log("85");
+
+  }
 
   useEffect(() => {
     if (homeRef.current !== undefined) {
@@ -56,27 +94,39 @@ function Index() {
       setOffsetHeightHome(offsetHeight);
       setOffsetWidthHome(offsetWidth);
     }
+    if(accountCookie){
+      getUserData()
+
+    }
+  
   }, []);
 
+ 
+  console.log(refreshData);
   const [data, setData] = useState([]);
   useEffect(() => {
-     getData()
 
-  }, [newFolderNamePopup,saveFilePopup]);
+    if(refreshData){
+      getData();
+      dispatch({ type: "setRefreshData", refreshDataAction: false });
+}
+    // }
+    // saveFilePopup
+  }, [refreshData]);
 
   useEffect(()=>{
     if(data.length>0){
-      console.log(data,'69');
       dispatch({ type: "setHomeCurrentFoler", openHomeSetingsAction: {name:"My Computer",data:data} });
     }
   },[data])
 
+  
   const getData = async () => {
 
     await getDocs(
       query(
         collection(fdb, "files"),
-        where("owner", "==", user.split('@')[0].trim().toLowerCase()),
+        where("owner", "==", state.email?.split('@')[0].trim().toLowerCase()),
         where("parent", "==", "")
       )
     )
@@ -214,7 +264,7 @@ function Index() {
   }, [renameFilePopup, renameFolderPopup, deletFilePopup]);
 
 
-  // console.log(data,'data');
+  // console.log(data.length==0,'data');
 
   return (
     <div
@@ -222,12 +272,13 @@ function Index() {
       onClick={closeFileSettings}
       onLoad={loadingAnnimation}
     >
+      
       <div
         className={`${
           openFoldersPath ? "w-minus-220px" : "w-full"
-        } h-full bg-red-00 transition-all delay-70 duration-400 ease-in-out`}
+        } h-full bg-red-00 transition-all delay-70 duration-400 ease-in-out `}
       >
-        <div className="w-full h-[35px] bg-green-00 flex items-center ">
+        <div className={`w-full h-[35px] bg-green-00 flex items-center `}>
           <AllTabs loading={loading} />
 
           <div className="w-[40px] h-full hover:cursor-pointer rounded-full bg-#0002] center">
@@ -241,7 +292,7 @@ function Index() {
           </div>
         </div>
 
-        <div className="w-full h-[45px]">
+        <div className={`w-full h-[45px] `}>
           {loading ? (
             <FolderPathLoader />
           ) : (
@@ -249,8 +300,12 @@ function Index() {
           )}
         </div>
 
+        <div className={`${data.length==0?"flex":"hidden"} h-minus-150px flex flex-col w-full center`}>
+        <img src={NotesVector} className="h-[80%]"/>
+        <div>Create New Notes</div>
+      </div>
         <div
-          className="w-full h-minus-150px bg-green-00 px-1 bg-red-00 relative"
+          className={`w-full h-minus-150px bg-green-00 px-1 bg-red-00 relative ${data.length==0?"hidden":"flex"}`}
           onContextMenu={handleWindowMouseMove}
           ref={homeRef}
           onMouseMove={handleMouseMove}
@@ -333,7 +388,7 @@ function Index() {
               <div className="bg-slate-400 animate-pulse w-[80px] h-[15px] rounded-full "></div>
             </div>
           ) : (
-            <div className="flex gap-2 text-sm font-medium ">
+            <div className={`flex gap-2 text-sm font-medium ${data.length==0?"hidden":"flex"}` }>
               <div>5 Folders </div>
 
               <div>Size 1.5Gb</div>

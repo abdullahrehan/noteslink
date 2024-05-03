@@ -15,6 +15,15 @@ const Reducer = (state, action) => {
 
     return { ...state, homeFolderPath:[...state.homeFolderPath ,action.homeFolderPathAction] };
 
+    case "resetHomeFolderPath":
+
+    return { ...state, homeFolderPath:action.homeFolderPathAction };
+
+    case "setRefreshData":
+
+    return { ...state, refreshData:action.refreshDataAction };
+
+
     case "setFileViewerContent":
 
     return { ...state, fileViewerContent:action.fileViewerContentAction };

@@ -1,19 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Login from './Login'
 import SignUp from './SignUp'
+import loader from '../../../Assets/Images/loader.gif'
 
 function Index() {
 
   const [page,setPage]=useState("login")
-
+  const [loginSuccessfull,setLoginSuccessfull]=useState(false)
   let login = page=="login" 
   let signup = page=="signup" 
+  let authDiv=useRef()
+
 
   return (
    
-    <>
+    <div className="w-full relative " ref={authDiv}>
+
+      <div className={`w-full `}>
     
-      <div className="flex w-full  h-[60px] justify-around items-center ">
+      <div className="flex z-10 w-full h-[60px] justify-around items-center ">
 
         <div className="flex flex-col items-center hover:cursor-pointer hover:bg-[#F1F1F1] px-4 h-[90%] rounded-[2px] center " onClick={() => setPage("signup")}>
           
@@ -41,13 +46,33 @@ function Index() {
       
       </div>
       
-      <div className="center w-full">
+      <div className={`center w-full z-10 `}>
       
-        {login ? <Login/> : signup ? <SignUp/> : null}
+        {login ? <Login setLoginSuccessfull={(data)=>setLoginSuccessfull(data)}/> : signup ? <SignUp/> : null}
       
       </div>
+
+      </div>
+      <div className={`w-full z-20 h-[280px] bg-white z-10 blur-sm absolute top-0 left-0 ${loginSuccessfull?" ":"hidden"}`}>
+
+      </div>
+      
+      <div className={`w-full z-30 absolute top-0 left-0 bg-[#0002] h-[280px] flex ${loginSuccessfull?" ":"hidden"} items-center flex-col rounded-[5px] gap-2 shadow-[0_3px_10px_rgb(0,0,0,0.2)]`}>
+
+        <div className="font-bold text-xl">Login Successfully</div>
+        
+        <div className="w-full h-full gap-5 flex items-center justify-center flex-col">
+
+          <img src={loader} className='h-[50px]'/>
+          <div>Account Loading....</div>
+        
+        </div>
+
+
+
+      </div>
     
-    </>
+    </div>
   );
 }
 

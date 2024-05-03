@@ -96,6 +96,8 @@ function NewFile() {
             setFileSaved(false)
             setTimeout(() => {
                 dispatch({ type: 'setAddNewTextfile', addNewTextfileAction: false })
+                dispatch({ type: "setRefreshData", refreshDataAction: true });
+
             }, 100)
 
         })

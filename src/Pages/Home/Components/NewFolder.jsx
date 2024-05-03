@@ -82,6 +82,8 @@ function NewFolder() {
     await setDoc(doc(fdb, "files", data.id), data).then(()=>{
       console.log("data sent ", data.id);
       dispatch({ type: 'setNewFolderNamePopup', newFolderNamePopupAction:false})
+      dispatch({ type: "setRefreshData", refreshDataAction: true });
+
     }
     
   );

@@ -33,45 +33,18 @@ import Settings from "./Pages/Settings/index.js";
 // import Feedback from "./Pages/Feedback/index.js";
 import Help from "./Pages/Help/index.js";
 import AppContext from './Context_Api/AppContext.js'
-
 import "./App.css";
 
-// import { collection, getDocs } from "firebase/firestore";
-// import { fdb, rdb } from "./Firebase/firebaseConfig.js";
-// import { ref, onValue, push, update, remove } from "firebase/database";
-
-
-// import {AppContextProvider} from './Context_Api/AppContext.js';
-// import Reducer from './Context_Api/Reducer/index.js'
-// import InitialState from './Context_Api/Initial_State/index.js'
-import { auth } from "./Firebase/firebaseConfig.js";
 const App = () => {
-  // const fetchData = async () => {
-  //   const querySnapshot = await getDocs(collection(fdb, "users"));
-  //   querySnapshot.forEach((doc) => {
-  //     console.log(`${doc.id} => ${doc.data()}`);
-  //   });
 
-  //   const data = await push(ref(rdb, '/todos'), {
-  //     done: false,
-  //     title: "rt",
-  //   });
-  // };
-
-  // useEffect(() => {
-  //   fetchData();
-  //asdasdadasdasasdadasdasds
-  //asdad
-  //asdasdasdasdadasdasdasd
-  // }, []);
 
   const {state,dispatch}=useContext(AppContext)
   const {openSideBar}=state
-//console
   
   const menuref = useRef();
 
   const MenuButton = () => {
+
     dispatch({ type: 'setSideBar', sideBar:!openSideBar});
 
     if (openSideBar) {

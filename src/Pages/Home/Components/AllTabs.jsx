@@ -1,14 +1,15 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState,useEffect } from 'react'
 import Tabs from './Tabs'
 import { FiLock } from "react-icons/fi";
 import { FiUnlock } from "react-icons/fi";
 import TabsLoader from './Loaders/TabsLoader'
 function AllTabs({loading}) {
 
-    const [currentTabIndex, setCurrentTabIndex] = useState(1)
+    const [currentTabIndex, setCurrentTabIndex] = useState(0)
     const [lockTabs, setLockTabs] = useState(1)
     const tabsRef=useRef([])
     const tabsInnerRef=useRef([])
+    const [noData,setNoData]=useState(false)
 
     const [tabs,setTabs] = useState( [
         { name: "My Folder" },
@@ -18,6 +19,15 @@ function AllTabs({loading}) {
         { name: "MongoDb" },
         { name: "Heroku" },
     ])
+
+    useEffect(()=>{
+
+        if(tabs.length==1) {
+            setTabs([...tabs,{name:"dummyTabForMyComputer"}])
+        }
+
+    },[])
+
 
     return (
         <div className='w-full h-full center '>
@@ -43,7 +53,7 @@ function AllTabs({loading}) {
                  tabsRef={tabsRef}
                  tabsInnerRef={tabsInnerRef}
                  key={index+1}
-                 name={data.name}
+                //  name={data?.name}
                  index={index}
                  setCurrentTabIndex={(data) => setCurrentTabIndex(data)}
                  tabType={0}
@@ -52,7 +62,8 @@ function AllTabs({loading}) {
                  currentTabIndex={0}
                  />
                  :
-                 <Tabs  
+            //   null
+                  <Tabs  
                  tabsLoader={true}
                  tabsRef={tabsRef}
                  tabsInnerRef={tabsInnerRef}
@@ -67,7 +78,8 @@ function AllTabs({loading}) {
                  />
                 )}            
                
-                <div className='flex items-center justify-around h-full  px-1'>
+                <div className={`flex items-center justify-around h-full  px-1 ${ tabs[1]?.name=="dummyTabForMyComputer" ? "hidden":"flex"}
+                    `}>
                 
                     <div className={`px-1 hover:cursor-pointer ${loading ? "hidden":"flex"}`} onClick={()=>setLockTabs(!lockTabs)}>
                     { lockTabs ?
