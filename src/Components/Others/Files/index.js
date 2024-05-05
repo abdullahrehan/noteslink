@@ -17,12 +17,14 @@ function AllFiles({ data, homeFilesSettingRef, loading }) {
   // console.log(data);
   return (
     <div className="flex items-start gap-2 flex flex-wrap h-auto">
-      {dataArray.map((data, index) =>
+      {loading ? 
+            <FileLoader />
+            :
+            dataArray.map((data, index) =>
         data.type == "folder" ? 
         
-          loading ? 
-            <FileLoader />
-          : 
+          
+          
             <Folder
               id={data.id}
               visibility={data.status}
@@ -34,8 +36,7 @@ function AllFiles({ data, homeFilesSettingRef, loading }) {
           
         
         // null: 
-        :loading ? 
-          <FileLoader />
+        
         :
         // null
           <MainFiles

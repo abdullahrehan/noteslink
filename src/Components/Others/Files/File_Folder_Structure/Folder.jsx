@@ -6,10 +6,9 @@ import FileSettings from '../FileSettings/index'
 import { FolderSettingsData , SavedFolderSettingsData  } from '../MapList/SettingsList'
 import AppContext from '../../../../Context_Api/AppContext.js'
 
-function Folder({ id,visibility,data,name,index, homeFilesSettingRef }) {
+function Folder({ page,id,visibility,data,name,index, homeFilesSettingRef }) {
 
     const {state,dispatch}=useContext(AppContext)
-
 
     const FileSetting=(event)=>{
         event.stopPropagation()
@@ -38,6 +37,23 @@ function Folder({ id,visibility,data,name,index, homeFilesSettingRef }) {
                 
                 </ span>
 
+                {page=="search files"
+                ?
+                <>
+                <span className='text-sm text-[#4F4E4E] bg-gray-00 max-w-[110px] px-2 h-auto inline-block text-center break-words'>
+
+                    {data.owner}
+                
+                </ span>
+                <span className='text-sm text-[#4F4E4E] bg-gray-00 max-w-[110px] px-2 h-auto inline-block text-center break-words'>
+
+                    {data.createdAt}
+                
+                </ span>
+               
+                </>
+    : null
+    }
                 <FileSettings
                     homeFilesSettingRef={homeFilesSettingRef}
                     index={index}

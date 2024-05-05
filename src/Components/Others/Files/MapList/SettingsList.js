@@ -24,8 +24,7 @@ export const FolderSettingsData = () => {
       name: "Open Folder",
       Icon: <FaRegFolderOpen size={20} />,
       Function: async (id,Data) => {
-        let newArray = [];
-        console.log("Here ===============> ", Data.name,);
+        let newArray = []; 
 
         const q = await getDocs(
           query(collection(fdb, "files"), where("parent", "==", id))
@@ -38,6 +37,8 @@ export const FolderSettingsData = () => {
             Promise.all(newArray).then((data) => {
               dispatch({ type: "setHomeCurrentFoler", openHomeSetingsAction: { name: Data.name, data: data } });
               dispatch({ type: "setHomeFolderPath", homeFolderPathAction: Data.name });
+              dispatch({ type: "setRefreshData", refreshDataAction: true });
+
 
             });
           })

@@ -4,6 +4,7 @@ import { Route, Routes } from "react-router-dom";
 import Header from "./Components/Main/Header/index.js";
 import Sidabar from "./Components/Main/Sidebar/index.js";
 import AdminSidebar from "./Components/Main/Sidebar/AdminSidebar.jsx";
+import LogOut from "./Components/Main/Header/LogOut.jsx";
 
 import Home from "./Pages/Home/index.js";
 import SavedFiles from "./Pages/SavedFiles/index.js";
@@ -39,7 +40,7 @@ const App = () => {
 
 
   const {state,dispatch}=useContext(AppContext)
-  const {openSideBar}=state
+  const {openSideBar,logoutPopup}=state
   
   const menuref = useRef();
 
@@ -56,7 +57,6 @@ const App = () => {
     }
     }
 
-    console.log(state.fileViewerContent);
     
 
   return (
@@ -76,8 +76,13 @@ const App = () => {
           <Sidabar openMenu={openSideBar} />
           {/* <AdminSidebar openMenu={openSideBar} /> */}
           
-        
         </div>
+
+        {logoutPopup ? (
+          <LogOut
+       
+          />
+        ) : null}
 
         <div className="h-full w-full w-minus-60px flex justify-end items-end">
     

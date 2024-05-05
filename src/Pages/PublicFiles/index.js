@@ -38,7 +38,7 @@ function Index() {
       query(
         collection(fdb, "files"),
         where("status", "==", "public"),
-        where("owner", "==", user.split("@")[0].trim().toLowerCase())
+        where("owner", "==", state.email.split("@")[0].trim().toLowerCase())
       )
     )
       .then((querySnapshot) => {

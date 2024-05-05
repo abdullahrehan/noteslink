@@ -1,7 +1,7 @@
  import React, { useContext } from 'react'
  import AppContext from "../../Context_Api/AppContext.js";
 
-function FolderPath({folderdata}) {
+function FolderPath({folderdata,setChangeFolder}) {
 
     const { state, dispatch } = useContext(AppContext);
 
@@ -20,7 +20,7 @@ function FolderPath({folderdata}) {
             const filteredIndex=state.homeFolderPath.findIndex((Data)=>Data==data)
 
             console.log(removeAfterIndex(state.homeFolderPath,filteredIndex),state.homeFolderPath);
-
+            // setChangeFolder(data)
             dispatch({ type: "setHomeCurrentFoler", openHomeSetingsAction: { name: data, data: folderdata } });
             dispatch({ type: "resetHomeFolderPath", homeFolderPathAction:  removeAfterIndex(state.homeFolderPath,filteredIndex)});
         // }
@@ -43,14 +43,6 @@ function FolderPath({folderdata}) {
             <span>/</span>
             </>
         )}
-            
-            {/* <span className='underline underline-offset-1 hover:cursor-pointer'>React</span>
-
-            <span>/</span>
-
-            <span className='underline underline-offset-1 hover:cursor-pointer'>Hooks</span>
-
-            <span>/</span> */}
 
         </div>
 

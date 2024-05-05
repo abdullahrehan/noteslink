@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { CiWarning } from 'react-icons/ci';
 import validator from 'validator';
 import { auth } from '../../../Firebase/firebaseConfig'
@@ -6,13 +6,17 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { NavLink, useNavigate } from "react-router-dom";
 import { addDoc, collection, getDocs } from "firebase/firestore";
 import { fdb, rdb } from "../../../Firebase/firebaseConfig";
-function SignUp() {
+import AppContext from "../../../Context_Api/AppContext.js";
+
+function SignUp({setSignUpSuccessfull}) {
 
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [signUpErrors, setSignUpErrors] = useState(null);
+    const { state, dispatch } = useContext(AppContext);
+
     const navigate = useNavigate();
 
     const errors = [
@@ -57,12 +61,16 @@ function SignUp() {
             createUserWithEmailAndPassword(auth, email, password).then(async () => {
 
                 console.log('Login successful')
+                setSignUpSuccessfull(true)
+
                 await addDoc(collection(fdb, "users") , {
                     name: username,
                     emailAddress: email,
                 }).then(() => {
-                    console.log("signup successful");
-                    // navigate("/noteslink")
+                    dispatch({ type: "setName", Name: username });
+                    dispatch({ type: "setEmail", Email: email });
+                    setSignUpSuccessfull(false)
+                    navigate("/noteslink")
 
                 }
                 ).catch(err => console.log(err))

@@ -6,7 +6,6 @@ import { LuHelpCircle } from "react-icons/lu";
 import { MdOutlineFeedback } from "react-icons/md";
 import { NavLink, useNavigate } from "react-router-dom";
 import AppContext from '../../../Context_Api/AppContext.js'
-import Cookies from 'js-cookie';
 
  
 function Account() {
@@ -17,9 +16,7 @@ function Account() {
     const logOutFunc=()=>{
         dispatch({ type: 'setOpenAccountSettings', setOpenAccountSettings:false})        
         dispatch({ type: 'setLogoutPopup', logoutPopupAction:true})
-        Cookies.remove('userEmail');
-        navigate("/auth")
-
+       
     }
 
     return (

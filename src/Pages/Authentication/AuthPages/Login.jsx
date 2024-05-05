@@ -40,6 +40,8 @@ function Login({setLoginSuccessfull}) {
       setLoginErrors(null)
       signInWithEmailAndPassword(auth, email, password).then(async (data) => {
         setLoginSuccessfull(true)
+        localStorage.setItem('userEmail', email);
+        localStorage.setItem('isLogin', true);
         Cookies.set('userEmail', JSON.stringify(email), { expires: 7 });
 
         const q = await getDocs(

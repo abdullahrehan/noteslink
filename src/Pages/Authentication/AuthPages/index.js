@@ -7,6 +7,7 @@ function Index() {
 
   const [page,setPage]=useState("login")
   const [loginSuccessfull,setLoginSuccessfull]=useState(false)
+  const [signUpSuccessfull,setSignUpSuccessfull]=useState(false)
   let login = page=="login" 
   let signup = page=="signup" 
   let authDiv=useRef()
@@ -48,7 +49,7 @@ function Index() {
       
       <div className={`center w-full z-10 `}>
       
-        {login ? <Login setLoginSuccessfull={(data)=>setLoginSuccessfull(data)}/> : signup ? <SignUp/> : null}
+        {login ? <Login setLoginSuccessfull={(data)=>setLoginSuccessfull(data)}/> : signup ? <SignUp setSignUpSuccessfull={(data)=>setSignUpSuccessfull(data)}/> : null}
       
       </div>
 
@@ -57,18 +58,31 @@ function Index() {
 
       </div>
       
-      <div className={`w-full z-30 absolute top-0 left-0 bg-[#0002] h-[280px] flex ${loginSuccessfull?" ":"hidden"} items-center flex-col rounded-[5px] gap-2 shadow-[0_3px_10px_rgb(0,0,0,0.2)]`}>
+      <div className={`w-full z-30 absolute top-0 left-0 bg-[#0000] h-[280px] flex ${loginSuccessfull?" ":"hidden"} items-center flex-col rounded-[5px] gap-2 shadow-[0_3px_10px_rgb(0,0,0,0.2)]`}>
 
-        <div className="font-bold text-xl">Login Successfully</div>
+        <div className="font-bold text-xl ">Login Successfully</div>
         
         <div className="w-full h-full gap-5 flex items-center justify-center flex-col">
 
-          <img src={loader} className='h-[50px]'/>
-          <div>Account Loading....</div>
+          <img src={loader} className='h-[50px] '/>
+         
+          <div className="text-gray-500">Account Loading....</div>
         
         </div>
 
+      </div>
 
+      <div className={`w-full z-30 absolute top-0 left-0 bg-[#0000] h-[280px] flex ${signUpSuccessfull?" ":"hidden"} items-center flex-col rounded-[5px] gap-2 shadow-[0_3px_10px_rgb(0,0,0,0.2)]`}>
+
+        <div className="font-bold text-xl ">Account Created Successfully</div>
+        
+        <div className="w-full h-full gap-5 flex items-center justify-center flex-col">
+
+          <img src={loader} className='h-[50px] '/>
+         
+          <div className="text-gray-500">Account Loading....</div>
+        
+        </div>
 
       </div>
     

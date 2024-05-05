@@ -9,7 +9,6 @@ import AddFilesButton from "./Components/AddFilesButton";
 import AllFiles from "../../Components/Others/Files/index.js";
 import PageSettings from "./Components/PageSettings.jsx";
 import { HomeFiles } from "../../Apis/Api.js";
-import LogOut from "../../Components/Main/Header/LogOut.jsx";
 import NewFolder from "./Components/NewFolder.jsx";
 import RenameFile from "./Components/RenameFile.jsx";
 import NewFile from "./Components/NewFile.jsx";
@@ -21,6 +20,8 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { fdb, rdb } from "../../Firebase/firebaseConfig.js";
 import NotesVector from '../../Assets/Images/Notes.gif'
 import Cookies from 'js-cookie';
+import loader from '../../Assets/Images/loader.gif'
+
 
 function Index() {
   const { state, dispatch } = useContext(AppContext);
@@ -36,14 +37,17 @@ function Index() {
     fileViewerContent
   } = state;
   const [offsetHeightHome, setOffsetHeightHome] = useState(null);
-  const [currentFolder,setCurrentFolder]=useState(null)
+  // const [currentFolder,setCurrentFolder]=useState(null)
   const [offsetWidthHome, setOffsetWidthHome] = useState(null);
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
-  const [accountCookie,setAccountCookie]=useState(false)
+  // const [accountCookie,setAccountCookie]=useState(false)
+  const [pageLoading, setPageLoading] = useState(true);
+
   const [menuDimension, setMenuDimension] = useState({
     horizontal: "right",
     vertical: "bottom",
   });
+  const [nofilesavailable,setNoFilesAvaiiable]=useState(false)
 
   const { openFoldersPath, openHomeSetings, openFileSettings } = state;
   const [loading, setLoading] = useState(true);
@@ -51,21 +55,19 @@ function Index() {
   const homeSettingsRef = useRef();
   const homeRef = useRef();
   const homeFilesSettingRef = useRef([]);
-
-  const user = "mahed442@gmail.com";
+  const [data, setData] = useState([]);
   
-  useEffect(() => {
-    if(Cookies.get("userEmail")){
-      setAccountCookie(true)
-      console.log(Cookies.get("userEmail").slice(1,-1))
-    }
-    else{
-      setAccountCookie(false)
-    }
-  },[state.logoutPopup])
+  // useEffect(() => {
+  //   if(Cookies.get("userEmail")){
+  //     setAccountCookie(true)
+  //   }
+  //   else{
+  //     setAccountCookie(false)
+  //   }
+  // },[state.logoutPopup])
 
   const getUserData=async()=>{
-    console.log("66");
+
     await getDocs(
       query(
         collection(fdb, "users"),
@@ -74,18 +76,13 @@ function Index() {
     )
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-          console.log(doc.data())
           const {name,emailAddress}=doc.data();
           
-
           dispatch({ type: "setName", Name: name });
           dispatch({ type: "setEmail", Email: emailAddress });
 
-
         });
       })
-      console.log("85");
-
   }
 
   useEffect(() => {
@@ -94,16 +91,15 @@ function Index() {
       setOffsetHeightHome(offsetHeight);
       setOffsetWidthHome(offsetWidth);
     }
-    if(accountCookie){
-      getUserData()
 
+    if(Cookies.get("userEmail")){
+      getUserData()
+      dispatch({ type: "setRefreshData", refreshDataAction: true });
     }
   
   }, []);
 
  
-  console.log(refreshData);
-  const [data, setData] = useState([]);
   useEffect(() => {
 
     if(refreshData){
@@ -123,11 +119,13 @@ function Index() {
   
   const getData = async () => {
 
+    setPageLoading(true)
+    console.log(state.homeCurrentFoler,state.homeCurrentFoler.name=="My Computer"?"":state.homeFolderPath[state.homeFolderPath.length-1],state.homeFolderPath[state.homeFolderPath.length-1]);
     await getDocs(
       query(
         collection(fdb, "files"),
-        where("owner", "==", state.email?.split('@')[0].trim().toLowerCase()),
-        where("parent", "==", "")
+        where("owner", "==", Cookies.get("userEmail").slice(1,-1).split('@')[0].trim().toLowerCase()),
+        where("parent", "==", state.homeCurrentFoler.name=="My Computer"?"":state.homeFolderPath[state.homeFolderPath.length-1])
       )
     )
       .then((querySnapshot) => {
@@ -138,6 +136,13 @@ function Index() {
         });
         
       })
+      .then(()=>{
+        // setPageLoading(false)
+        setLoading(false);
+
+
+      })
+
       .catch((e) => console.log(e));
   };
 
@@ -255,7 +260,6 @@ function Index() {
 
   const loadingAnnimation = () => {
     setTimeout(() => {
-      setLoading(false);
     }, 1500);
   };
 
@@ -270,7 +274,7 @@ function Index() {
     <div
       className="w-full h-full bg-green-00 flex justify-end  text-4xl"
       onClick={closeFileSettings}
-      onLoad={loadingAnnimation}
+      // onLoad={loadingAnnimation}
     >
       
       <div
@@ -300,12 +304,22 @@ function Index() {
           )}
         </div>
 
-        <div className={`${data.length==0?"flex":"hidden"} h-minus-150px flex flex-col w-full center`}>
-        <img src={NotesVector} className="h-[80%]"/>
-        <div>Create New Notes</div>
-      </div>
+        {/* <div className={`${data.length==0?"flex":"hidden"} h-minus-150px flex flex-col w-full center`}>
+        
+          <img src={NotesVector} className="h-[80%]"/>
+        
+          <div>Create New Notes</div>
+          
+        </div> */}
+
+        {/* <div className={`${pageLoading?"flex":"hidden"} h-minus-150px flex flex-col w-full center`}>
+        
+          <img src={loader} className="h-[50px]"/>
+                  
+        </div> */}
+
         <div
-          className={`w-full h-minus-150px bg-green-00 px-1 bg-red-00 relative ${data.length==0?"hidden":"flex"}`}
+          className={`w-full h-minus-150px bg-green-00 px-1 bg-red-00 relative flex`}
           onContextMenu={handleWindowMouseMove}
           ref={homeRef}
           onMouseMove={handleMouseMove}
@@ -327,13 +341,7 @@ function Index() {
           </div>
         </div>
 
-        {logoutPopup ? (
-          <LogOut
-            Function={() =>
-              dispatch({ type: "setLogoutPopup", logoutPopupAction: false })
-            }
-          />
-        ) : null}
+        
         {newFolderNamePopup ? <NewFolder userData={data} /> : null}
         {renameFilePopup ? (
           <RenameFile
