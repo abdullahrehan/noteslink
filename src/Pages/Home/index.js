@@ -21,6 +21,7 @@ import { fdb, rdb } from "../../Firebase/firebaseConfig.js";
 import NotesVector from '../../Assets/Images/Notes.gif'
 import Cookies from 'js-cookie';
 import loader from '../../Assets/Images/loader.gif'
+import { NavLink, useNavigate } from "react-router-dom";
 
 
 function Index() {
@@ -51,39 +52,20 @@ function Index() {
 
   const { openFoldersPath, openHomeSetings, openFileSettings } = state;
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const homeSettingsRef = useRef();
   const homeRef = useRef();
   const homeFilesSettingRef = useRef([]);
   const [data, setData] = useState([]);
   
-  // useEffect(() => {
-  //   if(Cookies.get("userEmail")){
-  //     setAccountCookie(true)
-  //   }
-  //   else{
-  //     setAccountCookie(false)
-  //   }
-  // },[state.logoutPopup])
 
-  const getUserData=async()=>{
+  useEffect(()=>{
+    if(!Cookies.get("userEmail")){
+      navigate("/auth")
+    }
 
-    await getDocs(
-      query(
-        collection(fdb, "users"),
-        where("emailAddress", "==",Cookies.get("userEmail").slice(1,-1))
-      )
-    )
-      .then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          const {name,emailAddress}=doc.data();
-          
-          dispatch({ type: "setName", Name: name });
-          dispatch({ type: "setEmail", Email: emailAddress });
-
-        });
-      })
-  }
+  },[])
 
   useEffect(() => {
     if (homeRef.current !== undefined) {
@@ -92,10 +74,7 @@ function Index() {
       setOffsetWidthHome(offsetWidth);
     }
 
-    if(Cookies.get("userEmail")){
-      getUserData()
-      dispatch({ type: "setRefreshData", refreshDataAction: true });
-    }
+  
   
   }, []);
 

@@ -3,10 +3,10 @@ import { CiWarning } from "react-icons/ci";
 import { NavLink, useNavigate } from "react-router-dom";
 import { auth, fdb } from '../../../Firebase/firebaseConfig'
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { collection, getDoc, getDocs, query, where } from 'firebase/firestore';
+import { collection, getDoc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import AppContext from "../../../Context_Api/AppContext.js";
 import Cookies from 'js-cookie';
-function Login({setLoginSuccessfull}) {
+function Login({ setLoginSuccessfull }) {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -51,15 +51,35 @@ function Login({setLoginSuccessfull}) {
           )
         )
           .then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
+            querySnapshot.forEach(async (doc) => {
               console.log(doc.data())
-              const {name,emailAddress}=doc.data();
+              const { name, emailAddress, userType, status, limitTill } = doc.data();
               dispatch({ type: "setName", Name: name });
               dispatch({ type: "setEmail", Email: emailAddress });
               setLoginSuccessfull(false)
               dispatch({ type: "setRefreshData", refreshDataAction: true });
+              if (userType === "admin") {
+                dispatch({ type: "setIsAdmin", isAdminAction: true });
+                Cookies.set('isAdmin', JSON.stringify(true), { expires: 7 });
+                navigate("/admin")
 
-              navigate("/noteslink")
+              } else {
+                if (status === "restricted") {
+
+                  if (new Date().getTime() > limitTill) {
+                    let date = new Date(limitTill).toDateString()
+                    alert(`You are not allowed to login till ${date}`)
+                  }
+                  else {
+                    await updateDoc(doc(fdb, "users", emailAddress), {
+                      status: "open"
+                    })
+                    dispatch({ type: "setIsAdmin", isAdminAction: false });
+                    navigate("/noteslink")
+                  }
+                }
+
+              }
 
             });
           })

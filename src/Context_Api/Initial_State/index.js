@@ -9,7 +9,7 @@ const initialState=
       refreshData:false,
 
       fileViewerContent:[],
-
+      isAdmin:false,
       openSideBar:false,
       openFoldersPath:true,
      

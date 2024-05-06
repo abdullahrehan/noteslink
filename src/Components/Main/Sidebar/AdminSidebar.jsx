@@ -16,13 +16,13 @@ function AdminSidebar({openMenu}) {
     {
       name: "Complaints",
       icon: <img src={feedback} className="w-[28px]" />,
-      path: "/complaints",
+      path: "/report",
     },
-    // {
-    //   name: "Feedback",
-    //   icon: <img src={Complaints} className="w-[35px]" />,
-    //   path: "/feedback",
-    // },
+    {
+      name: "Feedback",
+      icon: <img src={Complaints} className="w-[35px]" />,
+      path: "/feedback",
+    },
    
   ];
 

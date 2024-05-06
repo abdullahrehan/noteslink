@@ -6,7 +6,7 @@ import Account from "./Account";
 import Notification from './Notification'
 import AppContext from '../../../Context_Api/AppContext.js'
 
-function Index({menuButton}) {
+function Index({menuButton,heading}) {
 
   const {state,dispatch}=useContext(AppContext)
 
@@ -40,7 +40,7 @@ function Index({menuButton}) {
             </div>
           </div>
           <div className="text-2xl font-medium center text-white">
-            NotesLink
+            {heading}
           </div>
         </div>
         <div className="bg-blue-00 flex ">

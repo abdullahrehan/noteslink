@@ -23,6 +23,9 @@ const Reducer = (state, action) => {
 
     return { ...state, refreshData:action.refreshDataAction };
 
+    case "setIsAdmin":
+
+    return { ...state, isAdmin:action.isAdminAction };
 
     case "setFileViewerContent":
 

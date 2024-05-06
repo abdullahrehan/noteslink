@@ -21,6 +21,12 @@ const Files = [
   
    
   ];
+  // const Model=[{
+  //   id:1,
+  //   name:"Muhammad Abdullah Rehan"
+  //   email:"abdullahrehan8118@gmail.com",
+
+  // }]
   
   
   export const UserData={

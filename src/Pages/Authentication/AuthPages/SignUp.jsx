@@ -4,11 +4,12 @@ import validator from 'validator';
 import { auth } from '../../../Firebase/firebaseConfig'
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { NavLink, useNavigate } from "react-router-dom";
-import { addDoc, collection, getDocs } from "firebase/firestore";
+import { addDoc, collection, getDocs, setDoc, doc } from "firebase/firestore";
 import { fdb, rdb } from "../../../Firebase/firebaseConfig";
 import AppContext from "../../../Context_Api/AppContext.js";
+import Cookies from 'js-cookie';
 
-function SignUp({setSignUpSuccessfull}) {
+function SignUp({ setSignUpSuccessfull }) {
 
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
@@ -63,10 +64,12 @@ function SignUp({setSignUpSuccessfull}) {
                 console.log('Login successful')
                 setSignUpSuccessfull(true)
 
-                await addDoc(collection(fdb, "users") , {
+                await setDoc(doc(fdb, "users", email), {
                     name: username,
                     emailAddress: email,
+                    userType:"user",
                 }).then(() => {
+                    Cookies.set('userEmail', JSON.stringify(email), { expires: 7 });
                     dispatch({ type: "setName", Name: username });
                     dispatch({ type: "setEmail", Email: email });
                     setSignUpSuccessfull(false)

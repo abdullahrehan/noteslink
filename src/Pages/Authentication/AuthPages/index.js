@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import Login from './Login'
 import SignUp from './SignUp'
 import loader from '../../../Assets/Images/loader.gif'
+import Cookies from 'js-cookie';
+import { NavLink, useNavigate } from "react-router-dom";
 
 function Index() {
 
@@ -11,6 +13,14 @@ function Index() {
   let login = page=="login" 
   let signup = page=="signup" 
   let authDiv=useRef()
+  const navigate = useNavigate();
+
+  useEffect(()=>{
+    if(Cookies.get("userEmail")){
+      navigate("/noteslink")
+    }
+
+  },[])
 
 
   return (
@@ -72,7 +82,7 @@ function Index() {
 
       </div>
 
-      <div className={`w-full z-30 absolute top-0 left-0 bg-[#0000] h-[280px] flex ${signUpSuccessfull?" ":"hidden"} items-center flex-col rounded-[5px] gap-2 shadow-[0_3px_10px_rgb(0,0,0,0.2)]`}>
+      <div className={`w-full z-30 absolute top-0 left-0 bg-white h-[280px] flex ${signUpSuccessfull?" ":"hidden"} items-center flex-col rounded-[5px] gap-2 shadow-[0_3px_10px_rgb(0,0,0,0.2)]`}>
 
         <div className="font-bold text-xl ">Account Created Successfully</div>
         

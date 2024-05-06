@@ -1,5 +1,7 @@
-import React, { useRef,useContext} from "react";
+import React, { useRef,useContext, useEffect} from "react";
 import { Route, Routes } from "react-router-dom";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { fdb, rdb } from "./Firebase/firebaseConfig.js";
 
 import Header from "./Components/Main/Header/index.js";
 import Sidabar from "./Components/Main/Sidebar/index.js";
@@ -27,6 +29,7 @@ import ServiceCenter from "./Pages/ServiceCenter/index.js";
 
 import AllUsers from "./Pages/Admin/AllUsers.jsx";
 import Complaints from "./Pages/Admin/Complaints.jsx";
+import Report from "./Pages/Admin/Report.jsx";
 import Feedback from "./Pages/Admin/Feedback.jsx";
 
 
@@ -35,6 +38,8 @@ import Settings from "./Pages/Settings/index.js";
 import Help from "./Pages/Help/index.js";
 import AppContext from './Context_Api/AppContext.js'
 import "./App.css";
+import Cookies from 'js-cookie';
+
 
 const App = () => {
 
@@ -57,7 +62,49 @@ const App = () => {
     }
     }
 
+    console.log(Cookies.get("isAdmin"))
+
+    const getUserData=async()=>{
+
+      await getDocs(
+        query(
+          collection(fdb, "users"),
+          where("emailAddress", "==",Cookies.get("userEmail").slice(1,-1))
+        )
+      )
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            const {name,emailAddress}=doc.data();
+            
+            dispatch({ type: "setName", Name: name });
+            dispatch({ type: "setEmail", Email: emailAddress });
+  
+          });
+        })
+    }
+
     
+
+    useEffect(()=>{
+
+      
+      if(Cookies.get("userEmail")){
+        getUserData()
+        dispatch({ type: "setRefreshData", refreshDataAction: true });
+      }
+
+      if(Cookies.get("isAdmin")){
+        dispatch({ type: "setIsAdmin", isAdminAction: true });
+      }
+      else{
+        dispatch({ type: "setIsAdmin", isAdminAction: false });
+
+      }
+
+    },[])
+
+    console.log(state.isAdmin)
+
 
   return (
 
@@ -65,7 +112,7 @@ const App = () => {
 
       <div className="w-full h-[65px]">
 
-        <Header menuButton={MenuButton} />
+        <Header heading={state.isAdmin ? "NotesLink - Dashboard":"NotesLink"} menuButton={MenuButton} />
 
       </div>
 
@@ -73,10 +120,12 @@ const App = () => {
         
         <div className={`w-[60px] h-[90vh] t-[10vh] transition-all delay-70 duration-400 ease-in-out bg-[#2D2D2D] rounded-r-lg `} ref={menuref} >
          
-          <Sidabar openMenu={openSideBar} />
-          {/* <AdminSidebar openMenu={openSideBar} /> */}
-          
-        </div>
+          {state.isAdmin ?
+          <AdminSidebar openMenu={openSideBar} />
+:          
+            <Sidabar openMenu={openSideBar} /> 
+            }
+           </div>
 
         {logoutPopup ? (
           <LogOut
@@ -89,7 +138,7 @@ const App = () => {
           <Routes>
     
             <Route path="/admin"  element={<AllUsers/>} />
-            <Route path="/complaints"  element={<Complaints/>} />
+            <Route path="/report"  element={<Report/>} />
             <Route path="/feedback"  element={<Feedback/>} />
 
             <Route path="/auth"  element={<AuthenticationPage><AuthPages/></AuthenticationPage>} />
