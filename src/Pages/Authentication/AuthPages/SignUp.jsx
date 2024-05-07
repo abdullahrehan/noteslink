@@ -6,6 +6,8 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { NavLink, useNavigate } from "react-router-dom";
 import { addDoc, collection, getDocs, setDoc, doc } from "firebase/firestore";
 import { fdb, rdb } from "../../../Firebase/firebaseConfig";
+import { FiEye } from "react-icons/fi";
+import { GoEyeClosed } from "react-icons/go";
 import AppContext from "../../../Context_Api/AppContext.js";
 import Cookies from 'js-cookie';
 
@@ -14,7 +16,9 @@ function SignUp({ setSignUpSuccessfull }) {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [showPassword, setShowPassword] = useState('');
     const [signUpErrors, setSignUpErrors] = useState(null);
     const { state, dispatch } = useContext(AppContext);
 
@@ -67,7 +71,7 @@ function SignUp({ setSignUpSuccessfull }) {
                 await setDoc(doc(fdb, "users", email), {
                     name: username,
                     emailAddress: email,
-                    userType:"user",
+                    userType: "user",
                 }).then(() => {
                     Cookies.set('userEmail', JSON.stringify(email), { expires: 7 });
                     dispatch({ type: "setName", Name: username });
@@ -113,31 +117,57 @@ function SignUp({ setSignUpSuccessfull }) {
 
             </div>
 
+           
+
             <div className="py-2">
 
-                <input
-                    type="password"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-none"
-                    name="password"
-                    value={password}
-                    placeholder="Password"
-                    onChange={(e) => onInputChange(e, setPassword)}
-                    required
-                />
 
+                <div className='bg-gray-50 h-full border flex border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '>
+
+                    <input
+                        className="h-full bg-[#0000] w-[90%] outline-none"
+                        name="confirmPassword"
+                        value={confirmPassword}
+                        placeholder="Confirm Password"
+                        onChange={(e) => onInputChange(e, setPassword)}
+                        type={showPassword ? "text" : "password"}
+                        required
+                    />
+
+                    <div className='h-full w-[10%] hover:cursor-pointer' onClick={() => setShowPassword(!showPassword)}>
+                        {showPassword ?
+                            <GoEyeClosed size={20} />
+                            :
+                            <FiEye size={20} />
+                        }
+                    </div>
+
+                </div>
             </div>
 
             <div className="py-2">
+            
+                <div className='bg-gray-50 h-full border flex border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '>
 
                 <input
-                    type="password"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-none"
-                    name="confirmPassword"
-                    value={confirmPassword}
-                    placeholder="Confirm Password"
+                    type={showConfirmPassword ? "text" : "password"}
+                    className="h-full bg-[#0000] w-[90%] outline-none"
+                    name="password"
+                    value={password}
+                    placeholder="Password"
                     onChange={(e) => onInputChange(e, setConfirmPassword)}
                     required
                 />
+
+                <div className='h-full w-[10%] hover:cursor-pointer' onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+                    {showConfirmPassword ?
+                        <GoEyeClosed size={20} />
+                        :
+                        <FiEye size={20} />
+                    }
+                </div>
+
+                </div>
 
             </div>
 

@@ -25,6 +25,7 @@ import AuthenticationPage from './Pages/Authentication/Index.js'
 
 import Storage from "./Pages/Storage/index.js";
 import NotFound from "./Pages/NotFound/index.js";
+import HomeReRoute from "./Pages/HomeReRoute/HomeReRoute.jsx";
 import ServiceCenter from "./Pages/ServiceCenter/index.js";
 
 import AllUsers from "./Pages/Admin/AllUsers.jsx";
@@ -39,6 +40,7 @@ import Help from "./Pages/Help/index.js";
 import AppContext from './Context_Api/AppContext.js'
 import "./App.css";
 import Cookies from 'js-cookie';
+import { NavLink, useNavigate } from "react-router-dom";
 
 
 const App = () => {
@@ -46,6 +48,8 @@ const App = () => {
 
   const {state,dispatch}=useContext(AppContext)
   const {openSideBar,logoutPopup}=state
+  const navigate = useNavigate();
+
   
   const menuref = useRef();
 
@@ -59,10 +63,10 @@ const App = () => {
     } else {
       menuref.current.style.width = "180px";
       dispatch({ type: 'setFolderPath', folderPath: false });
-    }
+    } 
     }
 
-    console.log(Cookies.get("isAdmin"))
+    // console.log(Cookies.get("isAdmin"))
 
     const getUserData=async()=>{
 
@@ -93,7 +97,7 @@ const App = () => {
         dispatch({ type: "setRefreshData", refreshDataAction: true });
       }
 
-      if(Cookies.get("isAdmin")){
+      if(Cookies.get("isAdmin")==="true"){
         dispatch({ type: "setIsAdmin", isAdminAction: true });
       }
       else{
@@ -137,10 +141,18 @@ const App = () => {
     
           <Routes>
     
+          <Route path="/"  element={<HomeReRoute/>} />
+
+
+          {state.isAdmin ?
+            <>
             <Route path="/admin"  element={<AllUsers/>} />
             <Route path="/report"  element={<Report/>} />
             <Route path="/feedback"  element={<Feedback/>} />
-
+            </>
+          :
+          null
+          }  
             <Route path="/auth"  element={<AuthenticationPage><AuthPages/></AuthenticationPage>} />
             <Route path="/email" element={<AuthenticationPage><EnterEmail/></AuthenticationPage>} />
             <Route path="/verificationcode" element={<AuthenticationPage><VerificationCode/></AuthenticationPage>} />
@@ -148,7 +160,8 @@ const App = () => {
             <Route path="/passwordchanged" element={<AuthenticationPage><PasswordChanges/></AuthenticationPage>} />
 
             
-            <Route path="/noteslink/" element={<Home />} />
+          {!state.isAdmin ?
+          <>  <Route path="/noteslink/" element={<Home />} />
             <Route path="/savedfiles" element={<SavedFiles />} />
             <Route path="/publicfiles" element={<PublicFiles />} />
             <Route path="/seachfiles" element={<SeachFiles />} />
@@ -160,7 +173,9 @@ const App = () => {
             <Route path="/account-setting" element={<Settings />} />
             <Route path="/send-feedback" element={<Feedback />} />
             <Route path="/help" element={<Help />} />
-            <Route element={<NotFound />} />
+            </>
+          :null}
+            <Route path="*" element={<NotFound />} />
     
           </Routes>
 

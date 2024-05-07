@@ -3,17 +3,21 @@ import { CiWarning } from "react-icons/ci";
 import { NavLink, useNavigate } from "react-router-dom";
 import { auth, fdb } from '../../../Firebase/firebaseConfig'
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { collection, getDoc, getDocs, query, updateDoc, where } from 'firebase/firestore';
+import { collection, getDoc, getDocs, query, updateDoc, where, doc } from 'firebase/firestore';
 import AppContext from "../../../Context_Api/AppContext.js";
+import { FiEye } from "react-icons/fi";
+import { GoEyeClosed } from "react-icons/go";
 import Cookies from 'js-cookie';
+
 function Login({ setLoginSuccessfull }) {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginErrors, setLoginErrors] = useState(null);
+  const [showPassword, setShowPassword] = useState('');
   const { state, dispatch } = useContext(AppContext);
   const navigate = useNavigate();
-  const errors = ["All Fields Are Mandatory", "Invalid Username or Password"];
+  const errors = ["All Fields Are Mandatory", "Invalid Username or Password", "Something went wrong, please try again later!"];
 
   const onEmailChange = (event) => {
 
@@ -40,10 +44,7 @@ function Login({ setLoginSuccessfull }) {
       setLoginErrors(null)
       signInWithEmailAndPassword(auth, email, password).then(async (data) => {
         setLoginSuccessfull(true)
-        localStorage.setItem('userEmail', email);
-        localStorage.setItem('isLogin', true);
-        Cookies.set('userEmail', JSON.stringify(email), { expires: 7 });
-
+       
         const q = await getDocs(
           query(
             collection(fdb, "users"),
@@ -58,15 +59,11 @@ function Login({ setLoginSuccessfull }) {
               dispatch({ type: "setEmail", Email: emailAddress });
               setLoginSuccessfull(false)
               dispatch({ type: "setRefreshData", refreshDataAction: true });
-              if (userType === "admin") {
-                dispatch({ type: "setIsAdmin", isAdminAction: true });
-                Cookies.set('isAdmin', JSON.stringify(true), { expires: 7 });
-                navigate("/admin")
+              
 
-              } else {
                 if (status === "restricted") {
 
-                  if (new Date().getTime() > limitTill) {
+                  if (new Date().getTime() < limitTill) {
                     let date = new Date(limitTill).toDateString()
                     alert(`You are not allowed to login till ${date}`)
                   }
@@ -78,14 +75,41 @@ function Login({ setLoginSuccessfull }) {
                     navigate("/noteslink")
                   }
                 }
+                else{
+                  if (userType === "admin") {
+                    dispatch({ type: "setIsAdmin", isAdminAction: true });
+                    Cookies.set('isAdmin', JSON.stringify(true), { expires: 7 });
+                    navigate("/admin")
+    
+                  }
+                  else{
 
-              }
+                    Cookies.set('isAdmin', JSON.stringify(false), { expires: 7 });
+                    navigate("/noteslink")
+
+                  } 
+
+                  localStorage.setItem('userEmail', email);
+                  localStorage.setItem('isLogin', true);
+                  Cookies.set('userEmail', JSON.stringify(email), { expires: 7 });
+          
+                  
+                }
+
+              
 
             });
           })
           .catch((e) => console.log(e));
 
-      }).catch((e) => { console.log(e) })
+      }).catch((e) => { 
+        if(e.errorCode !== "auth/invalid-credential"){
+          setLoginErrors([1])
+        }
+        else{
+          setLoginErrors([2])
+        }
+       })
 
     }
 
@@ -107,15 +131,31 @@ function Login({ setLoginSuccessfull }) {
           required
         />
 
-        <input
-          type="password"
-          id="password"
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 outline-none"
-          name="password"
-          placeholder="Password"
-          onChange={onPasswordChange}
-          required
-        />
+        <div className="py-2">
+            
+            <div className='bg-gray-50 h-full border flex border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '>
+
+            <input
+                type={showPassword ? "text" : "password"}
+                className="h-full bg-[#0000] w-[90%] outline-none"
+                name="password"
+                value={password}
+                placeholder="Password"
+                onChange={onPasswordChange}
+                required
+            />
+
+            <div className='h-full w-[10%] hover:cursor-pointer' onClick={() => setShowPassword(!showPassword)}>
+                {showPassword ?
+                    <GoEyeClosed size={20} />
+                    :
+                    <FiEye size={20} />
+                }
+            </div>
+
+            </div>
+
+        </div>
 
       </div>
 

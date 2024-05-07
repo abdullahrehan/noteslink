@@ -125,6 +125,7 @@ function Index() {
       .catch((e) => console.log(e));
   };
 
+  console.log(data);
   const HorizontalRange = {
     leftTop: {
       top: 0,

@@ -15,6 +15,7 @@ function LogOut() {
         localStorage.removeItem('userEmail');
         localStorage.setItem('isLogin', false);
         dispatch({ type: "setLogoutPopup", logoutPopupAction: false })
+        dispatch({ type: "setIsAdmin", isAdminAction: false });
         Cookies.remove('userEmail');
         Cookies.remove('isAdmin');
         navigate("/auth")

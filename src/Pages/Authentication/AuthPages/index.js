@@ -70,7 +70,7 @@ function Index() {
       
       <div className={`w-full z-30 absolute top-0 left-0 bg-[#0000] h-[280px] flex ${loginSuccessfull?" ":"hidden"} items-center flex-col rounded-[5px] gap-2 shadow-[0_3px_10px_rgb(0,0,0,0.2)]`}>
 
-        <div className="font-bold text-xl ">Login Successfully</div>
+        <div className="font-bold text-xl "></div>
         
         <div className="w-full h-full gap-5 flex items-center justify-center flex-col">
 

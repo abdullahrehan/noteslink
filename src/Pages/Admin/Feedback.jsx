@@ -60,7 +60,6 @@ const [totalFeedbacks, setTotalFeedbacks] = useState(0)
     console.log('Delete account clicked for:', data.data.name);
     await deleteDoc(doc(fdb, 'feedbacks', data.id)).then(() => {
       alert("file deleted successfully")
-      // setloader(true)
       setReloadPage(true)
 
     })
@@ -77,8 +76,7 @@ const [totalFeedbacks, setTotalFeedbacks] = useState(0)
         limitTill: currentDate,
         status: 'restricted'
       }).then(() => {
-        // setLoader(true)
-        // setloader(true)
+        
         setReloadPage(true)
         alert("Account Status Changed to Restricted")
       })
@@ -132,7 +130,7 @@ const [totalFeedbacks, setTotalFeedbacks] = useState(0)
                 </tr>
               ) :
                 ["", ""].map((data, index) =>
-                  // <>
+
                   <tr className='overflow-hidden'>
                     <td className="border px-4 py-2 text-center font-bold"><div className='w-[80px] h-[50px] rounded bg-slate-200 duration-100 transition-all delay-70 ease-in-out animate-pulse shadow'></div></td>
                     <td className="border px-4 py-2 text-center"><div className='w-[80px] h-[50px] rounded bg-slate-200 duration-100 transition-all delay-70 ease-in-out animate-pulse shadow'></div></td>
@@ -154,7 +152,6 @@ const [totalFeedbacks, setTotalFeedbacks] = useState(0)
                       <div className="bg-gray-300 bg-slate-200 duration-100 transition-all delay-70 ease-in-out animate-pulse shadow w-[80px] h-[50px] py-2 rounded"></div>
                     </td>
 
-                    {/* </> */}
                   </tr>
                 )}
 
