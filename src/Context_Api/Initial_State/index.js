@@ -25,8 +25,8 @@ const initialState=
       saveFilePopup:false,
       logoutPopup:false,
       newFolderNamePopup:false,
-      renameFilePopup:false,
-      renameFolderPopup:false,
+      renameFilePopup:{value:false,id:null},
+      renameFolderPopup:{value:false,id:null},
       deletFilePopup:false,
       deleteFolderPopup:false,
 

@@ -38,10 +38,10 @@ function Index() {
     fileViewerContent
   } = state;
   const [offsetHeightHome, setOffsetHeightHome] = useState(null);
-  // const [currentFolder,setCurrentFolder]=useState(null)
+
   const [offsetWidthHome, setOffsetWidthHome] = useState(null);
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
-  // const [accountCookie,setAccountCookie]=useState(false)
+
   const [pageLoading, setPageLoading] = useState(true);
 
   const [menuDimension, setMenuDimension] = useState({
@@ -85,8 +85,6 @@ function Index() {
       getData();
       dispatch({ type: "setRefreshData", refreshDataAction: false });
 }
-    // }
-    // saveFilePopup
   }, [refreshData]);
 
   useEffect(()=>{
@@ -99,7 +97,7 @@ function Index() {
   const getData = async () => {
 
     setPageLoading(true)
-    console.log(state.homeCurrentFoler,state.homeCurrentFoler.name=="My Computer"?"":state.homeFolderPath[state.homeFolderPath.length-1],state.homeFolderPath[state.homeFolderPath.length-1]);
+    // console.log(state.homeCurrentFoler,state.homeCurrentFoler.name=="My Computer"?"":state.homeFolderPath[state.homeFolderPath.length-1],state.homeFolderPath[state.homeFolderPath.length-1]);
     await getDocs(
       query(
         collection(fdb, "files"),
@@ -116,7 +114,7 @@ function Index() {
         
       })
       .then(()=>{
-        // setPageLoading(false)
+        // console.log(data,'117');
         setLoading(false);
 
 
@@ -125,7 +123,7 @@ function Index() {
       .catch((e) => console.log(e));
   };
 
-  console.log(data);
+
   const HorizontalRange = {
     leftTop: {
       top: 0,
@@ -334,13 +332,13 @@ function Index() {
             }
           />
         ) : null}
-        {renameFolderPopup ? (
+        {renameFolderPopup.value ? (
           <RenameFile
             type="Folder"
             Function={() =>
               dispatch({
                 type: "setRenameFolderPopup",
-                renameFolderPopupAction: false,
+                renameFolderPopupAction: {value:false,id:null},
               })
             }
           />

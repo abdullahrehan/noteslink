@@ -72,6 +72,7 @@ function SignUp({ setSignUpSuccessfull }) {
                     name: username,
                     emailAddress: email,
                     userType: "user",
+                    tabs:{id: "", name: "My Computer"}
                 }).then(() => {
                     Cookies.set('userEmail', JSON.stringify(email), { expires: 7 });
                     dispatch({ type: "setName", Name: username });

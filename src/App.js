@@ -107,7 +107,7 @@ const App = () => {
 
     },[])
 
-    console.log(state.isAdmin)
+    // console.log(state.isAdmin)
 
 
   return (

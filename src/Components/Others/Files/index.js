@@ -40,8 +40,9 @@ function AllFiles({ data, homeFilesSettingRef, loading }) {
         :
         // null
           <MainFiles
-            content={data.content}
+            id={data.id}
             visibility={data.status}
+            content={data.content}
             data={data}
             name={data.name}
             index={index}
