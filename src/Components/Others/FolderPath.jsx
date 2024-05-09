@@ -1,7 +1,7 @@
  import React, { useContext } from 'react'
  import AppContext from "../../Context_Api/AppContext.js";
 
-function FolderPath({folderdata,setChangeFolder}) {
+function FolderPath({folderdata,searchFolder,setSearchFolder}) {
 
     const { state, dispatch } = useContext(AppContext);
 
@@ -14,6 +14,7 @@ function FolderPath({folderdata,setChangeFolder}) {
         return arr.slice(0, index + 1); // return a new array containing elements up to the specified index
       }
 
+    //   console.log(searchFolder)
     const setFolder=(data)=>{
 
         // if(data!=="My Computer"){
@@ -50,7 +51,7 @@ function FolderPath({folderdata,setChangeFolder}) {
 
             <div className='bg-red-200 w-[170px]'>
 
-                <input type='text' className='bg-green-00 w-full outline-none  border-b-[2px]' placeholder='search '/>
+                <input type='text' className='bg-green-00 w-full outline-none  border-b-[2px]' placeholder='search ' value={searchFolder} onChange={(e)=>setSearchFolder(e.target.value)}/>
 
             </div>
 

@@ -5,7 +5,7 @@ function TabsLoader({ name, tabsInnerRef, tabs , index, currentTabIndex, tabsRef
 
 
     const [tabType, setTabType] = useState("common")
-    const tabStyle = tabType == "prev" ? "h-full bg-slate-500 rounded-br-[7px] " : tabType == "selected" ? "h-[95%] bg-white  rounded-tr-[7px] rounded-tl-[7px]" : tabType == "selected" && currentTabIndex == 0 ? "h-[95%] bg-white rounded-tr-[7px] rounded-tl-[7px]" : tabType == "next" ? "h-full bg-slate-500 rounded-bl-[7px] text-[#B6B6B6]" : tabType == "common" ? "h-full bg-slate-500 " : tabType == "last" ? "h-full bg-slate-500" : null
+    const tabStyle = tabType == "prev" ? "h-full bg-slate-500 rounded-br-[0px] " : tabType == "selected" ? "h-[95%] bg-white  rounded-tr-[7px] rounded-tl-[7px]" : tabType == "selected" && currentTabIndex == 0 ? "h-[95%] bg-white rounded-tr-[7px] rounded-tl-[7px]" : tabType == "next" ? "h-full bg-slate-500 rounded-bl-[7px] text-[#B6B6B6]" : tabType == "common" ? "h-full bg-slate-500 " : tabType == "last" ? "h-full bg-slate-500" : null
 
 
     useEffect(() => {
@@ -21,7 +21,7 @@ function TabsLoader({ name, tabsInnerRef, tabs , index, currentTabIndex, tabsRef
 
     return (
 
-        <div  className={`w-[180px] h-[95%]  flex items-end justify-center transition-all delay-70 duration-500 ease-in-out ${tabType == "prev" ? "bg-white" : tabType == "selected" ? "bg-slate-500" : tabType == "next" ? "bg-white" : null}`} >
+        <div  className={`w-[180px] h-[95%] flex items-end justify-center transition-all delay-70 duration-500 ease-in-out ${tabType == "prev" ? "bg-white" : tabType == "selected" ? "bg-slate-500" : tabType == "next" ? "bg-white" : null}`} >
 
             <div  className={`w-full  flex justify-center text-base center hover:cursor-pointer transition-all delay-70 duration-500 ease-in-out ${tabStyle}  `}  >
 

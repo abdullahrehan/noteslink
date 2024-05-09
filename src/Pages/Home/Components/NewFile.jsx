@@ -235,7 +235,7 @@ function NewFile() {
                     </div>
                 </div>
 
-                <div className={`h-full ${renameFilePopup || fileSaved ? "flex" : "hidden"} center w-full absolute top-0 left-0 bg-[#0002] backdrop-blur-sm  rounded-[5px] flex flex-col center`}>
+                <div className={`h-full ${renameFilePopup.value || fileSaved ? "flex" : "hidden"} center w-full absolute top-0 left-0 bg-[#0002] backdrop-blur-sm  rounded-[5px] flex flex-col center`}>
 
                     <div className='text-base gap-2 items-center flex font-medium'>
                         <div><FaRegFileAlt /></div>

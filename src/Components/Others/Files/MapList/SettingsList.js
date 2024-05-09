@@ -28,7 +28,7 @@ export const FolderSettingsData = () => {
       Icon: <FaRegFolderOpen size={20} />,
       Function: async (id, Data) => {
         let newArray = [];
-        console.log(Data)
+        console.log(Data);
         const q = await getDocs(
           query(collection(fdb, "files"), where("parent", "==", id))
         )
@@ -73,11 +73,10 @@ export const FolderSettingsData = () => {
         await updateDoc(doc(fdb, "users", state.email.trim()), {
           tabs: arrayUnion({ id: Data.id, name: Data.name }),
         })
-        .then(()=>{
-        }).catch((e)=>{
-          console.error(e);
-
-        })
+          .then(() => {})
+          .catch((e) => {
+            console.error(e);
+          });
       },
     },
     {
@@ -225,6 +224,8 @@ export const FileSettingsData = (data) => {
       Function: () => {
         console.log(data, "data");
         // dispatch({ type: "setAddNewTextfile", addNewTextfileAction: true });
+        console.log(data);
+
         dispatch({
           type: "setFileViewerContent",
           fileViewerContentAction: {
@@ -233,6 +234,11 @@ export const FileSettingsData = (data) => {
             name: data.name,
             content: data.content,
             url: data.urls,
+            modifiedAt: data.modifiedAt,
+            interactions: data.interactions,
+            sharedWith: data.sharedWith,
+            viewers: data.viewers,
+            status: data.status,
           },
         });
       },

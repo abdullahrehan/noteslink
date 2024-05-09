@@ -52,6 +52,9 @@ function Index() {
 
   const { openFoldersPath, openHomeSetings, openFileSettings } = state;
   const [loading, setLoading] = useState(true);
+  const [loadFolders, setloadFolders] = useState(true);
+  const [tabsLoading, setTabsLoading] = useState(true);
+  const [searchFolder, setSearchFolder] = useState("");
   const navigate = useNavigate();
 
   const homeSettingsRef = useRef();
@@ -97,7 +100,7 @@ function Index() {
   const getData = async () => {
 
     setPageLoading(true)
-    // console.log(state.homeCurrentFoler,state.homeCurrentFoler.name=="My Computer"?"":state.homeFolderPath[state.homeFolderPath.length-1],state.homeFolderPath[state.homeFolderPath.length-1]);
+
     await getDocs(
       query(
         collection(fdb, "files"),
@@ -116,6 +119,7 @@ function Index() {
       .then(()=>{
         // console.log(data,'117');
         setLoading(false);
+        setloadFolders(false)
 
 
       })
@@ -245,15 +249,31 @@ function Index() {
     closeFileSettings();
   }, [renameFilePopup, renameFolderPopup, deletFilePopup]);
 
+  function searchFolders(data, searchQuery) {
+    // console.log(data,searchQuery,'asd')
+    // Convert search query to lowercase for case-insensitive search
+    if(searchQuery!==""){
+    const query = searchQuery.toLowerCase();
 
-  // console.log(data.length==0,'data');
+    // Filter folder names based on whether they contain the search query
+    const filteredFolders = data.filter(folderName => {
+        // Convert folder name to lowercase for case-insensitive comparison
+        const folderNameLower = folderName.name.toLowerCase();
+        // Check if folder name contains the search query
+        return folderNameLower.includes(query);
+    });
 
+    return filteredFolders;
+  }
+  else{
+    return data
+  }
+}
+
+// console.log(searchFolder)
   return (
-    <div
-      className="w-full h-full bg-green-00 flex justify-end  text-4xl"
-      onClick={closeFileSettings}
-      // onLoad={loadingAnnimation}
-    >
+    // <></>
+    <div className="w-full h-full bg-green-00 flex justify-end  text-4xl" onClick={closeFileSettings} onLoad={()=> dispatch({ type: "setRefreshData", refreshDataAction: true })}>
       
       <div
         className={`${
@@ -261,7 +281,7 @@ function Index() {
         } h-full bg-red-00 transition-all delay-70 duration-400 ease-in-out `}
       >
         <div className={`w-full h-[35px] bg-green-00 flex items-center `}>
-          <AllTabs loading={loading} />
+          <AllTabs loading={loading} tabsLoading={tabsLoading} setTabsLoading={(value)=>setTabsLoading(value)} setLoading={(value)=>setloadFolders(value)} />
 
           <div className="w-[40px] h-full hover:cursor-pointer rounded-full bg-#0002] center">
             <img
@@ -278,17 +298,9 @@ function Index() {
           {loading ? (
             <FolderPathLoader />
           ) : (
-            <FolderPath folderdata={data} />
+            <FolderPath searchFolder={searchFolder} setSearchFolder={(value)=>setSearchFolder(value)} folderdata={data} />
           )}
         </div>
-
-        {/* <div className={`${data.length==0?"flex":"hidden"} h-minus-150px flex flex-col w-full center`}>
-        
-          <img src={NotesVector} className="h-[80%]"/>
-        
-          <div>Create New Notes</div>
-          
-        </div> */}
 
         {/* <div className={`${pageLoading?"flex":"hidden"} h-minus-150px flex flex-col w-full center`}>
         
@@ -304,24 +316,23 @@ function Index() {
           onClick={closePopUp}
         >
           <AllFiles
-
-            data={state.homeCurrentFoler.data}
+            data={searchFolders(state.homeCurrentFoler.data,searchFolder)}
             homeFilesSettingRef={homeFilesSettingRef}
-            loading={loading}
+            loading={loadFolders}
             page={"home"}
           />
 
-          <div
-            className={`absolute ${openHomeSetings ? "flex" : "hidden"}`}
-            ref={homeSettingsRef}
-          >
+          <div className={`absolute ${openHomeSetings ? "flex" : "hidden"}`} ref={homeSettingsRef}>
+          
             <PageSettings menuDimension={menuDimension} />
+          
           </div>
+
         </div>
 
         
         {newFolderNamePopup ? <NewFolder userData={data} /> : null}
-        {renameFilePopup ? (
+        {renameFilePopup.value ? (
           <RenameFile
             type="File"
             Function={() =>
@@ -374,12 +385,14 @@ function Index() {
               <div className="bg-slate-400 animate-pulse w-[80px] h-[15px] rounded-full "></div>
             </div>
           ) : (
-            <div className={`flex gap-2 text-sm font-medium ${data.length==0?"hidden":"flex"}` }>
-              <div>5 Folders </div>
 
-              <div>Size 1.5Gb</div>
+          <div className={`flex gap-2 text-sm font-medium ${data.length==0?"hidden":"flex"}` }>
+
+              <div>{state.homeCurrentFoler.data.length} Files </div>
+
             </div>
-          )}
+
+)}
           <div className="absolute bottom-2 right-2">
             <AddFilesButton />
           </div>
