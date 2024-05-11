@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PopUp from '../../Components/Others/PopUp'
 
 function DeleteFile({ type , Function}) {

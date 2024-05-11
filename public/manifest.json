@@ -21,5 +21,9 @@
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "background_color": "#ffffff",
+  "host_permissions": ["*://*/*"],
+  "web_accessible_resources": [
+    "tileset/*.json", "layer/*.json", "sound/*.ogg"
+  ]
 }

@@ -16,7 +16,14 @@ function Account() {
     const logOutFunc=()=>{
         dispatch({ type: 'setOpenAccountSettings', setOpenAccountSettings:false})        
         dispatch({ type: 'setLogoutPopup', logoutPopupAction:true})
+        
        
+    }
+
+    const openFeedbackForm=()=>{
+        dispatch({ type: 'setOpenAccountSettings', setOpenAccountSettings:false})        
+        dispatch({ type: 'setShowFeedbackForm', showFeedbackFormAction:true})
+        
     }
 
     return (
@@ -51,27 +58,23 @@ function Account() {
                 <div className='w-full h-[52%]  pl-6 pr-6 flex flex-col justify-around pt-4'>
                     <div className='flex items-center bg-red-00 hover:bg-[#E1E1E1] hover:cursor-pointer py-2 rounded-[4px]'>
                         <div className='pl-2 pr-2'><IoSettingsOutline size={22} /></div>
-                        <NavLink  activeClass={"bg-red-200"} to={"/account-setting"}>
+                        <NavLink to={"/account-setting"}>
                             <div className='pl-4'>Account Setting</div>
                         </NavLink>
 
                     </div>
                     <div className='flex items-center hover:bg-[#E1E1E1] hover:cursor-pointer py-2 rounded-[4px]'>
                         <div className='pl-2 pr-2'><MdLogout size={22} /></div>
-                        {/* <NavLink  activeClass={"bg-red-200"} to={"/account-setting"}> */}
                             <div className='pl-4' onClick={logOutFunc}>logout</div>
-                        {/* </NavLink> */}
                     </div>
 
                     <div className='flex items-center hover:bg-[#E1E1E1] hover:cursor-pointer py-2 rounded-[4px] '>
                         <div className='pl-2 pr-2'><MdOutlineFeedback size={22} /></div>
-                        <NavLink  activeClass={"bg-red-200"} to={"/send-feedback"}>
-                            <div className='pl-4'>Send Feedback</div>
-                        </NavLink>
+                            <div className='pl-4' onClick={openFeedbackForm}>Send Feedback</div>
                     </div>
                     <div className='flex items-center hover:bg-[#E1E1E1] hover:cursor-pointer py-2 rounded-[4px]'>
                         <div className='pl-2 pr-2'><LuHelpCircle size={22} /></div>
-                        <NavLink  activeClass={"bg-red-200"} to={"/help"}>
+                        <NavLink to={"/help"}>
                             <div className='pl-4'>Help</div>
                         </NavLink>
                     </div>

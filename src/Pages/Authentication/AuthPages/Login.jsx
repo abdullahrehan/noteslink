@@ -53,7 +53,7 @@ function Login({ setLoginSuccessfull }) {
         )
           .then((querySnapshot) => {
             querySnapshot.forEach(async (doc) => {
-              console.log(doc.data())
+
               const { name, emailAddress, userType, status, limitTill } = doc.data();
               dispatch({ type: "setName", Name: name });
               dispatch({ type: "setEmail", Email: emailAddress });

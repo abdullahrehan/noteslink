@@ -16,8 +16,8 @@ function SignUp({ setSignUpSuccessfull }) {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [confirmPassword, setConfirmPassword] = useState();
+    const [showConfirmPassword, setShowConfirmPassword] = useState();
     const [showPassword, setShowPassword] = useState('');
     const [signUpErrors, setSignUpErrors] = useState(null);
     const { state, dispatch } = useContext(AppContext);
@@ -65,7 +65,6 @@ function SignUp({ setSignUpSuccessfull }) {
             setSignUpErrors(null);
             createUserWithEmailAndPassword(auth, email, password).then(async () => {
 
-                console.log('Login successful')
                 setSignUpSuccessfull(true)
 
                 await setDoc(doc(fdb, "users", email), {
@@ -130,7 +129,7 @@ function SignUp({ setSignUpSuccessfull }) {
                         name="confirmPassword"
                         value={confirmPassword}
                         placeholder="Confirm Password"
-                        onChange={(e) => onInputChange(e, setPassword)}
+                        onChange={(e) => onInputChange(e, setConfirmPassword)}
                         type={showPassword ? "text" : "password"}
                         required
                     />
@@ -156,7 +155,7 @@ function SignUp({ setSignUpSuccessfull }) {
                     name="password"
                     value={password}
                     placeholder="Password"
-                    onChange={(e) => onInputChange(e, setConfirmPassword)}
+                    onChange={(e) => onInputChange(e, setPassword)}
                     required
                 />
 

@@ -5,30 +5,18 @@ function FolderPath({folderdata,searchFolder,setSearchFolder}) {
 
     const { state, dispatch } = useContext(AppContext);
 
-    function removeAfterIndex(arr, index) {
-        if (index < 0 || index >= arr.length) {
-          console.error('Invalid index');
-          return arr; // return the original array if index is invalid
-        }
-        
-        return arr.slice(0, index + 1); // return a new array containing elements up to the specified index
-      }
+    const removeAfterIndex=(arr, index)=> {
 
-    //   console.log(searchFolder)
+        if (index < 0 || index >= arr.length) { return arr }
+        return arr.slice(0, index + 1); 
+      
+    }
+
     const setFolder=(data)=>{
 
-        // if(data!=="My Computer"){
-            const filteredIndex=state.homeFolderPath.findIndex((Data)=>Data==data)
-
-            console.log(removeAfterIndex(state.homeFolderPath,filteredIndex),state.homeFolderPath);
-            // setChangeFolder(data)
-            dispatch({ type: "setHomeCurrentFoler", openHomeSetingsAction: { name: data, data: folderdata } });
-            dispatch({ type: "resetHomeFolderPath", homeFolderPathAction:  removeAfterIndex(state.homeFolderPath,filteredIndex)});
-        // }
-
-        
-        
-        // alert(data)
+        const filteredIndex=state.homeFolderPath.findIndex((Data)=>Data==data)
+        dispatch({ type: "setHomeCurrentFoler", openHomeSetingsAction: { name: data, data: folderdata } });
+        dispatch({ type: "resetHomeFolderPath", homeFolderPathAction:  removeAfterIndex(state.homeFolderPath,filteredIndex)});
     }
 
     return (
@@ -37,13 +25,12 @@ function FolderPath({folderdata,searchFolder,setSearchFolder}) {
 
         <div className='flex gap-1 text-gray-500'>
 
-        {state.homeFolderPath?.map(data=>
-            <>
-            <span className='underline underline-offset-1 hover:cursor-pointer' onClick={()=>setFolder(data)}>{data}</span>
-
-            <span>/</span>
-            </>
-        )}
+            {state.homeFolderPath?.map((data,index)=>
+                <React.Fragment key={index}>
+                    <span className='underline underline-offset-1 hover:cursor-pointer' onClick={()=>setFolder(data)}>{data}</span>
+                    <span>/</span>
+                </React.Fragment>
+            )}
 
         </div>
 

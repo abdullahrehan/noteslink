@@ -28,8 +28,6 @@ function NavigationFolderPath() {
 
                     <div className=' absolute  bg-red-00 right-[2px] top-[2px]'>
 
-                        {/* <RxCross2 size={20} className='hover:cursor-pointer ' color={"black"} /> */}
-
                     </div>
 
                 </div>
@@ -38,18 +36,22 @@ function NavigationFolderPath() {
 
                     {navigationFolderArray.map((data, index) =>
                         
-                        <div className='bg-slate-300 animate-pulse w-[110px] h-[30px] px-2 flex items-center gap-2 rounded-[5px] ml-2 mt-2 '>
+                        <React.Fragment key={index}>
+                           
+                            <div className='bg-slate-300 animate-pulse w-[110px] h-[30px] px-2 flex items-center gap-2 rounded-[5px] ml-2 mt-2 '>
 
-                            <div className='bg-slate-400 animate-pulse w-[20px] h-[20px] rounded-full flex justify-center items-center '>
+                                <div className='bg-slate-400 animate-pulse w-[20px] h-[20px] rounded-full flex justify-center items-center '>
+
+                                </div>
+
+
+                                <div className='bg-slate-400 animate-pulse w-[80px] h-[12px] rounded-full flex justify-center items-center '>
+
+                                </div>
 
                             </div>
-
-
-                            <div className='bg-slate-400 animate-pulse w-[80px] h-[12px] rounded-full flex justify-center items-center '>
-
-                            </div>
-
-                        </div>
+                       
+                        </React.Fragment>
                         
                     )}
 

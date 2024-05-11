@@ -115,7 +115,7 @@ function Index() {
 
         data.map((data,index) => (
        
-       <div className="w-[120px]  rounded-[4px] hover:cursor-pointer hover:bg-gray-200 py-2">
+       <div className="w-[120px] px-1 rounded-[4px] hover:cursor-pointer hover:bg-gray-200 py-2">
        
             <div className=" bg-green-00 center flex rounded-[4px] relative">
 

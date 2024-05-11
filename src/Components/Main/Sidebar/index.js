@@ -4,9 +4,8 @@ import HomeIcon from "../../../Assets/Images/home-icon.png";
 import SavedFile from "../../../Assets/Images/saved-file-icon.png";
 import SearchFile from "../../../Assets/Images/search-file-icon.png";
 import SharedIcon from "../../../Assets/Images/shared-icon.png";
-import CloudIcon from "../../../Assets/Images/cloud-icon.png";
 import recycleBinIcon from "../../../Assets/Images/recyclebin-icon.png";
-import ServiceCenter from "../../../Assets/Images/service-center.PNG";
+import sharedFiles from "../../../Assets/Images/sharedFiles.png";
 
 function index({openMenu}) {
   const menuIcons = [
@@ -26,10 +25,17 @@ function index({openMenu}) {
       path: "/seachfiles",
     },
     {
-      name: "Shared Files",
+      name: "Public Files",
       icon: <img src={SharedIcon} className="w-[28px]" />,
       path: "/publicfiles",
     },
+    {
+      name: "Shared By Me",
+      icon: <img src={sharedFiles} className="w-[28px]" />,
+      path: "/sharedFiles",
+    },
+    
+
   ];
 
   const menuSettingsIcons = [
@@ -38,16 +44,7 @@ function index({openMenu}) {
       icon: <img src={recycleBinIcon} className="w-[30px]" />,
       path: "/deletefiles",
     },
-    {
-      name: "Service Center",
-      icon: <img src={ServiceCenter} className="w-[28px]" />,
-      path: "/service-center",
-    },
-    {
-      name: "Storage",
-      icon: <img src={CloudIcon} className="w-[28px]" />,
-      path: "/storage",
-    },
+    
   ];
 
   return (

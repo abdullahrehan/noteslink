@@ -1,12 +1,12 @@
 import React, { useContext, useState } from 'react'
 import { MdPublic } from "react-icons/md";
 import FileSettings from '../FileSettings/index'
-import { FileSettingsData , SavedFileSettingsData } from '../MapList/SettingsList'
+import { FileSettingsData , SavedFileSettingsData,PublicFileSettingsData,SearchFileSettingsData } from '../MapList/SettingsList'
 import { FaBookmark } from "react-icons/fa";
 import AppContext from '../../../../Context_Api/AppContext.js'
 
 
-function MainFiles({ content ,id, visibility, data,name , index , homeFilesSettingRef }) {
+function MainFiles({page, content ,id, visibility, data,name , index , homeFilesSettingRef }) {
     
     const {state,dispatch}=useContext(AppContext)
 
@@ -17,8 +17,7 @@ function MainFiles({ content ,id, visibility, data,name , index , homeFilesSetti
 
     }
 
-    // console.log(data,'20');
-
+   
     return (
     
     <div className='w-[120px] center flex-col text-sm h-auto py-2 gap-0  rounded-[4px] hover:cursor-pointer hover:bg-gray-200 relative'  onContextMenu={FolderSetting} >
@@ -56,7 +55,8 @@ function MainFiles({ content ,id, visibility, data,name , index , homeFilesSetti
                 index={index} 
                 id={id}
                 data={data}
-                FolderSettingsData={ visibility=="public" || visibility=="private" ? FileSettingsData(data) : visibility=="saved" ? SavedFileSettingsData() : null }
+                // FolderSettingsData={ visibility=="public" || visibility=="private" ? FileSettingsData(data) : visibility=="saved" ? SavedFileSettingsData() : null }
+                FolderSettingsData={page=="home"?FileSettingsData(data):page=="public files"?PublicFileSettingsData(data):page=="search files"?SearchFileSettingsData(data):null}
                 closeFileSettings={() =>dispatch({ type: 'setOpenFileSettings', openFileSettingsAction:{ value: false, event: null, index: null }})}
 />
         </div>

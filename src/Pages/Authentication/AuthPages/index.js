@@ -10,15 +10,21 @@ function Index() {
   const [page,setPage]=useState("login")
   const [loginSuccessfull,setLoginSuccessfull]=useState(false)
   const [signUpSuccessfull,setSignUpSuccessfull]=useState(false)
+
   let login = page=="login" 
   let signup = page=="signup" 
+  
   let authDiv=useRef()
   const navigate = useNavigate();
 
   useEffect(()=>{
     if(Cookies.get("userEmail")){
+      if(Cookies.get("isAdmin")=="true"){
+        navigate("/admin")
+
+      }else{
       navigate("/noteslink")
-    }
+    }}
 
   },[])
 
@@ -29,7 +35,7 @@ function Index() {
 
       <div className={`w-full `}>
     
-      <div className="flex z-10 w-full h-[60px] justify-around items-center ">
+      <div className={`z-10 w-full h-[60px] justify-around items-center ${signUpSuccessfull?"hidden":"flex"} `}>
 
         <div className="flex flex-col items-center hover:cursor-pointer hover:bg-[#F1F1F1] px-4 h-[90%] rounded-[2px] center " onClick={() => setPage("signup")}>
           
@@ -68,7 +74,7 @@ function Index() {
 
       </div>
       
-      <div className={`w-full z-30 absolute top-0 left-0 bg-[#0000] h-[280px] flex ${loginSuccessfull?" ":"hidden"} items-center flex-col rounded-[5px] gap-2 shadow-[0_3px_10px_rgb(0,0,0,0.2)]`}>
+      <div className={`w-full z-30 absolute top-0 left-0 bg-[#0000] h-[296px] flex ${loginSuccessfull?" ":"hidden"} items-center flex-col rounded-[5px] gap-2 shadow-[0_3px_10px_rgb(0,0,0,0.2)]`}>
 
         <div className="font-bold text-xl "></div>
         
@@ -82,9 +88,9 @@ function Index() {
 
       </div>
 
-      <div className={`w-full z-30 absolute top-0 left-0 bg-white h-[280px] flex ${signUpSuccessfull?" ":"hidden"} items-center flex-col rounded-[5px] gap-2 shadow-[0_3px_10px_rgb(0,0,0,0.2)]`}>
+      <div className={`w-full z-30 absolute top-0 left-0 bg-white h-[310px] flex ${signUpSuccessfull?" ":"hidden"} items-center flex-col rounded-[5px] gap-2 shadow-[0_3px_10px_rgb(0,0,0,0.2)]`}>
 
-        <div className="font-bold text-xl ">Account Created Successfully</div>
+        <div className="font-bold text-xl "></div>
         
         <div className="w-full h-full gap-5 flex items-center justify-center flex-col">
 

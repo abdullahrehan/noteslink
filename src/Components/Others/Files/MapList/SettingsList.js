@@ -7,17 +7,7 @@ import { MdOutlineDriveFileRenameOutline } from "react-icons/md";
 import { MdFolderCopy } from "react-icons/md";
 import AppContext from "../../../../Context_Api/AppContext.js";
 import { useContext } from "react";
-import {
-  FieldValue,
-  arrayUnion,
-  collection,
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  updateDoc,
-  where,
-} from "firebase/firestore";
+import {arrayUnion,collection,doc,getDocs,query,updateDoc,where} from "firebase/firestore";
 import { fdb } from "../../../../Firebase/firebaseConfig.js";
 
 export const FolderSettingsData = () => {
@@ -28,7 +18,7 @@ export const FolderSettingsData = () => {
       Icon: <FaRegFolderOpen size={20} />,
       Function: async (id, Data) => {
         let newArray = [];
-        console.log(Data);
+
         const q = await getDocs(
           query(collection(fdb, "files"), where("parent", "==", id))
         )
@@ -73,7 +63,14 @@ export const FolderSettingsData = () => {
         await updateDoc(doc(fdb, "users", state.email.trim()), {
           tabs: arrayUnion({ id: Data.id, name: Data.name }),
         })
-          .then(() => {})
+          .then(() => {
+            console.log("done")
+
+            dispatch({
+              type: "setRefreshTabs",
+              refreshTabsAction: true,
+          });
+          })
           .catch((e) => {
             console.error(e);
           });
@@ -108,112 +105,6 @@ export const FolderSettingsData = () => {
     },
   ];
 };
-
-export const publicFolderSettingsData = () => {
-  // const { state, dispatch } = useContext(AppContext);
-  return [
-    {
-      name: "Open Folder",
-      Icon: <FaRegFolderOpen size={20} />,
-      Function: async (id, Data) => {
-        let newArray = [];
-        console.log("Here ===============> ", Data.name);
-
-        const q = await getDocs(
-          query(collection(fdb, "files"), where("parent", "==", id))
-        )
-          .then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-              newArray.push(doc.data());
-            });
-
-            // Promise.all(newArray).then((data) => {
-            //   dispatch({ type: "setHomeCurrentFoler", openHomeSetingsAction: { name: Data.name, data: data } });
-            //   dispatch({ type: "setHomeFolderPath", homeFolderPathAction: Data.name });
-
-            // });
-          })
-          .catch((e) => console.log(e));
-      },
-    },
-    {
-      name: "Make Folder Private",
-      Icon: <BsPeople size={20} />,
-      Function: () => {},
-    },
-  ];
-};
-
-export const publicFileSettingsData = () => {
-  // const { state, dispatch } = useContext(AppContext);
-
-  return [
-    {
-      name: "Open File",
-      Icon: <FaRegFolderOpen size={20} />,
-      Function: async (id, Data) => {
-        let newArray = [];
-        console.log("Here ===============> ", Data.name);
-
-        const q = await getDocs(
-          query(collection(fdb, "files"), where("parent", "==", id))
-        )
-          .then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-              newArray.push(doc.data());
-            });
-
-            // Promise.all(newArray).then((data) => {
-            //   dispatch({ type: "setHomeCurrentFoler", openHomeSetingsAction: { name: Data.name, data: data } });
-            //   dispatch({ type: "setHomeFolderPath", homeFolderPathAction: Data.name });
-
-            // });
-          })
-          .catch((e) => console.log(e));
-      },
-    },
-    {
-      name: "Make File Private",
-      Icon: <BsPeople size={20} />,
-      Function: () => {},
-    },
-  ];
-};
-
-export const SavedFolderSettingsData = () => {
-  const { state, dispatch } = useContext(AppContext);
-  return [
-    {
-      name: "Open Folder",
-      Icon: <FaRegFolderOpen size={20} />,
-      Function: () => {},
-    },
-    {
-      name: "Add in Tabs",
-      Icon: <IoIosAdd size={20} />,
-      Function: () => {},
-    },
-    {
-      name: "Move Folder",
-      Icon: <MdOutlineDriveFileMove size={20} />,
-      Function: () => {},
-    },
-    {
-      name: "Copy Folder",
-      Icon: <MdFolderCopy size={20} />,
-      Function: () => {},
-    },
-
-    {
-      name: "Delete Folder",
-      Icon: <MdDeleteOutline size={20} />,
-      Function: () => {
-        dispatch({ type: "setDeletFilePopup", deletFilePopupAction: true });
-      },
-    },
-  ];
-};
-
 export const FileSettingsData = (data) => {
   const { state, dispatch } = useContext(AppContext);
 
@@ -281,6 +172,198 @@ export const FileSettingsData = (data) => {
       name: "Delete File",
       Icon: <MdDeleteOutline size={20} />,
       Function: () => {},
+    },
+  ];
+};
+
+export const PublicFolderSettingsData = () => {
+  const { state, dispatch } = useContext(AppContext);
+  return [
+    {
+      name: "Open Folder",
+      Icon: <FaRegFolderOpen size={20} />,
+      Function: async (id, Data) => {
+        let newArray = [];
+        console.log("Here ===============> ", Data.name);
+
+        const q = await getDocs(
+          query(collection(fdb, "files"), where("parent", "==", id))
+        )
+          .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              newArray.push(doc.data());
+            });
+
+            // Promise.all(newArray).then((data) => {
+            //   dispatch({ type: "setHomeCurrentFoler", openHomeSetingsAction: { name: Data.name, data: data } });
+            //   dispatch({ type: "setHomeFolderPath", homeFolderPathAction: Data.name });
+
+            // });
+          })
+          .catch((e) => console.log(e));
+      },
+    },
+    {
+      name: "Make Folder Private",
+      Icon: <BsPeople size={20} />,
+      Function: () => {},
+    },
+    {
+      name: "Delete Folder",
+      Icon: <MdDeleteOutline size={20} />,
+      Function: () => {
+        dispatch({ type: "setDeletFilePopup", deletFilePopupAction: true });
+      },
+    }
+  ];
+};
+
+export const PublicFileSettingsData = () => {
+  const { state, dispatch } = useContext(AppContext);
+
+  return [
+    {
+      name: "Open File",
+      Icon: <FaRegFolderOpen size={20} />,
+      Function: async (id, Data) => {
+        let newArray = [];
+        console.log("Here ===============> ", Data.name);
+
+        const q = await getDocs(
+          query(collection(fdb, "files"), where("parent", "==", id))
+        )
+          .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              newArray.push(doc.data());
+            });
+
+            // Promise.all(newArray).then((data) => {
+            //   dispatch({ type: "setHomeCurrentFoler", openHomeSetingsAction: { name: Data.name, data: data } });
+            //   dispatch({ type: "setHomeFolderPath", homeFolderPathAction: Data.name });
+
+            // });
+          })
+          .catch((e) => console.log(e));
+      },
+    },
+    {
+      name: "Make File Private",
+      Icon: <BsPeople size={20} />,
+      Function: () => {},
+    },
+    {
+      name: "Delete File",
+      Icon: <MdDeleteOutline size={20} />,
+      Function: () => {
+        dispatch({ type: "setDeletFilePopup", deletFilePopupAction: true });
+      },
+    }
+  ];
+};
+
+
+export const SearchFolderSettingsData = () => {
+  const { state, dispatch } = useContext(AppContext);
+  return [
+    {
+      name: "Open Folder",
+      Icon: <FaRegFolderOpen size={20} />,
+      Function: async (id, Data) => {
+        let newArray = [];
+        console.log("Here ===============> ", Data.name);
+
+        const q = await getDocs(
+          query(collection(fdb, "files"), where("parent", "==", id))
+        )
+          .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              newArray.push(doc.data());
+            });
+
+            // Promise.all(newArray).then((data) => {
+            //   dispatch({ type: "setHomeCurrentFoler", openHomeSetingsAction: { name: Data.name, data: data } });
+            //   dispatch({ type: "setHomeFolderPath", homeFolderPathAction: Data.name });
+
+            // });
+          })
+          .catch((e) => console.log(e));
+      },
+    },
+    {
+      name: "Save Folder",
+      Icon: <BsPeople size={20} />,
+      Function: () => {},
+    },
+  ];
+};
+
+export const SearchFileSettingsData = () => {
+  const { state, dispatch } = useContext(AppContext);
+
+  return [
+    {
+      name: "Open File",
+      Icon: <FaRegFolderOpen size={20} />,
+      Function: async (id, Data) => {
+        let newArray = [];
+        console.log("Here ===============> ", Data.name);
+
+        const q = await getDocs(
+          query(collection(fdb, "files"), where("parent", "==", id))
+        )
+          .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              newArray.push(doc.data());
+            });
+
+            // Promise.all(newArray).then((data) => {
+            //   dispatch({ type: "setHomeCurrentFoler", openHomeSetingsAction: { name: Data.name, data: data } });
+            //   dispatch({ type: "setHomeFolderPath", homeFolderPathAction: Data.name });
+
+            // });
+          })
+          .catch((e) => console.log(e));
+      },
+    },
+    {
+      name: "Save File ",
+      Icon: <BsPeople size={20} />,
+      Function: () => {},
+    },
+  ];
+};
+
+
+export const SavedFolderSettingsData = () => {
+  const { state, dispatch } = useContext(AppContext);
+  return [
+    {
+      name: "Open Folder",
+      Icon: <FaRegFolderOpen size={20} />,
+      Function: () => {},
+    },
+    {
+      name: "Add in Tabs",
+      Icon: <IoIosAdd size={20} />,
+      Function: () => {},
+    },
+    {
+      name: "Move Folder",
+      Icon: <MdOutlineDriveFileMove size={20} />,
+      Function: () => {},
+    },
+    {
+      name: "Copy Folder",
+      Icon: <MdFolderCopy size={20} />,
+      Function: () => {},
+    },
+
+    {
+      name: "Delete Folder",
+      Icon: <MdDeleteOutline size={20} />,
+      Function: () => {
+        dispatch({ type: "setDeletFilePopup", deletFilePopupAction: true });
+      },
     },
   ];
 };

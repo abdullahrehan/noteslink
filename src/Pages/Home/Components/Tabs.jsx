@@ -17,7 +17,7 @@ import {
 } from "firebase/firestore";
 import { fdb } from "../../../Firebase/firebaseConfig.js";
 
-function Tabs({ setRefreshTabs, setLoading, name, tabsInnerRef, tabs, setTabs, index, id, currentTabIndex, setCurrentTabIndex, tabsRef }) {
+function Tabs({ setLoading, name, tabsInnerRef, tabs, setTabs, index, id, currentTabIndex, setCurrentTabIndex, tabsRef }) {
 
 
     const [tabType, setTabType] = useState("common")
@@ -42,15 +42,9 @@ function Tabs({ setRefreshTabs, setLoading, name, tabsInnerRef, tabs, setTabs, i
         event.preventDefault()
 
         if (index !== 0) {
-            console.log("continue", index - 1)
             setCurrentTabIndex(index - 1)
-            console.log("current")
-            console.log(tabs)
             let tabNew = tabs.findIndex(item => item.id === id) - 1;
-            console.log("hello", tabs, id)
-            console.log("New Tab: " + tabNew)
             const newId = tabs[tabNew].id
-            console.log(tabs.filter((data)=>data.id!==id))
             const email = await state.email
 
             const q = await getDocs(
@@ -61,15 +55,15 @@ function Tabs({ setRefreshTabs, setLoading, name, tabsInnerRef, tabs, setTabs, i
                     querySnapshot.forEach((doc) => {
                         newArray.push(doc.data());
                     });
-                    console.log(newArray, state.email.trim(), newId)
                     await updateDoc(doc(fdb, "users", state.email.trim()), {
                         tabs: tabs.filter((data)=>data.id!==id),
                     })
                         .then(async() => {
-                            console.log('67')
                             const data = await getDoc(doc(fdb, 'users', localStorage.getItem("userEmail")))
-                            console.log(data.data())
-                            setRefreshTabs(true)
+                            dispatch({
+                                type: "setRefreshTabs",
+                                refreshTabsAction: true,
+                            });
                             setUpdateTabsStyle(updateTabsStyle + 1)
                             // if(index!==currentTabIndex){
                             dispatch({

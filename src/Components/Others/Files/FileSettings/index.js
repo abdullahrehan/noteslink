@@ -2,9 +2,7 @@ import React, { useContext, useEffect } from 'react'
 import FolderSettings from './FileSettings'
 import AppContext from '../../../../Context_Api/AppContext.js'
 
-
-
-function Index({homeFilesSettingRef,id,data,index,FolderSettingsData,closeFileSettings}) {
+function Index({page,homeFilesSettingRef,id,data,index,FolderSettingsData,closeFileSettings}) {
 
     const {state,dispatch}=useContext(AppContext)
     const {openFileSettings}=state
@@ -40,12 +38,12 @@ function Index({homeFilesSettingRef,id,data,index,FolderSettingsData,closeFileSe
 
         
     }
-    // console.log(FolderSettingsData);
-  return (
+
+    return (
     <>
         <div className='absolute top-[40%] left-[40%] z-20 hidden' ref={(element) => settingRef(element)}>
       
-            <FolderSettings settings={FolderSettingsData} id={id} data={data} closeFileSettings={() => closeFolderSetting()} />
+            <FolderSettings page={page} settings={FolderSettingsData} id={id} data={data} closeFileSettings={() => closeFolderSetting()} />
       
         </div>
     </>

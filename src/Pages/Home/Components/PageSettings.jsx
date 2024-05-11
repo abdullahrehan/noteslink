@@ -4,7 +4,7 @@ import SubSettings from './SubSettings'
 import { PageSettingsList } from './PageSettingsList'
 import AppContext from '../../../Context_Api/AppContext.js'
 
-function PageSettings({ closeSetting, menuDimension }) {
+function PageSettings({ menuDimension }) {
 
     const { state, dispatch } = useContext(AppContext)
     const { openHomeSetings } = state
@@ -24,7 +24,6 @@ function PageSettings({ closeSetting, menuDimension }) {
     return (
 
         <div className='relative flex w-[650px] bg-red-000 h-[240px]'>
-
 
             {openNewFiles || openView || openSortBy ?
 
@@ -49,9 +48,6 @@ function PageSettings({ closeSetting, menuDimension }) {
                 />
 
             </div>
-
-            {/* <div className={`w-[100vw] z-0 h-[100vh] fixed top-0 left-0`} onClick={closeSetting} ></div> */}
-
 
         </div>
     )
