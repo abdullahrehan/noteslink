@@ -12,6 +12,7 @@ const Reducer = (state, action) => {
     case "setShowFeedbackForm": return { ...state, showFeedbackForm:action.showFeedbackFormAction };
     case "setIsAdmin": return { ...state, isAdmin:action.isAdminAction };
     case "setFileViewerContent": return { ...state, fileViewerContent:action.fileViewerContentAction };
+    case "setSearchFileViewerContent": return { ...state, searchFileViewerContent:action.searchFileViewerContentAction };
     case "setSideBar": return { ...state, openSideBar: action.sideBar };
     case "setOpenAccountSettings": return { ...state, openAccountSettings: action.openAccountSettingsAction };
     case "setOpenHomeSetings": return { ...state, openHomeSetings: action.openHomeSetingsAction };

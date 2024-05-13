@@ -15,28 +15,28 @@ import OpenedFile from "./Components/OpenedFile.jsx";
 import DeleteFile from "../../Components/Others/DeleteFile.jsx";
 import SaveFile from "../../Components/Others/SaveFile.jsx";
 import AppContext from "../../Context_Api/AppContext.js";
-import { collection, getDocs, query, where } from "firebase/firestore";
-import { fdb, rdb } from "../../Firebase/firebaseConfig.js";
 import NotesVector from '../../Assets/Images/Notes.gif'
 import Cookies from 'js-cookie';
 
-import {  useNavigate } from "react-router-dom";
+import {  useNavigate, useParams } from "react-router-dom";
 import UserFeedback from '../UserFeedback/UserFeedback.jsx'
 
 
-function Index() {
+function Index({getFilesData,data}) {
   
   const { state, dispatch } = useContext(AppContext);
   const {refreshData,newFolderNamePopup,renameFilePopup,renameFolderPopup,deletFilePopup,addNewTextfile,saveFilePopup,fileViewerContent,openFoldersPath, openHomeSetings, openFileSettings} = state;
-  const [data, setData] = useState([]);
+  // const [data, setData] = useState([]);
+
+  const {id}=useParams();
     
   const [offsetHeightHome, setOffsetHeightHome] = useState(null);
   const [offsetWidthHome, setOffsetWidthHome] = useState(null);
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
   const [menuDimension, setMenuDimension] = useState({horizontal: "right",vertical: "bottom"});
 
-  const [loading, setLoading] = useState(true);
-  const [loadFolders, setloadFolders] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [loadFolders, setloadFolders] = useState(false);
   const [tabsLoading, setTabsLoading] = useState(true);
   const [searchFolder, setSearchFolder] = useState("");
 
@@ -79,9 +79,9 @@ function Index() {
 
   const getData = async () => {
 
-    await getDocs(query( collection(fdb, "files"), where("owner", "==", Cookies.get("userEmail").slice(1,-1).split('@')[0].trim().toLowerCase()),where("parent", "==", state.homeCurrentFoler.name=="My Computer"?"":state.homeFolderPath[state.homeFolderPath.length-1])))
-    .then((querySnapshot) => { setData([]); querySnapshot.forEach((doc) => { setData((prev) => [...prev, doc.data()])})})
-    .then(()=>{setLoading(false);setloadFolders(false)})
+    // await getDocs(query( collection(fdb, "files"), where("owner", "==", Cookies.get("userEmail").slice(1,-1).split('@')[0].trim().toLowerCase()),where("parent", "==", state.homeCurrentFoler.name=="My Computer"?"":state.homeFolderPath[state.homeFolderPath.length-1])))
+    // .then((querySnapshot) => { setData([]); querySnapshot.forEach((doc) => { setData((prev) => [...prev, doc.data()])})})
+    getFilesData().then(()=>{setLoading(false);setloadFolders(false)})
     .catch((e) => console.log(e));
   
   };
@@ -173,11 +173,11 @@ function Index() {
   },[])
 
  
-  useEffect(() => { if(refreshData){ getData(); dispatch({ type: "setRefreshData", refreshDataAction: false })} } , [refreshData]);
+  // useEffect(() => { if(refreshData){ getData(); dispatch({ type: "setRefreshData", refreshDataAction: false })} } , [refreshData]);
 
-  useEffect(()=>{ if(data.length>0){ dispatch({ type: "setHomeCurrentFoler", openHomeSetingsAction: {name:"My Computer",data:data} }) } },[data])
+  // useEffect(()=>{ if(data.length>0){ dispatch({ type: "setHomeCurrentFoler", openHomeSetingsAction: {name:"My Computer",data:data} }) } },[data])
 
-  useEffect(() => { closeFileSettings() }, [renameFilePopup, renameFolderPopup, deletFilePopup]);
+  useEffect(() => { closeFileSettings() }, [fileViewerContent,renameFilePopup, renameFolderPopup, deletFilePopup]);
 
 
   return (
@@ -230,7 +230,6 @@ function Index() {
       
         {addNewTextfile ? <NewFile /> : null}
       
-        {fileViewerContent.value ? <OpenedFile /> : null}
 
 
         <div className="w-full h-[70px] flex bg-green-00 relative justify-between items-end px-2 pb-2">

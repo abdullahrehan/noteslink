@@ -28,7 +28,7 @@ function OpenedFile() {
     const [fileName, setFileName] = useState(null)
     const [fileContent, setFileContent] = useState(null)
     const [fileLink, setFileLink] = useState(null)
-    const [showSharedEmail, setShowSharedEmail] = useState(true)
+    const [showSharedEmail, setShowSharedEmail] = useState(false)
     const [showWriteEmail, setShowWriteEmail] = useState(false)
     const [emailText, setEmailText] = useState()
     const [mappedEmails,setMappedEmails]=useState([])

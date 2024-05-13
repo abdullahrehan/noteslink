@@ -1,7 +1,8 @@
-import React, { useRef, useContext, useEffect } from "react";
+import React, { useRef, useContext, useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import { doc,getDoc} from "firebase/firestore";
 import { fdb } from "./Firebase/firebaseConfig.js";
+import { collection, getDocs, query, where } from "firebase/firestore";
 
 import EnterEmail from "./Pages/Authentication/ForgotPassword/EnterEmail";
 import AuthPages from "./Pages/Authentication/AuthPages/index";
@@ -21,6 +22,8 @@ import PublicFiles from "./Pages/PublicFiles/index.js";
 import SeachFiles from "./Pages/SeachFiles/index.js";
 import DeleteFiles from "./Pages/DeleteFiles/index.js";
 import SharedFiles from "./Pages/SharedFiles/index.js";
+import OpenedFile from "./Pages/Home/Components/OpenedFile.jsx";
+import OpenedSearchFile from "./Pages/Home/Components/OpenedSearchFile.jsx";
 
 import Help from "./Pages/Help/index.js";
 import Settings from "./Pages/Settings/index.js";
@@ -39,7 +42,8 @@ import "./App.css";
 const App = () => {
 
   const { state, dispatch } = useContext(AppContext);
-  const { openSideBar, logoutPopup } = state; 
+  const { openSideBar, logoutPopup ,fileViewerContent ,searchFileViewerContent ,refreshData } = state; 
+  const [data, setData] = useState([]);
   const menuref = useRef();
 
   const MenuButton = () => {
@@ -70,9 +74,23 @@ const App = () => {
  
   };
 
+  const getFilesData=async()=>{
+
+    await getDocs(query( collection(fdb, "files"), where("owner", "==", Cookies.get("userEmail").slice(1,-1).split('@')[0].trim().toLowerCase()),where("parent", "==", state.homeCurrentFoler.name=="My Computer"?"":state.homeFolderPath[state.homeFolderPath.length-1])))
+    .then((querySnapshot) => { setData([]); querySnapshot.forEach((doc) => { setData((prev) => [...prev, doc.data()])})})
+  
+
+  }
+
+  useEffect(() => { if(refreshData){ getFilesData(); dispatch({ type: "setRefreshData", refreshDataAction: false })} } , [refreshData]);
+
+  useEffect(()=>{ if(data.length>0){ dispatch({ type: "setHomeCurrentFoler", openHomeSetingsAction: {name:"My Computer",data:data} }) } },[data])
+
+
   useEffect(() => {
     if (Cookies.get("userEmail")) {
-      getUserData();
+      getUserData()
+      .then(()=>getFilesData())
       dispatch({ type: "setRefreshData", refreshDataAction: true });
     }
 
@@ -82,6 +100,7 @@ const App = () => {
       dispatch({ type: "setIsAdmin", isAdminAction: false });
     }
   }, []);
+  
 
   return (
     <div className="bg-red-00 w-full h-[100vh] selection:bg-red-300 select-none">
@@ -101,6 +120,9 @@ const App = () => {
         </div>
 
         {logoutPopup ? <LogOut /> : null}
+        {fileViewerContent.value ? <OpenedFile /> : null}
+        {searchFileViewerContent.value ? <OpenedSearchFile /> : null}
+
 
         <div className="h-full w-full w-minus-60px flex justify-end items-end">
         
@@ -127,9 +149,9 @@ const App = () => {
             !state.isAdmin ? (
             
             <>
-                <Route path="/noteslink/" element={<Home />} />
+                <Route path="/noteslink/:id" element={<Home getFilesData={getFilesData} data={data}/>} />
                 <Route path="/savedfiles" element={<SavedFiles />} />
-                <Route path="/publicfiles" element={<PublicFiles />} />
+                <Route path="/publicfiles" element={<PublicFiles getFilesData={getFilesData} data={data}/>} />
                 <Route path="/seachfiles" element={<SeachFiles />} />
                 <Route path="/sharedFiles" element={<SharedFiles />} />
                 <Route path="/deletefiles" element={<DeleteFiles />} />

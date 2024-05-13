@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { HomeFiles } from "../../Apis/Api.js";
 import folderIcon from "../../Assets/Images/folderIcon.png";
 import { collection, getDocs, query, where } from "firebase/firestore";
@@ -10,6 +10,7 @@ import search_file_vector from '../../Assets/Images/search_file_vector.png'
 import file_loader from '../../Assets/Images/loader.gif'
 import error from '../../Assets/Images/error.jpg'
 import { RxCross2 } from "react-icons/rx";
+import AppContext from "../../Context_Api/AppContext.js";
 
 function Index() {
   
@@ -19,6 +20,8 @@ function Index() {
   const [loading, setloading] = useState(false);
   const [serverError,setServerError]=useState(false);
   
+  const { state, dispatch } = useContext(AppContext);
+  const {openFileSettings,refreshData}=state
   const homeFilesSettingRef=useRef([])
 
   const search = async () => {
@@ -50,6 +53,19 @@ function Index() {
       
       .catch((e) => console.log(e));
   };
+  
+  const closeFileSettings = () => {
+  
+    console.log(homeFilesSettingRef.current,openFileSettings)
+  if (homeFilesSettingRef.current[openFileSettings?.index] !== undefined) {
+    homeFilesSettingRef.current[openFileSettings?.index].style.display ="none"
+  }
+  dispatch({type: "setOpenFileSettings",openFileSettingsAction: { value: false, event: null, index: null }});
+
+};
+
+useEffect(() => { closeFileSettings() }, [state.searchFileViewerContent,refreshData]);
+
 
   useEffect(()=>{
 

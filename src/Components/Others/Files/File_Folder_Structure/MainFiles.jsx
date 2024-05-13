@@ -47,6 +47,27 @@ function MainFiles({page, content ,id, visibility, data,name , index , homeFiles
             <div className='text-base bg-gray-00 max-w-[110px] px-2 h-auto inline-block text-center break-words'>
            
                 {name}
+
+                
+                {page=="search files"
+                ?
+                <>
+                <span className='text-sm text-gray-400 bg-gray-00 w-full px-2 h-auto inline-block text-center break-words'>
+
+                    {data.owner}
+                
+                </ span>
+                
+                <span className='text-sm text-gray-400 bg-gray-00 w-full px-2 h-auto inline-block text-center break-words '>
+
+                    <div className='text-xs text-gray-400'>26 views</div>
+                    <div className='text-xs text-gray-400'>1 month ago</div>
+                
+                </span>
+               
+                </>
+    : null
+    }
            
             </div>
 

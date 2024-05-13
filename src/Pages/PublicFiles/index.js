@@ -9,12 +9,14 @@ import file_loader from '../../Assets/Images/loader.gif'
 
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { fdb, rdb } from "../../Firebase/firebaseConfig.js";
+import Cookies from "js-cookie";
+
 
 function Index() {
 
   const { state, dispatch } = useContext(AppContext);
 
-  const { openFoldersPath, openHomeSetings, openFileSettings } = state;
+  const { openFoldersPath, openHomeSetings, refreshData, fileViewerContent, openFileSettings } = state;
 
   const homeSettingsRef = useRef([]);
 
@@ -29,6 +31,17 @@ function Index() {
     getData();
   }, []);
 
+
+  const closeFileSettings = () => {
+  
+      console.log(homeSettingsRef.current,openFileSettings)
+    if (homeSettingsRef.current[openFileSettings?.index] !== undefined) {
+      homeSettingsRef.current[openFileSettings?.index].style.display ="none"
+    }
+    dispatch({type: "setOpenFileSettings",openFileSettingsAction: { value: false, event: null, index: null }});
+  
+  };
+
   const getData = async () => {
     
     setloading(true);
@@ -38,7 +51,7 @@ function Index() {
       query(
         collection(fdb, "files"),
         where("status", "==", "public"),
-        where("owner", "==", state.email.split("@")[0].trim().toLowerCase())
+        where("owner", "==", Cookies.get("userEmail").slice(1,-1).split("@")[0].trim().toLowerCase())
       )
     )
       .then((querySnapshot) => {
@@ -54,6 +67,11 @@ function Index() {
     })
       .catch((e) => console.log(e));
   };
+
+  useEffect(() => { if(refreshData){ getData(); dispatch({ type: "setRefreshData", refreshDataAction: false })} } , [refreshData]);
+
+  console.log(state.searchFileViewerContent)
+  useEffect(() => { closeFileSettings() }, [state.searchFileViewerContent,refreshData]);
 
   
   return (

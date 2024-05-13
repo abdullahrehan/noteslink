@@ -113,9 +113,6 @@ export const FileSettingsData = (data) => {
       name: "Open File",
       Icon: <FaRegFolderOpen size={20} />,
       Function: () => {
-        console.log(data, "data");
-        // dispatch({ type: "setAddNewTextfile", addNewTextfileAction: true });
-        console.log(data);
 
         dispatch({
           type: "setFileViewerContent",
@@ -225,31 +222,40 @@ export const PublicFileSettingsData = () => {
     {
       name: "Open File",
       Icon: <FaRegFolderOpen size={20} />,
-      Function: async (id, Data) => {
-        let newArray = [];
-        console.log("Here ===============> ", Data.name);
-
-        const q = await getDocs(
-          query(collection(fdb, "files"), where("parent", "==", id))
-        )
-          .then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-              newArray.push(doc.data());
-            });
-
-            // Promise.all(newArray).then((data) => {
-            //   dispatch({ type: "setHomeCurrentFoler", openHomeSetingsAction: { name: Data.name, data: data } });
-            //   dispatch({ type: "setHomeFolderPath", homeFolderPathAction: Data.name });
-
-            // });
-          })
-          .catch((e) => console.log(e));
-      },
+      Function: async (id, data) => {
+        console.log(data)
+        dispatch({
+          type: "setFileViewerContent",
+          fileViewerContentAction: {
+            value: true,
+            id: data.id,
+            name: data.name,
+            content: data.content,
+            url: data.urls,
+            modifiedAt: data.modifiedAt,
+            interactions: data.interactions,
+            sharedWith: data.sharedWith,
+            viewers: data.viewers,
+            status: data.status,
+          },
+        });
+      }
     },
     {
       name: "Make File Private",
       Icon: <BsPeople size={20} />,
-      Function: () => {},
+      Function: (id,Data) => {
+        if (window.confirm("Are you sure you want to make the folder public")) {
+          console.log(id, Data);
+          updateDoc(doc(fdb, "files", id), {
+            status: "private",
+          }).then(() => {
+            dispatch({ type: "setRefreshData", refreshDataAction: true });
+          });
+          dispatch({type: "setOpenFileSettings",openFileSettingsAction: { value: false, event: null, index: null }});
+
+        }
+      },
     },
     {
       name: "Delete File",
@@ -304,25 +310,25 @@ export const SearchFileSettingsData = () => {
     {
       name: "Open File",
       Icon: <FaRegFolderOpen size={20} />,
-      Function: async (id, Data) => {
-        let newArray = [];
-        console.log("Here ===============> ", Data.name);
-
-        const q = await getDocs(
-          query(collection(fdb, "files"), where("parent", "==", id))
-        )
-          .then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-              newArray.push(doc.data());
-            });
-
-            // Promise.all(newArray).then((data) => {
-            //   dispatch({ type: "setHomeCurrentFoler", openHomeSetingsAction: { name: Data.name, data: data } });
-            //   dispatch({ type: "setHomeFolderPath", homeFolderPathAction: Data.name });
-
-            // });
-          })
-          .catch((e) => console.log(e));
+      Function: async (id, data) => {
+        console.log(data)
+        dispatch({
+          type: "setSearchFileViewerContent",
+          searchFileViewerContentAction: {
+            owner:data.owner,
+            likes:data.interactions,
+            value: true,
+            id: data.id,
+            name: data.name,
+            content: data.content,
+            url: data.urls,
+            modifiedAt: data.modifiedAt,
+            interactions: data.interactions,
+            sharedWith: data.sharedWith,
+            viewers: data.viewers,
+            status: data.status,
+          }
+        })
       },
     },
     {

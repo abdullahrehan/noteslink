@@ -14,6 +14,7 @@ const initialState=
       currentFolder:null,
       addNewTextfile:false,
       fileViewerContent:[],
+      searchFileViewerContent:[],
       openHomeSetings:false,
       saveFilePopup:false,
       newFolderNamePopup:false,
