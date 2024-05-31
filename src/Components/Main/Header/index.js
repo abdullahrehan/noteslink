@@ -52,8 +52,8 @@ function Index({menuButton,heading}) {
           </div>
           <div className="pl-2 center h-full pr-4 center bg-red-00">
             <div className={`w-[45px] h-[45px] rounded-full center bg-red-00 hover:cursor-pointer  ${openAccountSettings ? "bg-gradient-to-tr from-pink-400 to-blue-400 ":null} transition duration-700 ease-in-out`} onClick={openAccountSettingFunction}>
-              <div className="w-[93%] h-[93%] rounded-full center">
-              <img src={profile} />
+              <div className="w-[93%] h-[93%] rounded-full center overflow-hidden">
+              <img src={state.profilePic} />
               </div>
             </div>
           </div>

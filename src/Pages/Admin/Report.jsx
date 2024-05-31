@@ -52,7 +52,6 @@ function Report() {
       setFileName(doc.data().name)
       setFileContent(doc.data().content.join("\n"))
       setOpenReportFile(true)
-      console.log(doc)
     })
   }
   const handleDeleteAccount = async (data) => {

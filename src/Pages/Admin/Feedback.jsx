@@ -99,7 +99,8 @@ const [totalFeedbacks, setTotalFeedbacks] = useState(0)
             <tr>
               <th className="px-4 py-2">#</th>
               <th className="px-4 py-2">Subject</th>
-              <th className="px-4 py-2">Send By</th>
+              <th className="px-4 py-2">Sent By</th>
+              <th className="px-4 py-2">Email Address</th>
               <th className="px-4 py-2">Sent At</th>
               <th className="px-4 py-2"></th>
               <th className="px-4 py-2"></th>
@@ -111,9 +112,10 @@ const [totalFeedbacks, setTotalFeedbacks] = useState(0)
               !loader ? tableData.map((data, index) =>
                 <tr className='hover:bg-[#0001] hover:cursor-pointer'>
                   <td className="border px-4 py-2 text-center font-bold">{index + 1}</td>
+                  <td className="border px-4 py-2 text-center">{data.data.subject}</td>
                   <td className="border px-4 py-2 text-center">{data.data.name}</td>
-                  <td className="border px-4 py-2 text-center">{data.data.sentBy}@gmail.com</td>
-                  <td className="border px-4 py-2 text-center">{convertDate(data.data.createdAt)}</td>
+                  <td className="border px-4 py-2 text-center">{data.data.email}@gmail.com</td>
+                  <td className="border px-4 py-2 text-center">{convertDate(data.data.date)}</td>
 
                   <td className="border px-4 py-2 text-center">
                     <button onClick={() => viewFile(data.id)} className="bg-[#2D2D2D] hover:bg-yellow-700 text-white py-2 px-4 rounded">

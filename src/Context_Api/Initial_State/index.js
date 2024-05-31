@@ -2,6 +2,7 @@ const initialState=
     {
       email:"",
       name:null,
+      profilePic:null,
       isAdmin:false,
       openSideBar:false,
       refreshData:false,
@@ -23,6 +24,8 @@ const initialState=
       deletFilePopup:false,
       deleteFolderPopup:false,
       showFeedbackForm:false,
+      showPrivacyForm:false,
+      showAccountSettings:false,
       openAccountSettings:false,
       openNotifications:false,
       logoutPopup:false,

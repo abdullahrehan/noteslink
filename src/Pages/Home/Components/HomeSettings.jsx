@@ -6,14 +6,15 @@ function FileSettings({ settings, openView, viewFunction, openSortBy, sortByFunc
 
     const openSetting = (e,data) => {
 
+        // console.log("hello")
         const viewFilesConditions=data.name === "View" ? !openView ? true : false : false;
         const sortByConditions=data.name === "Sort By" ? !openSortBy ? true : false : false;
         const newFilesConditions=data.name === "New" ? !openNewFiles ? true : false : false;
         e.stopPropagation()
 
-        data.Function()
-        viewFunction(viewFilesConditions)
-        sortByFunction(sortByConditions)
+        // data.Function()
+        // viewFunction(viewFilesConditions)
+        // sortByFunction(sortByConditions)
         newFilesFunction(newFilesConditions)
 
     }

@@ -1,9 +1,9 @@
 import React from 'react'
-
 function FolderPathLoader() {
   return (
 
     <div className='h-full text-sm bg-red-00 flex items-center justify-between ml-1 '>
+
 
         <div className='flex gap-1 text-gray-500 flex items-center'>
 

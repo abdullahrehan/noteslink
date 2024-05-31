@@ -15,6 +15,8 @@ import {
     updateDoc,
     where,
 } from "firebase/firestore";
+import { NavLink, useNavigate } from "react-router-dom";
+
 import { fdb } from "../../../Firebase/firebaseConfig.js";
 
 function Tabs({ setLoading, name, tabsInnerRef, tabs, setTabs, index, id, currentTabIndex, setCurrentTabIndex, tabsRef }) {
@@ -24,6 +26,7 @@ function Tabs({ setLoading, name, tabsInnerRef, tabs, setTabs, index, id, curren
     const [updateTabsStyle, setUpdateTabsStyle] = useState(1)
     const tabStyle = name == "dummyTabForMyComputer" ? "bg-[#373737] h-full rounded-bl-[7px]" : tabType == "prev" ? "h-full bg-[#373737] hover:bg-[#434343  rounded-br-[7px] text-[#B6B6B6]" : tabType == "selected" ? "h-[95%] bg-white text-[#373737] rounded-tr-[7px] rounded-tl-[7px]" : tabType == "selected" && currentTabIndex == 0 ? "h-[95%] bg-white rounded-tr-[7px] rounded-tl-[7px]" : tabType == "next" ? "h-full bg-[#373737] hover:bg-[#434343 rounded-bl-[7px] text-[#B6B6B6]" : tabType == "common" ? "h-full bg-[#373737] hover:bg-[#434343 text-[#B6B6B6]" : tabType == "last" ? "h-full bg-[#373737] hover:bg-[#434343 text-[#B6B6B6]" : null
     const { state, dispatch } = useContext(AppContext);
+    const navigate = useNavigate();
     let newArray = [];
 
 
@@ -111,34 +114,35 @@ function Tabs({ setLoading, name, tabsInnerRef, tabs, setTabs, index, id, curren
         setLoading(true)
 
         console.log(index, id)
+        navigate(`/noteslink/${id}`)
 
         setCurrentTabIndex(Index)
-        newArray = []
+        // newArray = []
 
-        const email = await state.email
-        const q = await getDocs(
-            query(collection(fdb, "files"), where("parent", "==", Id), where('owner', '==', email.split('@')[0]))
-        )
-            .then((querySnapshot) => {
-                newArray = []
-                dispatch({
-                    type: "setHomeCurrentFoler",
-                    openHomeSetingsAction: { name: newArray.name, data: [""] },
-                });
-                querySnapshot.forEach((doc) => {
-                    newArray.push(doc.data());
-                });
-                console.log('asdfghjn', newArray)
+        // const email = await state.email
+        // const q = await getDocs(
+        //     query(collection(fdb, "files"), where("parent", "==", Id), where('owner', '==', email.split('@')[0]))
+        // )
+        //     .then((querySnapshot) => {
+        //         newArray = []
+        //         dispatch({
+        //             type: "setHomeCurrentFoler",
+        //             openHomeSetingsAction: { name: newArray.name, data: [""] },
+        //         });
+        //         querySnapshot.forEach((doc) => {
+        //             newArray.push(doc.data());
+        //         });
+        //         console.log('asdfghjn', newArray)
 
-            }).then(() => {
-                setLoading(false)
-                dispatch({
-                    type: "setHomeCurrentFoler",
-                    openHomeSetingsAction: { name: newArray.name, data: newArray },
-                });
+        //     }).then(() => {
+        //         setLoading(false)
+        //         dispatch({
+        //             type: "setHomeCurrentFoler",
+        //             openHomeSetingsAction: { name: newArray.name, data: newArray },
+        //         });
 
-            })
-            .catch((e) => console.log(e));
+        //     })
+        //     .catch((e) => console.log(e));
     }
 
 

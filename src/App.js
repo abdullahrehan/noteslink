@@ -64,8 +64,10 @@ const App = () => {
 
     try {
      
-      const data = await getDoc(doc(fdb, "users", 'mahed442@gmail.com'));
-      const { name, emailAddress } = data.data();
+      const data = await getDoc(doc(fdb, "users", localStorage.getItem('userEmail')));
+      const { name, emailAddress, picture } = data.data();
+
+      dispatch({ type: "setProfilePic", profilePicAction: picture });
 
       dispatch({ type: "setName", Name: name });
       dispatch({ type: "setEmail", Email: emailAddress });
@@ -81,6 +83,8 @@ const App = () => {
   
 
   }
+  // console.log(state.profilePic)
+
 
   useEffect(() => { if(refreshData){ getFilesData(); dispatch({ type: "setRefreshData", refreshDataAction: false })} } , [refreshData]);
 
@@ -149,13 +153,14 @@ const App = () => {
             !state.isAdmin ? (
             
             <>
-                <Route path="/noteslink/:id" element={<Home getFilesData={getFilesData} data={data}/>} />
+                <Route path="/noteslink/:folderID" element={<Home getFilesData={getFilesData} data={data}/>} />
+                <Route path="/noteslink" element={<Home getFilesData={getFilesData} data={data}/>} />
                 <Route path="/savedfiles" element={<SavedFiles />} />
                 <Route path="/publicfiles" element={<PublicFiles getFilesData={getFilesData} data={data}/>} />
                 <Route path="/seachfiles" element={<SeachFiles />} />
                 <Route path="/sharedFiles" element={<SharedFiles />} />
                 <Route path="/deletefiles" element={<DeleteFiles />} />
-                <Route path="/account-setting" element={<Settings />} />
+                {/* <Route path="/account-setting" element={<Settings />} /> */}
                 <Route path="/send-feedback" element={<UserFeedback />} />
                 <Route path="/help" element={<Help />} />
           

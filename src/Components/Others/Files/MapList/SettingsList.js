@@ -9,37 +9,21 @@ import AppContext from "../../../../Context_Api/AppContext.js";
 import { useContext } from "react";
 import {arrayUnion,collection,doc,getDocs,query,updateDoc,where} from "firebase/firestore";
 import { fdb } from "../../../../Firebase/firebaseConfig.js";
+import { NavLink, useNavigate } from "react-router-dom";
 
 export const FolderSettingsData = () => {
   const { state, dispatch } = useContext(AppContext);
+  const navigate = useNavigate();
+
   return [
     {
       name: "Open Folder",
       Icon: <FaRegFolderOpen size={20} />,
       Function: async (id, Data) => {
-        let newArray = [];
+        navigate(`/noteslink/${id}`)
+        // console.log(id)
 
-        const q = await getDocs(
-          query(collection(fdb, "files"), where("parent", "==", id))
-        )
-          .then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-              newArray.push(doc.data());
-            });
-
-            Promise.all(newArray).then((data) => {
-              dispatch({
-                type: "setHomeCurrentFoler",
-                openHomeSetingsAction: { name: Data.name, data: data },
-              });
-              dispatch({
-                type: "setHomeFolderPath",
-                homeFolderPathAction: Data.name,
-              });
-              dispatch({ type: "setRefreshData", refreshDataAction: true });
-            });
-          })
-          .catch((e) => console.log(e));
+       
       },
     },
     {

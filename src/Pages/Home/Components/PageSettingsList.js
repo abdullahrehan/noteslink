@@ -16,16 +16,28 @@ import { IoMdRadioButtonOff } from "react-icons/io";
 import { IoIosRadioButtonOn } from "react-icons/io";
 import { FaRegFileAlt } from "react-icons/fa";
 // import { FaRegFolderOpen } from "react-icons/fa";
+import { MdRefresh } from "react-icons/md";
 import AppContext from '../../../Context_Api/AppContext.js'
 import { useContext } from "react";
+import { useNavigate } from 'react-router-dom';
 
 export const PageSettingsList=()=>{
+
   const {state,dispatch}=useContext(AppContext)
+  const navigate = useNavigate();
 
 return ([
   {
     name: "Go Back",
     Icon: <IoMdArrowRoundBack size={20} />,
+    Function:()=>{
+      navigate(-1);
+      dispatch({ type: "setOpenHomeSetings", openHomeSetingsAction: false });
+    },
+  },
+  {
+    name: "Refresh",
+    Icon: <MdRefresh size={20} />,
     Function:()=>{},
   },
   {
@@ -57,16 +69,6 @@ return ([
 
   },
 
-
-
-
-  
-  {
-    name: "Paste",
-    Icon: <FaRegPaste size={20} />,
-    Function:()=>{},
-
-  },
   {
     name: "Sort By",
     Icon: <FaSort size={20} />,

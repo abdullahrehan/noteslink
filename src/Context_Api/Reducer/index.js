@@ -4,12 +4,15 @@ const Reducer = (state, action) => {
 
     case "setEmail": return { ...state, email: action.Email };
     case "setName": return { ...state, name: action.Name };
+    case "setProfilePic": return { ...state, profilePic: action.profilePicAction };
     case "setHomeCurrentFoler": return { ...state, homeCurrentFoler:action.openHomeSetingsAction };
     case "setHomeFolderPath": return { ...state, homeFolderPath:[...state.homeFolderPath ,action.homeFolderPathAction] };
     case "resetHomeFolderPath": return { ...state, homeFolderPath:action.homeFolderPathAction };
     case "setRefreshData": return { ...state, refreshData:action.refreshDataAction };
     case "setRefreshTabs": return { ...state, refreshTabs:action.refreshTabsAction };
     case "setShowFeedbackForm": return { ...state, showFeedbackForm:action.showFeedbackFormAction };
+    case "setShowPrivacyForm": return { ...state, showPrivacyForm:action.showPrivacyFormAction };
+    case "setShowAccountSettings": return { ...state, showAccountSettings:action.showAccountSettingsAction };
     case "setIsAdmin": return { ...state, isAdmin:action.isAdminAction };
     case "setFileViewerContent": return { ...state, fileViewerContent:action.fileViewerContentAction };
     case "setSearchFileViewerContent": return { ...state, searchFileViewerContent:action.searchFileViewerContentAction };
