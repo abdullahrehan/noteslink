@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { MdPublic } from "react-icons/md";
 import FileSettings from '../FileSettings/index'
-import { FileSettingsData , SavedFileSettingsData,PublicFileSettingsData,SearchFileSettingsData } from '../MapList/SettingsList'
+import { FileSettingsData , SavedFileSettingsData,PublicFileSettingsData,SearchFileSettingsData ,DeleteFileSettingsData , SharedFileSettingsData} from '../MapList/SettingsList'
 import { FaBookmark } from "react-icons/fa";
 import AppContext from '../../../../Context_Api/AppContext.js'
 
@@ -16,6 +16,8 @@ function MainFiles({page, content ,id, visibility, data,name , index , homeFiles
         dispatch({ type: 'setOpenFileSettings', openFileSettingsAction:{ value: true, event: event, index: index }})
 
     }
+
+    console.log(data)
 
    
     return (
@@ -44,7 +46,7 @@ function MainFiles({page, content ,id, visibility, data,name , index , homeFiles
     
             </div>
             
-            <div className='text-base bg-gray-00 max-w-[110px] px-2 h-auto inline-block text-center break-words'>
+            <div className='text-base bg-gray-00 max-w-[110px] px-2 h-auto inline-block text-center break-words '>
            
                 {name}
 
@@ -52,7 +54,7 @@ function MainFiles({page, content ,id, visibility, data,name , index , homeFiles
                 {page=="search files"
                 ?
                 <>
-                <span className='text-sm text-gray-400 bg-gray-00 w-full px-2 h-auto inline-block text-center break-words'>
+                <span className='text-xs text-gray-400 bg-gray-00 w-full px-2 h-auto inline-block text-center break-words'>
 
                     {data.owner}
                 
@@ -60,8 +62,8 @@ function MainFiles({page, content ,id, visibility, data,name , index , homeFiles
                 
                 <span className='text-sm text-gray-400 bg-gray-00 w-full px-2 h-auto inline-block text-center break-words '>
 
-                    <div className='text-xs text-gray-400'>26 views</div>
-                    <div className='text-xs text-gray-400'>1 month ago</div>
+                    <div className='text-xs text-gray-400'>{data.interactions} views</div>
+                    <div className='text-xs text-gray-400'>{new Date(data.createdAt).toDateString()}</div>
                 
                 </span>
                
@@ -77,7 +79,7 @@ function MainFiles({page, content ,id, visibility, data,name , index , homeFiles
                 id={id}
                 data={data}
                 // FolderSettingsData={ visibility=="public" || visibility=="private" ? FileSettingsData(data) : visibility=="saved" ? SavedFileSettingsData() : null }
-                FolderSettingsData={page=="home"?FileSettingsData(data):page=="public files"?PublicFileSettingsData(data):page=="search files"?SearchFileSettingsData(data):null}
+                FolderSettingsData={page=="home"?FileSettingsData(data):page=="public files"?PublicFileSettingsData(data):page=="search files"?SearchFileSettingsData(data):page=="saved files"?SavedFileSettingsData(data):page=="delete files"?DeleteFileSettingsData(data):page=="shared files"?SharedFileSettingsData(data):null}
                 closeFileSettings={() =>dispatch({ type: 'setOpenFileSettings', openFileSettingsAction:{ value: false, event: null, index: null }})}
 />
         </div>

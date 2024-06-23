@@ -34,7 +34,7 @@ function Index() {
     const q = await getDocs(
       query(
         collection(fdb, "files"),
-        where("bookmarks", "array-contains", state.email.split("@")[0].trim().toLowerCase()),
+        where("bookmarks", "array-contains", localStorage.getItem("userEmail").split("@")[0].trim().toLowerCase()),
       )
     )
       .then((querySnapshot) => {
@@ -51,6 +51,7 @@ function Index() {
       .catch((e) => console.log(e));
   };
   // console.log(state.email);
+  console.log(data)
 
   return (
     <div className="w-full h-full bg-green-00 justify-end flex text-4xl">

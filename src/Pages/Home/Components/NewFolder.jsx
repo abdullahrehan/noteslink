@@ -5,12 +5,14 @@ import { FaRegFolderOpen } from "react-icons/fa";
 import { BiError } from "react-icons/bi";
 import { setDoc, doc } from 'firebase/firestore';
 import { fdb } from "../../../Firebase/firebaseConfig.js";
+import { useNavigate, useParams } from "react-router-dom";
 
 function NewFolder() {
   
   const {state,dispatch}=useContext(AppContext)
   const [error,setError]=useState(false)
   const [folderName,setFolderName]=useState(null)
+  const { folderID } = useParams();
 
  
   const closeFunction=()=>{dispatch({ type: 'setNewFolderNamePopup', newFolderNamePopupAction:false})}
@@ -35,7 +37,7 @@ function NewFolder() {
     status: 'private',
     keywords: [],
     content: [],
-    parent: state.homeCurrentFoler.data[0].parent,
+    parent: folderID==undefined ? "" : folderID,
     path: [],
     interactions: 5,
     strikeStatus: null,
@@ -52,6 +54,7 @@ function NewFolder() {
 
   const createNewFolder= async ()=>{
   
+      // console.log(folderID,"asd")
     await setDoc(doc(fdb, "files", data.id), data).then(()=>{dispatch({ type: 'setNewFolderNamePopup', newFolderNamePopupAction:false});dispatch({ type: "setRefreshData", refreshDataAction: true });});
   
   }

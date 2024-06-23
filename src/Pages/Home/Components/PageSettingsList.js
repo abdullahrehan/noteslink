@@ -38,7 +38,11 @@ return ([
   {
     name: "Refresh",
     Icon: <MdRefresh size={20} />,
-    Function:()=>{},
+    Function:()=>{
+      dispatch({ type: "setRefreshHomeData", refreshHomeDataAction: true });
+      dispatch({ type: "setOpenHomeSetings", openHomeSetingsAction: false });
+
+    },
   },
   {
     name: "New",

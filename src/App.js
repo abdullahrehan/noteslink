@@ -23,6 +23,7 @@ import SeachFiles from "./Pages/SeachFiles/index.js";
 import DeleteFiles from "./Pages/DeleteFiles/index.js";
 import SharedFiles from "./Pages/SharedFiles/index.js";
 import OpenedFile from "./Pages/Home/Components/OpenedFile.jsx";
+import OpenedSharedFile from "./Pages/Home/Components/OpenedSharedFile.jsx";
 import OpenedSearchFile from "./Pages/Home/Components/OpenedSearchFile.jsx";
 
 import Help from "./Pages/Help/index.js";
@@ -51,9 +52,12 @@ const App = () => {
     dispatch({ type: "setSideBar", sideBar: !openSideBar });
 
     if (openSideBar) {
+
       menuref.current.style.width = "60px";
       dispatch({ type: "setFolderPath", folderPath: true });
+
     } else {
+
       menuref.current.style.width = "180px";
       dispatch({ type: "setFolderPath", folderPath: false });
     }
@@ -83,7 +87,6 @@ const App = () => {
   
 
   }
-  // console.log(state.profilePic)
 
 
   useEffect(() => { if(refreshData){ getFilesData(); dispatch({ type: "setRefreshData", refreshDataAction: false })} } , [refreshData]);
@@ -125,6 +128,7 @@ const App = () => {
 
         {logoutPopup ? <LogOut /> : null}
         {fileViewerContent.value ? <OpenedFile /> : null}
+        {state.sharedFileViewerContent.value ? <OpenedSharedFile /> : null}
         {searchFileViewerContent.value ? <OpenedSearchFile /> : null}
 
 
@@ -157,10 +161,11 @@ const App = () => {
                 <Route path="/noteslink" element={<Home getFilesData={getFilesData} data={data}/>} />
                 <Route path="/savedfiles" element={<SavedFiles />} />
                 <Route path="/publicfiles" element={<PublicFiles getFilesData={getFilesData} data={data}/>} />
+                <Route path="/publicfiles/:folderID" element={<PublicFiles getFilesData={getFilesData} data={data}/>} />
+                {/* <Route path="/publicfiles" element={<PublicFiles getFilesData={getFilesData} data={data}/>} /> */}
                 <Route path="/seachfiles" element={<SeachFiles />} />
                 <Route path="/sharedFiles" element={<SharedFiles />} />
                 <Route path="/deletefiles" element={<DeleteFiles />} />
-                {/* <Route path="/account-setting" element={<Settings />} /> */}
                 <Route path="/send-feedback" element={<UserFeedback />} />
                 <Route path="/help" element={<Help />} />
           

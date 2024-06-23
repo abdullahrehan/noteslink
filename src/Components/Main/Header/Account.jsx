@@ -44,24 +44,18 @@ function Account() {
             <div className='w-[98%] h-[98%] bg-white'>
                 <div className='w-full h-[42%] flex items-center shadow-lg justify-center pb-0 flex-col border-b-[0px]  border-[#A6A6A6] '>
                     <div className='flex gap-2 w-full pl-2'>
+                        
                         <div className='flex center flex-col gap-2'>
                             <div className='w-[65px] h-[65px] border-2 overflow-hidden rounded-full '>
                                 <img alt='null' src={state.profilePic} className='w-full h-full' />
                             </div>
-                            {/* <div className='text-sm text-red-400 font-medium'>
-                                1 Strike
-                            </div> */}
                         </div>
+
                         <div className='pl-2'>
 
                             <div className='  flex flex-col'>
                                 <div className='font-medium text-lg'>{state.name?.split(" ")[0]+" "+state.name?.split(" ")[1]}</div>
                                 <div className='text-sm text-[#4F4F4F]'>{state.email}</div>
-                                <div className='text-sm text-[#4F4F4F]'>100 Follower</div>
-                            </div>
-
-                            <div className='pt-3 font-medium text-[#097B7B] text-sm hover:cursor-pointer hover:underline  hover:underline-offset-1 pt- '>
-                                View Account
                             </div>
 
                         </div>

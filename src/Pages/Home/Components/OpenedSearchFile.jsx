@@ -19,30 +19,68 @@ import { doc, updateDoc, getDocs, query, collection } from 'firebase/firestore';
 import { fdb } from '../../../Firebase/firebaseConfig.js';
 import { IoIosShareAlt } from "react-icons/io";
 
+import { IoBookmarkOutline } from "react-icons/io5";
+import { IoBookmark } from "react-icons/io5";
+
+import { MdOutlineReportProblem } from "react-icons/md";
+import PopUp from '../../../Components/Others/PopUp.jsx'
+
 function OpenedSeachFile() {
 
     const { state, dispatch } = useContext(AppContext)
     const { renameFilePopup, saveFilePopup } = state
-    const [data,setData]=useState([])
+    const [data, setData] = useState([])
     const [openSaveOptions, setSaveOptions] = useState(true)
     const [fileSaved, setFileSaved] = useState(false)
-    const likeIcon=useRef()
-    const [fileLiked,setFileLinked] = useState(false)
+    const likeIcon = useRef()
+    const [fileLiked, setFileLinked] = useState(false)
+    const [reason, setReason] = useState("")
+    const [openReport, setOpenReport] = useState(false)
+    const [isBookMarked, setIsBookMarked] = useState(state.searchFileViewerContent.bookmarks.includes(localStorage.getItem("userEmail").split("@")[0]))
 
-    const likeFile=()=>{
+    // console.log(state.searchFileViewerContent.bookmarks,localStorage.getItem("userEmail").split("@")[0])
+    // console.log(state.searchFileViewerContent.bookmarks.contains(localStorage.getItem("userEmail").split("@")[0]))
+    useEffect(() => {
+
+
+
+        // setIsBookMarked(state.searchFileViewerContent.bookmarks?.contains(localStorage.getItem("userEmail").split("@")[0]))
+
+    }, [])
+
+    const details = []
+
+    const likeFile = () => {
         setFileLinked(true)
     }
-    const unlikeFile=()=>{
+    const unlikeFile = () => {
         setFileLinked(false)
     }
 
-    const closePage=()=>{
+    const closePage = () => {
         setFileLinked(false)
         dispatch({ type: "setSearchFileViewerContent", searchFileViewerContentAction: { value: false, id: null, name: null, content: null, url: null } })
-        
+
     }
 
-   
+    const handleCheckbox = (e) => {
+        let isChecked = e.target.checked;
+
+        if (isChecked) {
+
+            console.log(e.target.name)
+            details.push(e.target.name)
+        }
+    }
+
+    const submit = () => {
+
+        console.log(details, reason)
+
+
+        setOpenReport(false)
+    }
+
 
     useEffect(() => {
         setData(state.searchFileViewerContent)
@@ -50,6 +88,23 @@ function OpenedSeachFile() {
 
     console.log(state.searchFileViewerContent)
 
+    const handleBookmarks = async () => {
+        if (isBookMarked) {
+            await updateDoc(doc(fdb, 'files', data.id), {
+                bookmarks: data.bookmarks.filter(data => data == localStorage.getItem('userEmail').split('@')[0])
+            }).then(() => {
+                setIsBookMarked(false)
+                console.log('Bookmark Removed')
+            })
+        }
+        else{
+            await updateDoc(doc(fdb, 'files', data.id), {
+                bookmarks: [...data.bookmarks, localStorage.getItem('userEmail').split('@')[0]]
+            }).then(() => {
+                setIsBookMarked(true)
+            })
+        }
+    }
 
     return (
         <div className='fixed z-40 top-0 left-0 w-[100vw] h-[100vh] bg-[#0009]  center '>
@@ -68,11 +123,12 @@ function OpenedSeachFile() {
                     <div className='w-[33%] h-full flex text-xs text-gray-400 items-end pb-2 justify-start gap-1'>
 
                         file by {data.owner}
-                      
+
 
                     </div>
 
                     <div className='w-[33%] text-lg font-medium center flex-col '>
+
 
                         <div className='flex gap-5 items-center bg-red-00'>
                             <div className=' h-full '></div>
@@ -83,10 +139,17 @@ function OpenedSeachFile() {
 
                     </div>
 
+                    <div className='h-full center hover:cursor-pointer' onClick={handleBookmarks}>
+                        {isBookMarked ?
+                            <IoBookmark size={22} />
+                            : <IoBookmarkOutline size={22} />
+                        }
+                    </div>
+
                     <div className='w-[33%] h-full flex justify-end items-end pb-2 pr-1 pb-2 bg-red-00 gap-3 text-xs text-gray-400'>
 
-                        Last Modified {data.modifiedAt}
-                        
+                        Last Modified {new Date(data.modifiedAt).toDateString()}
+
                     </div>
 
 
@@ -112,7 +175,7 @@ function OpenedSeachFile() {
                     </div>
 
                     <div className={`w-[100%] flex justify-between px-2 items-center bg-green-00 transition-all duration-500 ease-in-out overflow-hidden  border-black ${openSaveOptions ? 'h-[80px]' : 'h-[0px]'} rounded-tl-[5px] rounded-[5px] borde-t-[px]`}>
-                      
+
                         <div className='w-1/2 relative h-[40%] bg-red-00 flex items-center justify-between pr-2 pl-2 '>
                             <div className='flex text-base gap-2 items-center'>
                                 <div className='font-medium'>Link</div>
@@ -125,23 +188,29 @@ function OpenedSeachFile() {
 
                             <div className={`w-auto bg-red-00  `}>
 
-                                    <div className='flex gap-4'>  <div className='font-medium flex items-center text-[16px] gap-1 center'>
-                                        {/* {state.searchFileViewerContent.viewers[0]} */}
-                                         12
-                                         <LuEye size={21} />
+                                <div className='flex gap-4 items-center hover:cursor-pointer'>
+                                    <div onClick={() => setOpenReport(true)}>
+                                        <MdOutlineReportProblem size={20} />
+
                                     </div>
-                                        <div className='font-medium flex items-center text-[16px] gap-1 center hover:cursor-pointer '>
-                                            {state.searchFileViewerContent.interactions} 
-                                            {fileLiked ?
-                                            <BiSolidLike size={21} className='text-blue-500' onClick={unlikeFile}/>
-                                        :
 
-                                            <BiLike size={21} className='' ref={likeIcon} onClick={likeFile}/>
-                                            }
-                                            
-                                        </div>
+                                    <div className='font-medium flex items-center text-[16px] gap-1 center'>
+                                        {/* {state.searchFileViewerContent.viewers[0]} */}
+                                        12
+                                        <LuEye size={21} />
+                                    </div>
+                                    <div className='font-medium flex items-center text-[16px] gap-1 center hover:cursor-pointer '>
+                                        {state.searchFileViewerContent.interactions}
+                                        {fileLiked ?
+                                            <BiSolidLike size={21} className='text-blue-500' onClick={unlikeFile} />
+                                            :
 
-                                    </div> 
+                                            <BiLike size={21} className='' ref={likeIcon} onClick={likeFile} />
+                                        }
+
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
 
@@ -152,8 +221,44 @@ function OpenedSeachFile() {
                 </div>
 
 
-                
+
             </div>
+            {
+                openReport ?
+
+
+                    <PopUp title={"Report File"} width='w-[380px]' height='h-[300px]' crossFunction={() => setOpenReport(false)}>
+                        <div className={`flex flex-col justify-around items-start h-full w-[90%]`}>
+                            <div className=' text-lg font-semibold'>Reason</div>
+                            <div className='w-full h-[40px] '><input className='w-full px-2 rounded h-full outline-none' value={reason} onChange={(e) => setReason(e.target.value)} placeholder='reason' /></div>
+                            <div className=' text-lg font-semibold'>More Details</div>
+                            <div className='flex flex-col' >
+                                <div className='flex gap-2 items-center'>
+                                    <input type='checkbox' name='Bad Language' onChange={(e) => handleCheckbox(e)} />
+                                    <div>Bad Language</div>
+                                </div>
+                                <div className='flex gap-2 items-center'>
+                                    <input type='checkbox' name="Sexual Content" onChange={(e) => handleCheckbox(e)} />
+                                    <div>Sexual Content</div>
+                                </div>
+
+                                <div className='flex gap-2 items-center'>
+                                    <input type='checkbox' name="Harasment" onChange={(e) => handleCheckbox(e)} />
+                                    <div>Harasment</div>
+                                </div>
+
+                                <div className='flex gap-2 items-center'>
+                                    <input type='checkbox' name="Sexual Content" onChange={(e) => handleCheckbox(e)} />
+                                    <div>Sexual Content</div>
+                                </div>
+
+                            </div>
+                            <div className='w-full center py-2'>
+                                <button className='px-5 py-2 bg-red-400 rounded hover:cursor-pointer' onClick={submit}>Submit</button>
+                            </div>
+                        </div>
+                    </PopUp>
+                    : null}
 
         </div>
     )

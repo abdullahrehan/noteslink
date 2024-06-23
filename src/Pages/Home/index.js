@@ -40,7 +40,6 @@ function Index({ getFilesData, data }) {
     openHomeSetings,
     openFileSettings,
   } = state;
-  // const [data, setData] = useState([]);
 
   const { folderID } = useParams();
 
@@ -92,17 +91,6 @@ function Index({ getFilesData, data }) {
       right: offsetWidthHome,
     },
   };
-
-  // const getData = async () => {
-  //   // await getDocs(query( collection(fdb, "files"), where("owner", "==", Cookies.get("userEmail").slice(1,-1).split('@')[0].trim().toLowerCase()),where("parent", "==", state.homeCurrentFoler.name=="My Computer"?"":state.homeFolderPath[state.homeFolderPath.length-1])))
-  //   // .then((querySnapshot) => { setData([]); querySnapshot.forEach((doc) => { setData((prev) => [...prev, doc.data()])})})
-  //   getFilesData()
-  //     .then(() => {
-  //       setLoading(false);
-  //       setloadFolders(false);
-  //     })
-  //     .catch((e) => console.log(e));
-  // };
 
   const closePopUp = () => {
     dispatch({
@@ -199,13 +187,19 @@ function Index({ getFilesData, data }) {
     }
   };
 
+//   useEffect(()=>{
+  
+//     searchFolders(folderData,searchFolder)
+  
+  
+// },[searchFolder])
+  console.log(searchFolder)
+
   const searchFolderById = async (folderID) => {
     console.log(localStorage.getItem("userEmail"));
 
     let newArray = [];
     let fid = folderID !== undefined ? folderID : "";
-    // clg
-    console.log(fid);
 
     await getDocs(
       query(
@@ -221,20 +215,10 @@ function Index({ getFilesData, data }) {
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           newArray.push(doc.data());
-          // console.log(data.push());
-        });
-
-        Promise.all(newArray).then((data) => {
-          // console.log(data);
-          // dispatch({type: "setHomeCurrentFoler",openHomeSetingsAction: { name: data.name, data: data }});
-          // dispatch({type: "setHomeFolderPath",homeFolderPathAction: data.name});
-          // dispatch({ type: "setRefreshData", refreshDataAction: true });
         });
       })
       .catch((e) => console.log(e));
-    // console.log(newArray);
     setFolderData(newArray);
-    // setTabsLoading(false);
     setloadFolders(false);
   };
 
@@ -251,36 +235,23 @@ function Index({ getFilesData, data }) {
   }, []);
 
   useEffect(() => {
-    // setTabsLoading(true);
     setloadFolders(true);
     searchFolderById(folderID);
+    dispatch({ type: "setRefreshHomeData", refreshHomeDataAction: false });
+  }, [folderID, state.refreshHomeData]);
 
-  }, [folderID]);
-
-  console.log(state.showPrivacyForm)
-
-  // useEffect(() => { if(refreshData){ getData(); dispatch({ type: "setRefreshData", refreshDataAction: false })} } , [refreshData]);
-
-  // useEffect(()=>{ if(data.length>0){ dispatch({ type: "setHomeCurrentFoler", openHomeSetingsAction: {name:"My Computer",data:data} }) } },[data])
 
   useEffect(() => {
     closeFileSettings();
   }, [fileViewerContent, renameFilePopup, renameFolderPopup, deletFilePopup]);
 
   return (
-    <div
-      className="w-full h-full bg-green-00 flex justify-end  text-4xl"
-      onClick={closeFileSettings}
-      onLoad={() =>
-        dispatch({ type: "setRefreshData", refreshDataAction: true })
-      }
-    >
-      <div
-        className={`${
-          openFoldersPath ? "w-minus-220px" : "w-full"
-        } h-full bg-red-00 transition-all delay-70 duration-400 ease-in-out `}
-      >
+    <div className="w-full h-full bg-green-00 flex justify-end  text-4xl" onClick={closeFileSettings} onLoad={() =>dispatch({ type: "setRefreshData", refreshDataAction: true })} >
+      
+      <div className={`${ openFoldersPath ? "w-minus-220px" : "w-full" } h-full bg-red-00 transition-all delay-70 duration-400 ease-in-out `} >
+      
         <div className={`w-full h-[35px] bg-green-00 flex items-center`}>
+      
           <AllTabs
             loading={loading}
             tabsLoading={tabsLoading}
@@ -289,28 +260,25 @@ function Index({ getFilesData, data }) {
           />
 
           <div className="w-[40px] h-full hover:cursor-pointer rounded-full bg-#0002] center">
-            <img
-              src={TabFolderIcon}
-              className="h-[18px] hover:h-[19px]"
-              onClick={() =>
-                dispatch({ type: "setFolderPath", folderPath: true })
-              }
-            />
+
+            <img src={TabFolderIcon} className="h-[18px] hover:h-[19px]" onClick={() =>dispatch({ type: "setFolderPath", folderPath: true })}/>
+          
           </div>
+        
         </div>
 
-        <div className={`w-full h-[45px] `}>
-          {loading ? (
-            <FolderPathLoader />
-          ) : (
+        <div className={`w-full h-[45px]`}>
+
+          {loading ? <FolderPathLoader />: 
             <FolderPath
+              searchFunction={()=> searchFolders(folderData,searchFolder)}
               folderID={folderID}
               searchFolder={searchFolder}
               setSearchFolder={(value) => setSearchFolder(value)}
               folderdata={data}
-              
             />
-          )}
+          }
+        
         </div>
 
         <div

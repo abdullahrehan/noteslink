@@ -7,7 +7,18 @@ import { MdOutlineDriveFileRenameOutline } from "react-icons/md";
 import { MdFolderCopy } from "react-icons/md";
 import AppContext from "../../../../Context_Api/AppContext.js";
 import { useContext } from "react";
-import {arrayUnion,collection,doc,getDocs,query,updateDoc,where} from "firebase/firestore";
+import {
+  arrayUnion,
+  collection,
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  query,
+  setDoc,
+  updateDoc,
+  where,
+} from "firebase/firestore";
 import { fdb } from "../../../../Firebase/firebaseConfig.js";
 import { NavLink, useNavigate } from "react-router-dom";
 
@@ -20,10 +31,8 @@ export const FolderSettingsData = () => {
       name: "Open Folder",
       Icon: <FaRegFolderOpen size={20} />,
       Function: async (id, Data) => {
-        navigate(`/noteslink/${id}`)
+        navigate(`/noteslink/${id}`);
         // console.log(id)
-
-       
       },
     },
     {
@@ -48,12 +57,12 @@ export const FolderSettingsData = () => {
           tabs: arrayUnion({ id: Data.id, name: Data.name }),
         })
           .then(() => {
-            console.log("done")
+            console.log("done");
 
             dispatch({
               type: "setRefreshTabs",
               refreshTabsAction: true,
-          });
+            });
           })
           .catch((e) => {
             console.error(e);
@@ -83,8 +92,44 @@ export const FolderSettingsData = () => {
     {
       name: "Delete Folder",
       Icon: <MdDeleteOutline size={20} />,
-      Function: () => {
-        dispatch({ type: "setDeletFilePopup", deletFilePopupAction: true });
+      Function: (fId, fData) => {
+        getAllDescendantIds(fData.id)
+          .then((allIds) => {
+            console.log("All descendant IDs:", allIds);
+            allIds.push(fData.id); // Include the folder itself
+            allIds.forEach(async (id) => {
+              await getDoc(doc(fdb, "files", id)).then(async (response) => {
+                const owner = response.data().owner;
+                if (
+                  localStorage
+                    .getItem("userEmail")
+                    .split("@")[0]
+                    .toLowerCase() === owner
+                ) {
+                  await deleteDoc(doc(fdb, "files", id))
+                    .then(async () => {
+                      if (response.data().id == fId) {
+                        await setDoc(
+                          doc(fdb, "recycleBin", response.data().id),
+                          { ...response.data(), head: true }
+                        );
+                      } else {
+                        await setDoc(doc(fdb, "files", response.data().id), {
+                          ...response.data(),
+                          head: false,
+                        });
+                      }
+                    })
+                    .catch((error) => {
+                      console.error("Error deleting document:", error);
+                    });
+                }
+              });
+            });
+          })
+          .catch((error) => {
+            console.error("Error fetching descendant IDs:", error);
+          });
       },
     },
   ];
@@ -97,13 +142,15 @@ export const FileSettingsData = (data) => {
       name: "Open File",
       Icon: <FaRegFolderOpen size={20} />,
       Function: () => {
-
+        // console.log(data)
         dispatch({
           type: "setFileViewerContent",
           fileViewerContentAction: {
             value: true,
             id: data.id,
             name: data.name,
+            keywords: data.keywords,
+            likes: data.likes,
             content: data.content,
             url: data.urls,
             modifiedAt: data.modifiedAt,
@@ -111,6 +158,8 @@ export const FileSettingsData = (data) => {
             sharedWith: data.sharedWith,
             viewers: data.viewers,
             status: data.status,
+            likedBy: data.likedBy,
+            type: data.type,
           },
         });
       },
@@ -152,36 +201,84 @@ export const FileSettingsData = (data) => {
     {
       name: "Delete File",
       Icon: <MdDeleteOutline size={20} />,
-      Function: () => {},
+      Function: async (fId, fData) => {
+        console.log("delete pressed");
+        if (fData.type === "folder") {
+          getAllDescendantIds(fData.id)
+            .then((allIds) => {
+              console.log("All descendant IDs:", allIds);
+              allIds.push(fData.id); // Include the folder itself
+              allIds.forEach(async (id) => {
+                await getDocs(doc(fdb, "files", id)).then(async (response) => {
+                  const owner = response.data().owner;
+                  if (
+                    localStorage
+                      .getItem("userEmail")
+                      .split("@")[0]
+                      .toLowerCase() === owner
+                  ) {
+                    await deleteDoc(doc(fdb, "files", id))
+                      .then(async () => {
+                        if (response.data().id == fId) {
+                          await setDoc(
+                            doc(fdb, "recycleBin", response.data().id),
+                            { ...response.data(), head: true }
+                          );
+                        } else {
+                          await setDoc(doc(fdb, "files", response.data().id), {
+                            ...response.data(),
+                            head: false,
+                          });
+                        }
+                      })
+                      .catch((error) => {
+                        console.error("Error deleting document:", error);
+                      });
+                  } else {
+                  }
+                });
+              });
+            })
+            .catch((error) => {
+              console.error("Error fetching descendant IDs:", error);
+              // setWaiting(false);
+            });
+        } else {
+          await getDoc(doc(fdb, "files", fId)).then(async (response) => {
+            const owner = response.data().owner;
+            if (
+              localStorage.getItem("userEmail").split("@")[0].toLowerCase() ===
+              owner
+            ) {
+              await setDoc(doc(fdb, "recycleBin", response.data().id), {
+                ...response.data(),
+                head: true,
+              });
+              await deleteDoc(doc(fdb, "files", response.data().id))
+                .then(async () => {})
+                .catch((error) => {
+                  console.error("Error deleting document:", error);
+                });
+            } else {
+            }
+          });
+        }
+      },
     },
   ];
 };
 
 export const PublicFolderSettingsData = () => {
   const { state, dispatch } = useContext(AppContext);
+  const navigate = useNavigate();
+
   return [
     {
       name: "Open Folder",
       Icon: <FaRegFolderOpen size={20} />,
       Function: async (id, Data) => {
-        let newArray = [];
-        console.log("Here ===============> ", Data.name);
-
-        const q = await getDocs(
-          query(collection(fdb, "files"), where("parent", "==", id))
-        )
-          .then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-              newArray.push(doc.data());
-            });
-
-            // Promise.all(newArray).then((data) => {
-            //   dispatch({ type: "setHomeCurrentFoler", openHomeSetingsAction: { name: Data.name, data: data } });
-            //   dispatch({ type: "setHomeFolderPath", homeFolderPathAction: Data.name });
-
-            // });
-          })
-          .catch((e) => console.log(e));
+        console.log("Here ===============> ", id);
+        navigate(`/publicfiles/${id}`);
       },
     },
     {
@@ -195,7 +292,7 @@ export const PublicFolderSettingsData = () => {
       Function: () => {
         dispatch({ type: "setDeletFilePopup", deletFilePopupAction: true });
       },
-    }
+    },
   ];
 };
 
@@ -207,7 +304,7 @@ export const PublicFileSettingsData = () => {
       name: "Open File",
       Icon: <FaRegFolderOpen size={20} />,
       Function: async (id, data) => {
-        console.log(data)
+        console.log(data);
         dispatch({
           type: "setFileViewerContent",
           fileViewerContentAction: {
@@ -223,12 +320,12 @@ export const PublicFileSettingsData = () => {
             status: data.status,
           },
         });
-      }
+      },
     },
     {
       name: "Make File Private",
       Icon: <BsPeople size={20} />,
-      Function: (id,Data) => {
+      Function: (id, Data) => {
         if (window.confirm("Are you sure you want to make the folder public")) {
           console.log(id, Data);
           updateDoc(doc(fdb, "files", id), {
@@ -236,8 +333,10 @@ export const PublicFileSettingsData = () => {
           }).then(() => {
             dispatch({ type: "setRefreshData", refreshDataAction: true });
           });
-          dispatch({type: "setOpenFileSettings",openFileSettingsAction: { value: false, event: null, index: null }});
-
+          dispatch({
+            type: "setOpenFileSettings",
+            openFileSettingsAction: { value: false, event: null, index: null },
+          });
         }
       },
     },
@@ -247,10 +346,9 @@ export const PublicFileSettingsData = () => {
       Function: () => {
         dispatch({ type: "setDeletFilePopup", deletFilePopupAction: true });
       },
-    }
+    },
   ];
 };
-
 
 export const SearchFolderSettingsData = () => {
   const { state, dispatch } = useContext(AppContext);
@@ -295,14 +393,15 @@ export const SearchFileSettingsData = () => {
       name: "Open File",
       Icon: <FaRegFolderOpen size={20} />,
       Function: async (id, data) => {
-        console.log(data)
+        console.log(data);
         dispatch({
           type: "setSearchFileViewerContent",
           searchFileViewerContentAction: {
-            owner:data.owner,
-            likes:data.interactions,
+            owner: data.owner,
+            likes: data.interactions,
             value: true,
             id: data.id,
+            bookmarks:data.bookmarks,
             name: data.name,
             content: data.content,
             url: data.urls,
@@ -311,8 +410,8 @@ export const SearchFileSettingsData = () => {
             sharedWith: data.sharedWith,
             viewers: data.viewers,
             status: data.status,
-          }
-        })
+          },
+        });
       },
     },
     {
@@ -322,7 +421,6 @@ export const SearchFileSettingsData = () => {
     },
   ];
 };
-
 
 export const SavedFolderSettingsData = () => {
   const { state, dispatch } = useContext(AppContext);
@@ -365,8 +463,26 @@ export const SavedFileSettingsData = () => {
     {
       name: "Open File",
       Icon: <FaRegFolderOpen size={20} />,
-      Function: () => {
-        dispatch({ type: "setAddNewTextfile", addNewTextfileAction: true });
+      Function: (id, data) => {
+        console.log(data);
+        dispatch({
+          type: "setSavedFileViewerContent",
+          savedFileViewerContentAction: {
+            owner: data.owner,
+            likes: data.interactions,
+            value: true,
+            id: data.id,
+            name: data.name,
+            content: data.content,
+            url: data.urls,
+            modifiedAt: data.modifiedAt,
+            interactions: data.interactions,
+            sharedWith: data.sharedWith,
+            viewers: data.viewers,
+            status: data.status,
+          },
+        });
+        // dispatch({ type: "setAddNewTextfile", addNewTextfileAction: true });
       },
     },
     {
@@ -375,19 +491,121 @@ export const SavedFileSettingsData = () => {
       Function: () => {},
     },
     {
-      name: "Move File",
-      Icon: <MdOutlineDriveFileMove size={20} />,
-      Function: () => {},
-    },
-    {
-      name: "Copy File",
-      Icon: <MdFolderCopy size={20} />,
-      Function: () => {},
-    },
-    {
       name: "Delete File",
       Icon: <MdDeleteOutline size={20} />,
       Function: () => {},
+    },
+  ];
+};
+async function getAllDescendantIds(parentId) {
+  let allIds = [];
+  const querySnapshot = await getDocs(
+    query(collection(fdb, "files"), where("parent", "==", parentId))
+  );
+  const childDocs = querySnapshot.docs;
+
+  for (const doc of childDocs) {
+    allIds.push(doc.id);
+    if (doc.data().type === "folder") {
+      const childIds = await getAllDescendantIds(doc.id);
+      allIds = allIds.concat(childIds);
+    }
+  }
+
+  return allIds;
+}
+export const DeleteFileSettingsData = () => {
+  const { state, dispatch } = useContext(AppContext);
+
+  return [
+    {
+      name: "Restore",
+      Icon: <FaRegFolderOpen size={20} />,
+      Function: (data) => {
+        console.log(data);
+        dispatch({
+          type: "setSavedFileViewerContent",
+          savedFileViewerContentAction: {
+            owner: data.owner,
+            likes: data.interactions,
+            value: true,
+            id: data.id,
+            name: data.name,
+            content: data.content,
+            url: data.urls,
+            modifiedAt: data.modifiedAt,
+            interactions: data.interactions,
+            sharedWith: data.sharedWith,
+            viewers: data.viewers,
+            status: data.status,
+          },
+        });
+        // dispatch({ type: "setAddNewTextfile", addNewTextfileAction: true });
+      },
+    },
+    {
+      name: "Delete Permanently",
+      Icon: <BsPeople size={20} />,
+      Function: async (id, selected) => {
+        console.log(selected);
+        if (selected.type === "folder") {
+          getAllDescendantIds(selected.id)
+            .then((allIds) => {
+              console.log("All descendant IDs:", allIds);
+              allIds.push(selected.id); // Include the folder itself
+              allIds.forEach(async (id) => {
+                await deleteDoc(doc(fdb, "recycleBin", id))
+                  .then(async () => {})
+                  .catch((error) => {
+                    console.error("Error deleting document:", error);
+                  });
+              });
+            })
+            .catch((error) => {
+              console.error("Error fetching descendant IDs:", error);
+            });
+        } else {
+          await deleteDoc(doc(fdb, "recycleBin", selected.id));
+        }
+      },
+    },
+  ];
+};
+
+
+export const SharedFileSettingsData = () => {
+  const { state, dispatch } = useContext(AppContext);
+
+  return [
+    {
+      name: "Open File",
+      Icon: <FaRegFolderOpen size={20} />,
+      Function: (id, data) => {
+        console.log(data);
+        dispatch({
+          type: "setSharedFileViewerContent",
+          sharedFileViewerContentAction: {
+            owner: data.owner,
+            likes: data.interactions,
+            value: true,
+            id: data.id,
+            name: data.name,
+            content: data.content,
+            url: data.urls,
+            modifiedAt: data.modifiedAt,
+            interactions: data.interactions,
+            sharedWith: data.sharedWith,
+            viewers: data.viewers,
+            status: data.status,
+          },
+        });
+        dispatch({ type: "setRefreshData", refreshDataAction: true });
+      },
+    },
+    {
+      name: "Delete File",
+      Icon: <BsPeople size={20} />,
+      Function: async (id, selected) => {},
     },
   ];
 };

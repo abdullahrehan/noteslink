@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { CiWarning } from 'react-icons/ci';
 import validator from 'validator';
 import { auth } from '../../../Firebase/firebaseConfig'
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import { NavLink, useNavigate } from "react-router-dom";
 import { addDoc, collection, getDocs, setDoc, doc } from "firebase/firestore";
 import { fdb, rdb } from "../../../Firebase/firebaseConfig";
@@ -71,8 +71,10 @@ function SignUp({ setSignUpSuccessfull }) {
                     name: username,
                     emailAddress: email,
                     userType: "user",
-                    tabs:{id: "", name: "My Computer"}
-                }).then(() => {
+                    tabs: { id: "", name: "My Computer" }
+                }).then(async () => {
+
+
                     Cookies.set('userEmail', JSON.stringify(email), { expires: 7 });
                     dispatch({ type: "setName", Name: username });
                     dispatch({ type: "setEmail", Email: email });
@@ -117,7 +119,7 @@ function SignUp({ setSignUpSuccessfull }) {
 
             </div>
 
-           
+
 
             <div className="py-2">
 
@@ -146,26 +148,26 @@ function SignUp({ setSignUpSuccessfull }) {
             </div>
 
             <div className="py-2">
-            
+
                 <div className='bg-gray-50 h-full border flex border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '>
 
-                <input
-                    type={showConfirmPassword ? "text" : "password"}
-                    className="h-full bg-[#0000] w-[90%] outline-none"
-                    name="password"
-                    value={password}
-                    placeholder="Password"
-                    onChange={(e) => onInputChange(e, setPassword)}
-                    required
-                />
+                    <input
+                        type={showConfirmPassword ? "text" : "password"}
+                        className="h-full bg-[#0000] w-[90%] outline-none"
+                        name="password"
+                        value={password}
+                        placeholder="Password"
+                        onChange={(e) => onInputChange(e, setPassword)}
+                        required
+                    />
 
-                <div className='h-full w-[10%] hover:cursor-pointer' onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
-                    {showConfirmPassword ?
-                        <GoEyeClosed size={20} />
-                        :
-                        <FiEye size={20} />
-                    }
-                </div>
+                    <div className='h-full w-[10%] hover:cursor-pointer' onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+                        {showConfirmPassword ?
+                            <GoEyeClosed size={20} />
+                            :
+                            <FiEye size={20} />
+                        }
+                    </div>
 
                 </div>
 

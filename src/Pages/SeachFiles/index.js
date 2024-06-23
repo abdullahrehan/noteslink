@@ -33,7 +33,7 @@ function Index() {
     const q = await getDocs(
       query(
         collection(fdb, "files"), 
-        where("keywords", "array-contains", searchQuery.trim().toLowerCase()),
+        where("keywords", "array-contains-any", searchQuery.trim().toLowerCase().split(' ')),
         where("status", "==", "public")
       )
     )
@@ -53,6 +53,14 @@ function Index() {
       
       .catch((e) => console.log(e));
   };
+
+  const enterPressed=(e)=>{
+    console.log('58')
+    if(e.key === 'Enter' || e.keyCode === 13){
+      console.log('60')
+      search();
+    }
+  }
   
   const closeFileSettings = () => {
   
@@ -94,6 +102,7 @@ useEffect(() => { closeFileSettings() }, [state.searchFileViewerContent,refreshD
             placeholder="Search the file "
             onChange={(e) => setSearchQuery(e.target.value)}
             value={searchQuery}
+            onKeyUp={(e)=>enterPressed(e)}
           />
           <button className="border-gray-400 border-r-[1px] pr-2 h-[60%]" onClick={removeSearch}>
             <RxCross2 size={22} className="text-gray-400 hover:text-black hover:cursor-pinter"/>

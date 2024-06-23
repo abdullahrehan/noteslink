@@ -12,9 +12,9 @@ function FileSettings({ settings, openView, viewFunction, openSortBy, sortByFunc
         const newFilesConditions=data.name === "New" ? !openNewFiles ? true : false : false;
         e.stopPropagation()
 
-        // data.Function()
-        // viewFunction(viewFilesConditions)
-        // sortByFunction(sortByConditions)
+        data.Function()
+        viewFunction(viewFilesConditions)
+        sortByFunction(sortByConditions)
         newFilesFunction(newFilesConditions)
 
     }

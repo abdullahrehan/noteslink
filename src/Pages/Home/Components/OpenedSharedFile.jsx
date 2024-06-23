@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { RxCross2 } from "react-icons/rx";
 import AppContext from '../../../Context_Api/AppContext.js'
 import { MdKeyboardDoubleArrowUp } from "react-icons/md";
@@ -13,9 +13,7 @@ import { MdPublic } from "react-icons/md";
 import { MdPublicOff } from "react-icons/md";
 import { AiOutlineLike } from "react-icons/ai";
 import { LuEye } from "react-icons/lu";
-import { BiLike } from "react-icons/bi";
-import { BiSolidLike } from "react-icons/bi";
-import { doc, updateDoc, getDocs, query, collection, getDoc } from 'firebase/firestore';
+import { doc, updateDoc, getDocs, query, collection } from 'firebase/firestore';
 import { fdb } from '../../../Firebase/firebaseConfig.js';
 import { IoIosShareAlt } from "react-icons/io";
 import { FiDownload } from "react-icons/fi";
@@ -43,13 +41,10 @@ function OpenedFile() {
     const [emailText, setEmailText] = useState()
     const [mappedEmails, setMappedEmails] = useState([])
     const [downloadFile, setdownloadFile] = useState(false)
-    const [Likes, setLikes] = useState(state.fileViewerContent.likes)
-    const [fileLiked, setFileLiked] = useState(state.fileViewerContent.likedBy.includes(localStorage.getItem("userEmail").split("@")[0]))
 
     let allEmails = [];
-    const likeIcon = useRef()
 
-    // console.log(state.fileViewerContent)
+    console.log("open shared files")
 
     const settingsIcon = [
         { icon: <GoBold size={18} />, function: () => { } },
@@ -58,94 +53,69 @@ function OpenedFile() {
         { icon: <HiMiniListBullet size={18} />, function: () => { } },
     ]
 
-
-    const likeFile = async () => {
-        if (fileLiked) {
-            await updateDoc(doc(fdb, 'files', state.fileViewerContent.id), {
-                likedBy: state.fileViewerContent.likedBy.filter(data => data !== localStorage.getItem('userEmail').split('@')[0]),
-                likes: state.fileViewerContent.likes - 1,
-            }).then(() => {
-                setLikes(Likes - 1)
-                console.log('File unliked')
-                setFileLiked(false)
-            })
-        }
-        else {
-            await updateDoc(doc(fdb, 'files', state.fileViewerContent.id), {
-                likedBy: [...state.fileViewerContent.likedBy, localStorage.getItem('userEmail').split('@')[0]],
-                likes: state.fileViewerContent.likes + 1,
-            }).then(() => {
-                setLikes(Likes + 1)
-                console.log('File unliked')
-                setFileLiked(true)
-            })
-        }
-    }
-
-
     const changeFileType = async (value) => {
 
-        if (value !== state.fileViewerContent) {
+        if (value !== state.sharedFileViewerContent) {
 
             setFileTypeSetting(value)
 
             if (window.confirm("Are you sure to want to change the file status")) {
 
-                await updateDoc(doc(fdb, 'files', state.fileViewerContent.id), { status: value }).then(() => { dispatch({ type: "setRefreshData", refreshDataAction: true }) }).catch(() => { })
+                await updateDoc(doc(fdb, 'files', state.sharedFileViewerContent.id), { status: value }).then(() => { dispatch({ type: "setRefreshData", refreshDataAction: true }) }).catch(() => { })
             }
         }
     }
 
     const DownloadWord = async () => {
-        // console.log('67', state.fileViewerContent.content);
-
+        console.log('67', state.sharedFileViewerContent.content);
+      
         setdownloadFile(false);
-
+      
         // Create the document
         const doc = new Document({
-            sections: [
-                {
+          sections: [
+            {
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({
+                      text: fileName,
+                      bold: true,
+                      size: 28,
+                    }),
+                  ],
+                }),
+                // Add each piece of content as a new paragraph
+                ...state.sharedFileViewerContent.content.map((data) =>
+                  new Paragraph({
                     children: [
-                        new Paragraph({
-                            children: [
-                                new TextRun({
-                                    text: fileName,
-                                    bold: true,
-                                    size: 28,
-                                }),
-                            ],
-                        }),
-                        // Add each piece of content as a new paragraph
-                        ...state.fileViewerContent.content.map((data) =>
-                            new Paragraph({
-                                children: [
-                                    new TextRun({
-                                        text: data,
-                                        size: 22,
-                                    }),
-                                ],
-                            })
-                        ),
+                      new TextRun({
+                        text: data,
+                        size: 22,
+                      }), 
                     ],
-                },
-            ],
+                  })
+                ),
+              ],
+            },
+          ],
         });
-
+      
         // Generate the Word document and trigger the download
         const blob = await Packer.toBlob(doc);
         saveAs(blob, `${fileName}.docx`);
-    };
-
-    const handleDownloadPDF = () => {
-
-    };
-
-
+      };
+    
+      const handleDownloadPDF = () => {
+  
+      };
+    
+    
 
     const saveFileChanges = async () => {
-        // console.log(state.fileViewerContent)
+        console.log(state.sharedFileViewerContent)
         setFileSaved(true)
-        await updateDoc(doc(fdb, 'files', state.fileViewerContent.id),
+        await updateDoc(doc(fdb, 'files', state.sharedFileViewerContent.id),
             {
                 name: fileName,
                 content: fileContent.split('\n'),
@@ -156,101 +126,50 @@ function OpenedFile() {
     }
 
 
-    const searchEmails = async () => {
+    // const searchEmails = async () => {
 
-        await getDocs(query(collection(fdb, "users"))).then((qs) => {
-            allEmails = [];
-            qs.forEach(d => {
-                if (d.data().emailAddress !== localStorage.getItem("userEmail") && !(state.fileViewerContent.sharedWith.includes(d.data().emailAddress))) {
-                    allEmails.push(d.data().emailAddress);
-                }
-            })
-            setMappedEmails(allEmails.filter(data => data.includes(emailText)))
-        })
-    }
+    //     await getDocs(query(collection(fdb, "users"))).then((qs) => {
+    //         allEmails = [];
+    //         qs.forEach(d => {
+    //             if (d.data().emailAddress !== localStorage.getItem("userEmail") && !(state.sharedFileViewerContent.sharedWith?.includes(d.data().emailAddress))) {
+    //                 allEmails.push(d.data().emailAddress);
+    //             }
+    //         })
+    //         setMappedEmails(allEmails.filter(data => data.includes(emailText)))
+    //     })
+    // }
 
-    const removeEmail = async (data) => {
+    // const removeEmail = async (data) => {
 
-        if (window.confirm("Are you sure to want to remove this email")) {
-            await updateDoc(doc(fdb, 'files', state.fileViewerContent.id), { sharedWith: state.fileViewerContent.sharedWith.filter(Data => Data !== data) })
-                .then(() => { }).catch(() => { })
-        }
+    //     if (window.confirm("Are you sure to want to remove this email")) {
+    //         await updateDoc(doc(fdb, 'files', state.sharedFileViewerContent.id), { sharedWith: state.sharedFileViewerContent.sharedWith.filter(Data => Data !== data) })
+    //             .then(() => { }).catch(() => { })
+    //     }
 
-    }
-    const sendNotification = async (receiverEmail, notificationTitle, notificationBody, file) => {
-        let tokens = []
-        const user = await getDoc(doc(fdb, 'users', receiverEmail.trim().toLowerCase())).then(async (user) => {
-            tokens = user.data().tokens
-        })
-        console.log(tokens)
-        const myHeaders = new Headers()
-        myHeaders.append('Authorization', "key=AAAAoiZwGIM:APA91bGyIvP2MHJ12LbfZEm-miIRrUw77VWa8aX9Gaz6JXaqVCEx2A4kOEOD4vdgf9kzGBC9UCqajdd4ORcO-h0jd6L7MY9AlFhIT8wOxcplggjXvWVpmTgzvXz2JbGdChdIIvakJ1Iw")
-        myHeaders.append('Content-Type', 'application/json')
+    // }
 
-        const raw = JSON.stringify({
-            data: { data: file },
-            notification: {
-                body: notificationBody,
-                title: notificationTitle,
-            },
-            registration_ids: tokens,
-        })
+    // const addEmail = async () => {
 
-        const requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow',
-        }
-        await fetch('https://fcm.googleapis.com/fcm/send', requestOptions)
-            .then(response => response.text())
-            .then(result => console.log(result))
-            .catch(error => console.error(error))
-    };
+    //     setShowWriteEmail(false)
 
-    const addEmail = async () => {
+    //     if (window.confirm("Are you sure to want to Share this file with: " + emailText)) {
 
-        setShowWriteEmail(false)
+    //         await updateDoc(doc(fdb, 'files', state.sharedFileViewerContent.id), { sharedWith: [...state.sharedFileViewerContent.sharedWith, emailText.split('@')[0].toLowerCase().trim()] })
+    //             .then(() => { }).catch(() => { })
 
-        //    sendNotification() 
-        if (window.confirm("Are you sure to want to Share this file with: " + emailText)) {
-            await updateDoc(doc(fdb, 'files', state.fileViewerContent.id), { sharedWith: [...state.fileViewerContent.sharedWith, emailText.split('@')[0].toLowerCase().trim()] })
-            await sendNotification(
-                emailText.toLowerCase().trim(),
-                `${state.fileViewerContent.type} Received`,
-                `${state.name} shared a ${state.fileViewerContent.type} "${state.fileViewerContent.name}" with you!`,
-                state.fileViewerContent,
-            );
-        }
-    }
+    //     }
+    // }
 
     useEffect(() => {
-
-        if (state.fileViewerContent.value) {
-            setFileName(state.fileViewerContent.name);
-            setFileLink(state.fileViewerContent.urls !== undefined ? state.fileViewerContent.urls[0] : undefined);
-            setFileContent(state.fileViewerContent.content);
-        }
-        else if (state.sharedFileViewerContent.value) {
-            setFileName(state.sharedFileViewerContent.name);
+        console.log(state.sharedFileViewerContent)
+        setFileName(state.sharedFileViewerContent.name);
             setFileLink(state.sharedFileViewerContent.urls !== undefined ? state.sharedFileViewerContent.urls[0] : undefined);
             setFileContent(state.sharedFileViewerContent.content);
-        }
-
-    }, [state.fileViewerContent, state.sharedFileViewerContent])
-
-    useEffect(() => { searchEmails() }, [emailText])
-
-    useEffect(() => {
-        const views = async () => {
-            await updateDoc(doc(fdb, 'files', state.fileViewerContent.id), {
-                interactions: state.fileViewerContent.interactions + 1,
-            })
-        }
-        views()
+            
+            
     }, [])
 
-    // console.log(state.fileViewerContent.likes)
+    // useEffect(() => { searchEmails() }, [emailText])
 
     return (
         <div className='fixed z-40 top-0 left-0 w-[100vw] h-[100vh] bg-[#0009]  center '>
@@ -258,7 +177,7 @@ function OpenedFile() {
             <div className={`h-[92%]  w-[50%] bg-[#EAEAEA] relative rounded-[5px] relative  flex flex-col center`}>
 
 
-                <div className='pt-1 absolute -top-2 -right-8 hover:cursor-pointer' onClick={() => dispatch({ type: "setFileViewerContent", fileViewerContentAction: { value: false, id: null, name: null, content: null, url: null } })}>
+                <div className='pt-1 absolute -top-2 -right-8 hover:cursor-pointer' onClick={() => dispatch({ type: "setSharedFileViewerContent", sharedFileViewerContentAction: { value: false, id: null, name: null, content: null, url: null } })}>
 
                     <RxCross2 color='white' size={24} />
 
@@ -294,9 +213,9 @@ function OpenedFile() {
 
                     <div className='w-[33%] h-full flex justify-end items-end pr-1 pb-2 bg-red-00 gap-3 '>
 
-                        <div className='hover:cursor-pointer' onClick={() => setdownloadFile(true)}><FiDownload size={22} /></div>
+                        <div className='hover:cursor-pointer' onClick={()=>setdownloadFile(true)}><FiDownload size={22} /></div>
                         <div className='w-[100px] h-[25px] relative rounded-[2px] borde border-gray-500 center hover:cursor-pointer shadow-[0_3px_10px_rgb(0,0,0,0.2)] ' onClick={() => setOpenFileTypeSetting(!openFileTypeSetting)}>
-                            <div className='w-[70%] center text-base gap-1'><MdPublic size={15} />{state.fileViewerContent.status == "public" ? "Public" : "Private"}</div>
+                            <div className='w-[70%] center text-base gap-1'><MdPublic size={15} />{state.sharedFileViewerContent.status == "public" ? "Public" : "Private"}</div>
                             <div className='w-[30%] h-full  center bg-red-00' >
                                 <IoIosArrowDown size={16} />
                             </div>
@@ -304,7 +223,7 @@ function OpenedFile() {
                             <div className={`absolute center ${openFileTypeSetting ? "flex" : "hidden"} flex-col shadow-[0_3px_10px_rgb(0,0,0,0.2)] justify-around w-full h-[60px] bg-[#EAEAEA] rounded-[2px]  borde border-gray-500 z-50 top-[30px]`}>
                                 <button className='w-[90%] h-[45%] flex items-center pl-1 gap-1 hover:cursor-pointer hover:bg-gray-200 text-base' disabled={fileTypeSetting == "public" ? true : false} onClick={() => changeFileType("public")}><MdPublic size={15} />Public</button>
                                 <div className='w-[90%] h-[1px] bg-gray-500'></div>
-                                <button className='w-[90%] h-[45%] flex items-center pl-1 gap-1 hover:cursor-pointer hover:bg-gray-200 text-base' disabled={state.fileViewerContent.status == "private" ? true : false} onClick={() => changeFileType("private")}><MdPublicOff size={15} />Private</button>
+                                <button className='w-[90%] h-[45%] flex items-center pl-1 gap-1 hover:cursor-pointer hover:bg-gray-200 text-base' disabled={state.sharedFileViewerContent.status == "private" ? true : false} onClick={() => changeFileType("private")}><MdPublicOff size={15} />Private</button>
 
                             </div>
                         </div>
@@ -358,18 +277,12 @@ function OpenedFile() {
 
                             <div className={`w-[150px] bg-red-00  `}>
 
-                                {state.fileViewerContent.status == "public" ?
+                                {state.sharedFileViewerContent.status == "public" ?
                                     <div className='flex gap-2'>  <div className='font-medium flex items-center text-[14px] gap-1 center'>
-                                        {state.fileViewerContent.interactions} <LuEye size={19} />
+                                        {state.sharedFileViewerContent.viewers[0]} <LuEye size={19} />
                                     </div>
                                         <div className='font-medium flex items-center text-[14px] gap-1 center'>
-                                            {/* {state.fileViewerContent.likes} {state.fileViewerContent.likedBy.contains(localStorage.getItem('userEmail').split('@')[0])? 
-                                            <BiSolidLike size={21} className='text-blue-500' onClick={unlikeFile} />
-                                            : */}
-
-                                            {Likes}
-                                            {fileLiked ? <BiSolidLike size={21} className='hover:cursor-pointer' onClick={likeFile} /> : <BiLike size={21} className='hover:cursor-pointer' onClick={likeFile} />}
-                                            {/* // } */}
+                                            {state.sharedFileViewerContent.interactions} <AiOutlineLike size={19} />
                                         </div>
 
                                     </div> : null}
@@ -405,7 +318,7 @@ function OpenedFile() {
                             <div className='text-lg font-medium'>Share File</div>
                             <div className='pt-1 hover:cursor-pointer' onClick={() => setShowSharedEmail(false)}><RxCross2 color='black' size={24} /></div>
                         </div>
-
+{/* 
                         {showWriteEmail ?
 
                             <div className='w-[95%] h-full flex items-center flex-col text-base'>
@@ -418,7 +331,7 @@ function OpenedFile() {
                                 </div>
 
                                 <div className='w-full h-[60%] flex flex-col gap-1'>
-                                    {mappedEmails.map(data =>
+                                    {mappedEmails?.map(data =>
 
                                         <div className='w-full p-2 flex bg-gray-300 flex justify-around items-center rounded-full text-sm hover:bg-gray-400' onClick={() => setEmailText(data)}>
                                             <div className='w-full center'>{data}</div>
@@ -438,7 +351,7 @@ function OpenedFile() {
                             <div className='w-[95%] h-full flex items-center flex-col text-base'>
                                 <div className='w-full h-[10%] pl-2 mb-2'>File Shared With</div>
                                 <div className='w-full h-[65%] flex flex-col gap-1'>
-                                    {state.fileViewerContent.sharedWith.map(data =>
+                                    {state.sharedFileViewerContent.sharedWith?.map(data =>
 
                                         <div className='w-full p-2 flex bg-gray-300 flex justify-around items-center rounded-full text-sm'>
                                             <div className='w-[85%] center'>{data}@gmail.com</div>
@@ -451,7 +364,7 @@ function OpenedFile() {
                                 <div className='w-full h-[25%]  center'>
                                     <button className='p-5 bg-black rounded w-[100px] h-[45px] center text-white' onClick={() => setShowWriteEmail(true)}>Add</button>
                                 </div>
-                            </div>}
+                            </div>} */}
 
 
 
@@ -466,7 +379,7 @@ function OpenedFile() {
                 downloadFile ? <PopUp title={"Download File"} width="w-[350px]" height="h-[200px]" crossFunction={() => { setdownloadFile(false) }}>
                     <div className='w-full center pb-10'>Chosse the format of the download File </div>
                     <div className='flex flex-row gap-5 w-full center'>
-                        <div className='px-2 py-2 bg-green-600 rounded hover:cursor-pointer' onClick={() => DownloadWord()}>Download As Word</div>
+                        <div className='px-2 py-2 bg-green-600 rounded hover:cursor-pointer' onClick={()=>DownloadWord()}>Download As Word</div>
                         <div className='px-2 py-2 bg-green-600 rounded hover:cursor-pointer' onClick={handleDownloadPDF}>Download As PDF</div>
                     </div>
                 </PopUp>

@@ -19,7 +19,7 @@ function AllFiles({ page, data, homeFilesSettingRef, loading }) {
   const dataArray = Array.sort(sortByType);
  
   return (
-    <div className="flex w-full items-start gap-2 flex flex-wrap h-auto">
+    <div className="flex w-full items-start gap-2 flex flex-wrap h-auto content-start">
      
       {state.homeCurrentFoler.data.length!==0 ? 
       

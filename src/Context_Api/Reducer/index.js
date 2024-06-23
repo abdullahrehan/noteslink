@@ -9,6 +9,7 @@ const Reducer = (state, action) => {
     case "setHomeFolderPath": return { ...state, homeFolderPath:[...state.homeFolderPath ,action.homeFolderPathAction] };
     case "resetHomeFolderPath": return { ...state, homeFolderPath:action.homeFolderPathAction };
     case "setRefreshData": return { ...state, refreshData:action.refreshDataAction };
+    case "setRefreshHomeData": return { ...state, refreshHomeData:action.refreshHomeDataAction };
     case "setRefreshTabs": return { ...state, refreshTabs:action.refreshTabsAction };
     case "setShowFeedbackForm": return { ...state, showFeedbackForm:action.showFeedbackFormAction };
     case "setShowPrivacyForm": return { ...state, showPrivacyForm:action.showPrivacyFormAction };
@@ -16,6 +17,8 @@ const Reducer = (state, action) => {
     case "setIsAdmin": return { ...state, isAdmin:action.isAdminAction };
     case "setFileViewerContent": return { ...state, fileViewerContent:action.fileViewerContentAction };
     case "setSearchFileViewerContent": return { ...state, searchFileViewerContent:action.searchFileViewerContentAction };
+    case "setSavedFileViewerContent": return { ...state, savedFileViewerContent:action.savedFileViewerContentAction };
+    case "setSharedFileViewerContent": return { ...state, sharedFileViewerContent:action.sharedFileViewerContentAction };
     case "setSideBar": return { ...state, openSideBar: action.sideBar };
     case "setOpenAccountSettings": return { ...state, openAccountSettings: action.openAccountSettingsAction };
     case "setOpenHomeSetings": return { ...state, openHomeSetings: action.openHomeSetingsAction };

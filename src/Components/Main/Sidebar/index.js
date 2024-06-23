@@ -30,7 +30,7 @@ function index({openMenu}) {
       path: "/publicfiles",
     },
     {
-      name: "Shared By Me",
+      name: "Shared With Me",
       icon: <img src={sharedFiles} className="w-[28px]" />,
       path: "/sharedFiles",
     },

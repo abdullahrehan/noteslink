@@ -3,6 +3,7 @@ import AppContext from "../../Context_Api/AppContext.js";
 import AllFiles from "../../Components/Others/Files/index.js";
 import file_loader from "../../Assets/Images/loader.gif";
 import sharedFiles from "../../Assets/Images/sharedFiles.png";
+import SaveFile from "../../Components/Others/SaveFile.jsx";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { fdb } from "../../Firebase/firebaseConfig.js";
 
@@ -19,6 +20,7 @@ function Index() {
   const getData = async () => {
     setData([]);
     setloading(true);
+    console.log(localStorage.getItem("userEmail"))
 
     const q = await getDocs(
       query(
@@ -26,7 +28,7 @@ function Index() {
         where(
           "bookmarks",
           "array-contains",
-          state.email.split("@")[0].trim().toLowerCase()
+          localStorage.getItem("userEmail").split("@")[0].trim().toLowerCase()
         )
       )
     )
@@ -70,7 +72,7 @@ function Index() {
               data={data}
               homeFilesSettingRef={homeSettingsRef}
               loading={false}
-              page={"delete files"}
+              page={"shared files"}
             />
           ) : loading ? (
             <div className="w-full h-full center flex flex-col gap-5">
@@ -79,6 +81,16 @@ function Index() {
           ) : null}
         </div>
       </div>
+
+      {/* {state.sharedFileViewerContent.value ? (
+          <SaveFile
+            type="File"
+            Function={() =>
+              dispatch({ type: "setSaveFilePopup", sharedFileViewerContentAction: {value:false,id:null} })
+            }
+          />
+        ) : null} */}
+        
     </div>
   );
 }

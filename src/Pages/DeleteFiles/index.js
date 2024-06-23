@@ -34,8 +34,9 @@ function Index() {
 
     const q = await getDocs(
       query(
-        collection(fdb, "files"),
-        where("bookmarks", "array-contains", state.email.split("@")[0].trim().toLowerCase()),
+        collection(fdb, "recycleBin"),
+        where("owner", "==", state.email.split("@")[0].trim().toLowerCase()),
+        where("head", "==", true),
       )
     )
       .then((querySnapshot) => {
@@ -51,7 +52,8 @@ function Index() {
     })
       .catch((e) => console.log(e));
   };
-  // console.log(state.email);
+
+  console.log(data)
 
   return (
     <div className="w-full h-full bg-green-00 justify-end flex text-4xl">
@@ -74,8 +76,9 @@ function Index() {
           {data.length!==0 ? (
               <>
               <div className="h-[40px] w-full bg-red-00">
-              <FolderPath path={path} />
+              {/* <FolderPath path={path} /> */}
             </div>
+            
             <AllFiles
               data={data}
               homeFilesSettingRef={homeSettingsRef}

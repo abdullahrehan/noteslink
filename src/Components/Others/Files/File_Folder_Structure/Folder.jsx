@@ -3,7 +3,7 @@ import folderIcon from '../../../../Assets/Images/folderIcon.png'
 import PublicfolderIcon from '../../../../Assets/Images/PublicfolderIcon.png'
 import FolderSaved from '../../../../Assets/Images/folderSaved.png'
 import FileSettings from '../FileSettings/index'
-import { FolderSettingsData , SavedFolderSettingsData ,PublicFolderSettingsData , SearchFolderSettingsData } from '../MapList/SettingsList'
+import { FolderSettingsData , SavedFileSettingsData ,PublicFolderSettingsData , SearchFolderSettingsData ,DeleteFileSettingsData ,SharedFileSettingsData} from '../MapList/SettingsList'
 import AppContext from '../../../../Context_Api/AppContext.js'
 
 function Folder({ page,id,visibility,data,name,index, homeFilesSettingRef }) {
@@ -14,6 +14,8 @@ function Folder({ page,id,visibility,data,name,index, homeFilesSettingRef }) {
         event.stopPropagation()
         dispatch({ type: 'setOpenFileSettings', openFileSettingsAction:{ value: true, event: event, index: index }})
     }
+
+    console.log(data,'data')
 
     return (
 
@@ -40,7 +42,7 @@ function Folder({ page,id,visibility,data,name,index, homeFilesSettingRef }) {
                 
                 <span className='text-sm text-gray-400 bg-gray-00 w-full px-2 h-auto inline-block text-center break-words '>
 
-                    <div className='text-xs text-gray-400'>26 views</div>
+                    <div className='text-xs text-gray-400'>{data.interactions[0]}</div>
                     <div className='text-xs text-gray-400'>1 month ago</div>
                 
                 </span>
@@ -49,7 +51,7 @@ function Folder({ page,id,visibility,data,name,index, homeFilesSettingRef }) {
     : null
     }
 
-            {page=="delete files"
+            {/* {page=="delete files"
                 ?
                 <>
                 <span className='text-sm text-gray-400 bg-gray-00 w-full px-2 h-auto inline-block text-center break-words'>
@@ -60,7 +62,7 @@ function Folder({ page,id,visibility,data,name,index, homeFilesSettingRef }) {
 
                 </>
             : null
-            }
+            } */}
 
     
                 <FileSettings
@@ -70,7 +72,7 @@ function Folder({ page,id,visibility,data,name,index, homeFilesSettingRef }) {
                     id={id}
                     data={data}
                     // FolderSettingsData={visibility=="public" || visibility=="private" ? FolderSettingsData() : visibility=="saved" ? SavedFolderSettingsData():null}
-                    FolderSettingsData={page=="home"?FolderSettingsData(data):page=="public files"?PublicFolderSettingsData(data):page=="search files"?SearchFolderSettingsData(data):null}
+                    FolderSettingsData={page=="home"?FolderSettingsData(data):page=="public files"?PublicFolderSettingsData(data):page=="search files"?SearchFolderSettingsData(data):page=="delete files"?DeleteFileSettingsData(data):page=="saved files"?SavedFileSettingsData(data):page=="shared files"?null:null}
                     closeFileSettings={() =>dispatch({ type: 'setOpenFileSettings', openFileSettingsAction:{ value: false, event: null, index: null }})}
                 />
 

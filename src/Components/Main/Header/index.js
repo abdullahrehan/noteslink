@@ -45,10 +45,10 @@ function Index({menuButton,heading}) {
         </div>
         <div className="bg-blue-00 flex ">
           <div className="center h-full hover:cursor-pointer" onClick={openNotification}>
-            <div className={`w-[43px] h-[43px] bg-green-00 relative   ${openNotifications ? "bg-[#0003]": null} hover:bg-[#0003] rounded-full center`}>
-              <div className="w-[15px] h-[15px] bg-red-500 z-10 rounded-full absolute right-1 top-2 text-[10px] center text-white">9</div>
-              <FaRegBell size={22} color="white" className="relative z-0" />
-            </div>
+            {/* <div className={`w-[43px] h-[43px] bg-green-00 relative   ${openNotifications ? "bg-[#0003]": null} hover:bg-[#0003] rounded-full center`}>
+              // {/* <div className="w-[15px] h-[15px] bg-red-500 z-10 rounded-full absolute right-1 top-2 text-[10px] center text-white">9</div> */}
+              {/* <FaRegBell size={22} color="white" className="relative z-0" /> */}
+            {/* </div>  */}
           </div>
           <div className="pl-2 center h-full pr-4 center bg-red-00">
             <div className={`w-[45px] h-[45px] rounded-full center bg-red-00 hover:cursor-pointer  ${openAccountSettings ? "bg-gradient-to-tr from-pink-400 to-blue-400 ":null} transition duration-700 ease-in-out`} onClick={openAccountSettingFunction}>

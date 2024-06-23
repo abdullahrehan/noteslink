@@ -10,6 +10,7 @@ import file_loader from '../../Assets/Images/loader.gif'
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { fdb, rdb } from "../../Firebase/firebaseConfig.js";
 import Cookies from "js-cookie";
+import { useParams } from "react-router-dom";
 
 
 function Index() {
@@ -17,8 +18,11 @@ function Index() {
   const { state, dispatch } = useContext(AppContext);
 
   const { openFoldersPath, openHomeSetings, refreshData, fileViewerContent, openFileSettings } = state;
+  // const [folderData, setFolderData] = useState(data);
 
   const homeSettingsRef = useRef([]);
+  const { folderID } = useParams();
+
 
   const path = ["Public Files"];
 
@@ -28,7 +32,9 @@ function Index() {
   const [loading, setloading] = useState(false);
 
   useEffect(() => {
-    getData();
+    // getData();
+    dispatch({ type: "setRefreshData", refreshDataAction: true })
+    console.log('37')
   }, []);
 
 
@@ -41,11 +47,14 @@ function Index() {
     dispatch({type: "setOpenFileSettings",openFileSettingsAction: { value: false, event: null, index: null }});
   
   };
+  console.log(folderID)
+
 
   const getData = async () => {
     
     setloading(true);
     setData([]);
+
 
     const q = await getDocs(
       query(
@@ -68,10 +77,60 @@ function Index() {
       .catch((e) => console.log(e));
   };
 
-  useEffect(() => { if(refreshData){ getData(); dispatch({ type: "setRefreshData", refreshDataAction: false })} } , [refreshData]);
+  const searchFolderById = async (folderID) => {
+
+    
+    let newArray = [];
+    let fid = folderID !== undefined ? folderID : "";
+
+    await getDocs(
+      query(
+        collection(fdb, "files"),
+        where("parent", "==", fid),
+        where(
+          "owner",
+          "==",
+          localStorage.getItem("userEmail").split("@")[0].trim()
+        )
+      )
+    )
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          newArray.push(doc.data());
+        });
+      })
+      .catch((e) => console.log(e));
+    setData(newArray);
+    setloading(false)
+
+  };
+
+  useEffect(() => { 
+    console.log("folder change");
+    setloading(true);
+    // dispatch({ type: "setRefreshData", refreshDataAction: true })
+    // if(refreshData){ 
+      
+      if(folderID==undefined){
+
+        getData();
+        console.log('data')
+      }
+      else{
+        searchFolderById(folderID)
+        console.log('search')
+        closeFileSettings()
+
+        // }  // // }
+      dispatch({ type: "setRefreshData", refreshDataAction: false })
+    } 
+  
+  } , [refreshData,folderID]);
 
   console.log(state.searchFileViewerContent)
   useEffect(() => { closeFileSettings() }, [state.searchFileViewerContent,refreshData]);
+
+  
 
   
   return (

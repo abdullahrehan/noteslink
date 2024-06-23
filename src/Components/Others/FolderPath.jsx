@@ -4,7 +4,7 @@ import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
 import { useNavigate } from 'react-router-dom';
 
-function FolderPath({ folderID, folderdata, searchFolder, setSearchFolder }) {
+function FolderPath({ folderID, folderdata, searchFolder, setSearchFolder,searchFunction }) {
 
     const { state, dispatch } = useContext(AppContext);
     const navigate = useNavigate();
@@ -25,6 +25,12 @@ function FolderPath({ folderID, folderdata, searchFolder, setSearchFolder }) {
         dispatch({ type: "resetHomeFolderPath", homeFolderPathAction: removeAfterIndex(state.homeFolderPath, filteredIndex) });
     }
 
+    const onEnter=(e)=>{
+        if(e.key=='Enter'||e.keyCode==13){
+        searchFunction()
+}
+    }
+
     return (
 
         <div className='h-full w-full text-sm bg-red-00 flex items-center justify-between ml-1 '>
@@ -38,12 +44,12 @@ function FolderPath({ folderID, folderdata, searchFolder, setSearchFolder }) {
                 
                 <div className='flex gap-1 text-gray-500'>
 
-                    {state.homeFolderPath?.map((data, index) =>
+                    {/* {state.homeFolderPath?.map((data, index) =>
                         <React.Fragment key={index}>
                             <span className='underline underline-offset-1 hover:cursor-pointer' onClick={() => setFolder(data)}>{data}</span>
                             <span>/</span>
                         </React.Fragment>
-                    )}
+                    )} */}
 
                 </div>
                 
@@ -53,7 +59,7 @@ function FolderPath({ folderID, folderdata, searchFolder, setSearchFolder }) {
 
                 <div className='bg-red-200 w-[170px]'>
 
-                    <input type='text' className='bg-green-00 w-full outline-none  border-b-[2px]' placeholder='search ' value={searchFolder} onChange={(e) => setSearchFolder(e.target.value)} />
+                    <input type='text' className='bg-green-00 w-full outline-none  border-b-[2px]' placeholder='search ' value={searchFolder} onChange={(e) => setSearchFolder(e.target.value)} onKeyUp={(e)=>onEnter(e)}/>
 
                 </div>
 
