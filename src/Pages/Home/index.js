@@ -161,6 +161,10 @@ function Index({ getFilesData, data }) {
     }
   };
 
+  // useEffect(()=>{
+  //   setLoading(true)
+  // },[])
+
   const closeFileSettings = () => {
     if (homeFilesSettingRef.current[openFileSettings?.index] !== undefined) {
       homeFilesSettingRef.current[openFileSettings?.index].style.display =
@@ -172,17 +176,22 @@ function Index({ getFilesData, data }) {
     });
   };
 
-  const searchFolders = (data, searchQuery) => {
+  const searchFolders = (Data, searchQuery) => {
+
+    console.log(data,'181s')
+    console.log(searchQuery,'sdad')
     if (searchQuery !== "") {
+      console.log('183')
       const query = searchQuery.toLowerCase();
 
-      const filteredFolders = data.filter((folderName) => {
+      const filteredFolders = Data.filter((folderName) => {
         const folderNameLower = folderName.name.toLowerCase();
         return folderNameLower.includes(query);
       });
 
       setFolderData(filteredFolders);
     } else {
+      console.log('192',data)
       setFolderData(data);
     }
   };
@@ -193,7 +202,6 @@ function Index({ getFilesData, data }) {
   
   
 // },[searchFolder])
-  console.log(searchFolder)
 
   const searchFolderById = async (folderID) => {
     console.log(localStorage.getItem("userEmail"));
@@ -219,7 +227,9 @@ function Index({ getFilesData, data }) {
       })
       .catch((e) => console.log(e));
     setFolderData(newArray);
-    setloadFolders(false);
+    dispatch({ type: "setRefreshHomeData", refreshHomeDataAction: false });
+    dispatch({ type: "setLoadHomeFiles", loadHomeFilesAction: false });
+    // setloadFolders(false);
   };
 
   useEffect(() => {
@@ -237,13 +247,15 @@ function Index({ getFilesData, data }) {
   useEffect(() => {
     setloadFolders(true);
     searchFolderById(folderID);
-    dispatch({ type: "setRefreshHomeData", refreshHomeDataAction: false });
-  }, [folderID, state.refreshHomeData]);
+
+  }, [folderID, state.refreshHomeData,state.loadHomeFiles]);
 
 
   useEffect(() => {
     closeFileSettings();
   }, [fileViewerContent, renameFilePopup, renameFolderPopup, deletFilePopup]);
+
+  
 
   return (
     <div className="w-full h-full bg-green-00 flex justify-end  text-4xl" onClick={closeFileSettings} onLoad={() =>dispatch({ type: "setRefreshData", refreshDataAction: true })} >
@@ -259,7 +271,7 @@ function Index({ getFilesData, data }) {
             setLoading={(value) => setloadFolders(value)}
           />
 
-          <div className="w-[40px] h-full hover:cursor-pointer rounded-full bg-#0002] center">
+          <div className={`w-[40px] h-full ${state.openFoldersPath?"hidden":"center"} hover:cursor-pointer rounded-full bg-#0002] `}>
 
             <img src={TabFolderIcon} className="h-[18px] hover:h-[19px]" onClick={() =>dispatch({ type: "setFolderPath", folderPath: true })}/>
           
@@ -291,7 +303,7 @@ function Index({ getFilesData, data }) {
           <AllFiles
             data={folderData}
             homeFilesSettingRef={homeFilesSettingRef}
-            loading={loadFolders}
+            // loading={loadFolders}
             page={"home"}
           />
 
@@ -386,7 +398,7 @@ function Index({ getFilesData, data }) {
           <NavigationFolderPath />
         ) : (
           <NavigationFolder
-            folderName={"Main Files"}
+            folderName={"My Computer"}
             closeFolders={() =>
               dispatch({ type: "setFolderPath", folderPath: false })
             }

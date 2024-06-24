@@ -1,12 +1,13 @@
 import React, { useContext } from 'react'
 import profile from "../../../Assets/Images/profile.png";
+import userImage from "../../../Assets/Images/user.png";
 import { IoSettingsOutline } from "react-icons/io5";
 import { MdLogout } from "react-icons/md";
 import { LuHelpCircle } from "react-icons/lu";
 import { MdOutlineFeedback } from "react-icons/md";
 import { NavLink, useNavigate } from "react-router-dom";
 import AppContext from '../../../Context_Api/AppContext.js'
-
+import { RiAccountPinCircleFill } from "react-icons/ri";
  
 function Account() {
 
@@ -47,7 +48,7 @@ function Account() {
                         
                         <div className='flex center flex-col gap-2'>
                             <div className='w-[65px] h-[65px] border-2 overflow-hidden rounded-full '>
-                                <img alt='null' src={state.profilePic} className='w-full h-full' />
+                                <img alt='null' src={state.profilePic ? state.profilePic : userImage}  className='w-full h-full' />
                             </div>
                         </div>
 

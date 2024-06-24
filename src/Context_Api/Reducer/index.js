@@ -8,6 +8,10 @@ const Reducer = (state, action) => {
     case "setHomeCurrentFoler": return { ...state, homeCurrentFoler:action.openHomeSetingsAction };
     case "setHomeFolderPath": return { ...state, homeFolderPath:[...state.homeFolderPath ,action.homeFolderPathAction] };
     case "resetHomeFolderPath": return { ...state, homeFolderPath:action.homeFolderPathAction };
+
+    case "setLoadHomeFiles": return { ...state, loadHomeFiles:action.loadHomeFilesAction };
+    
+    
     case "setRefreshData": return { ...state, refreshData:action.refreshDataAction };
     case "setRefreshHomeData": return { ...state, refreshHomeData:action.refreshHomeDataAction };
     case "setRefreshTabs": return { ...state, refreshTabs:action.refreshTabsAction };

@@ -5,11 +5,15 @@ const initialState=
       profilePic:null,
       isAdmin:false,
       openSideBar:false,
+
       refreshData:false,
       refreshTabs:false,
+      
       homeCurrentFoler:{name:"My Computer",data:[]},
       homeFolderPath:["My Computer"],
       homeFilesRef:[],
+      loadHomeFiles:false,
+      
       openFoldersPath:true,
       currentTab:null,
       refreshHomeData:false,

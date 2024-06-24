@@ -167,9 +167,11 @@ function Tabs({ setLoading, name, tabsInnerRef, tabs, setTabs, index, id, curren
 
                         <div className={`w-[30px] flex justify-start items-center h-[70%] bg-gray-00  border-gray-500 ${tabType == "selected" || tabType == "prev" ? "border-none" : "border-r-[2px] "} `} onClick={(event) => closeTab(event, name, index)}>
 
-
+                        { index==0 ?
+                            null
+                        :
                             <RxCross2 size={16} className='hover:cursor-pointer' color={`${tabType == "selected" ? "black" : "#B3B3B3 "} `} />
-
+                        }        
                         </div>
 
                     </div>

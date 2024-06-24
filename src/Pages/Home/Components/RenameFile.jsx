@@ -11,11 +11,23 @@ function RenameFile({type,Function}) {
   const {state,dispatch}=useContext(AppContext)
   const [error,setError]=useState(false)
   const [newName,setNewName]=useState()
+  const [loading,setLoading]=useState(false)
   
-  const Rename=()=>{ updateDoc(doc(fdb, "files", state.renameFolderPopup.id), {name: newName}).then(()=>{dispatch({ type: "setRefreshData", refreshDataAction: true });Function()})}
+  const Rename=()=>{ 
+    
+    setLoading(true)
+    updateDoc(doc(fdb, "files", state.renameFolderPopup.id), {name: newName})
+  
+    .then(()=>{
+      setLoading(false)
+      dispatch({ type: "setRefreshHomeData", refreshHomeDataAction: true });
+        dispatch({type: "setRefreshTabs",refreshTabsAction: true});
+        Function()})
+  
+      }
 
   return (
-      <PopUp title={`Rename ${type} `} width='w-[420px]' height='h-[220px]' crossFunction={Function}>
+      <PopUp title={`Rename ${type} `} width='w-[420px]' loading={loading} height='h-[220px]' crossFunction={Function}>
         <div className={`flex flex-col gap-6 pt-5 h-full w-[90%]`}>
           <div className='flex flex-col gap-3'>
             <div className='w- full text-base '>

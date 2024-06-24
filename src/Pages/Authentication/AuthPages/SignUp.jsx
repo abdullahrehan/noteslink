@@ -71,11 +71,13 @@ function SignUp({ setSignUpSuccessfull }) {
                     name: username,
                     emailAddress: email,
                     userType: "user",
-                    tabs: { id: "", name: "My Computer" }
+                    tabs: { id: "", name: "My Computer" }, status: 'open'
                 }).then(async () => {
 
 
                     Cookies.set('userEmail', JSON.stringify(email), { expires: 7 });
+                    localStorage.setItem('userEmail', JSON.stringify(email))
+                    localStorage.setItem('isLogin', true)
                     dispatch({ type: "setName", Name: username });
                     dispatch({ type: "setEmail", Email: email });
                     setSignUpSuccessfull(false)
@@ -121,31 +123,7 @@ function SignUp({ setSignUpSuccessfull }) {
 
 
 
-            <div className="py-2">
-
-
-                <div className='bg-gray-50 h-full border flex border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '>
-
-                    <input
-                        className="h-full bg-[#0000] w-[90%] outline-none"
-                        name="confirmPassword"
-                        value={confirmPassword}
-                        placeholder="Confirm Password"
-                        onChange={(e) => onInputChange(e, setConfirmPassword)}
-                        type={showPassword ? "text" : "password"}
-                        required
-                    />
-
-                    <div className='h-full w-[10%] hover:cursor-pointer' onClick={() => setShowPassword(!showPassword)}>
-                        {showPassword ?
-                            <GoEyeClosed size={20} />
-                            :
-                            <FiEye size={20} />
-                        }
-                    </div>
-
-                </div>
-            </div>
+            
 
             <div className="py-2">
 
@@ -171,6 +149,32 @@ function SignUp({ setSignUpSuccessfull }) {
 
                 </div>
 
+            </div>
+
+            <div className="py-2">
+
+
+                <div className='bg-gray-50 h-full border flex border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 '>
+
+                    <input
+                        className="h-full bg-[#0000] w-[90%] outline-none"
+                        name="confirmPassword"
+                        value={confirmPassword}
+                        placeholder="Confirm Password"
+                        onChange={(e) => onInputChange(e, setConfirmPassword)}
+                        type={showPassword ? "text" : "password"}
+                        required
+                    />
+
+                    <div className='h-full w-[10%] hover:cursor-pointer' onClick={() => setShowPassword(!showPassword)}>
+                        {showPassword ?
+                            <GoEyeClosed size={20} />
+                            :
+                            <FiEye size={20} />
+                        }
+                    </div>
+
+                </div>
             </div>
 
             <div className={`flex gap-1 py-3 px-1 text-red-500 w-full text-sm ${signUpErrors !== null ? 'center' : 'hidden'}`}>

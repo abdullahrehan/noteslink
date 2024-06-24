@@ -15,7 +15,7 @@ function Folder({ page,id,visibility,data,name,index, homeFilesSettingRef }) {
         dispatch({ type: 'setOpenFileSettings', openFileSettingsAction:{ value: true, event: event, index: index }})
     }
 
-    console.log(data,'data')
+    // console.log(data,'data')
 
     return (
 

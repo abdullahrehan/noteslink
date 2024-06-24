@@ -31,74 +31,83 @@ export const FolderSettingsData = () => {
       name: "Open Folder",
       Icon: <FaRegFolderOpen size={20} />,
       Function: async (id, Data) => {
+        dispatch({ type: "setRefreshHomeData", refreshHomeDataAction: true });
         navigate(`/noteslink/${id}`);
         // console.log(id)
       },
     },
     {
-      name: `Make Folder Public`,
+      name: `Change Status`,
       Icon: <BsPeople size={20} />,
       Function: async (id, Data) => {
-        if (window.confirm("Are you sure you want to make the folder public")) {
+        
+        dispatch({ type: "setOpenHomeSetings", openHomeSetingsAction: false });
+
+        setTimeout(() => {
+          
+        if (window.confirm(`Are you sure you want to make this folder ${Data.status === "public" ? "private" : "public"}`)) {
           console.log(id, Data);
+          dispatch({ type: "setRefreshHomeData", refreshHomeDataAction: true });
           updateDoc(doc(fdb, "files", id), {
             status: Data.status === "public" ? "private" : "public",
           }).then(() => {
-            dispatch({ type: "setRefreshData", refreshDataAction: true });
+            dispatch({ type: "setRefreshHomeData", refreshHomeDataAction: false });
           });
         }
-      },
+      }, 100);
+    },
     },
     {
       name: "Add in Tabs",
       Icon: <IoIosAdd size={20} />,
       Function: async (id, Data) => {
+        dispatch({
+          type: "setRefreshTabs",
+          refreshTabsAction: true,
+        });
         await updateDoc(doc(fdb, "users", state.email.trim()), {
           tabs: arrayUnion({ id: Data.id, name: Data.name }),
         })
           .then(() => {
             console.log("done");
-
-            dispatch({
-              type: "setRefreshTabs",
-              refreshTabsAction: true,
-            });
           })
           .catch((e) => {
             console.error(e);
           });
       },
     },
-    {
-      name: "Move Folder",
-      Icon: <MdOutlineDriveFileMove size={20} />,
-      Function: () => {},
-    },
-    {
-      name: "Copy Folder",
-      Icon: <MdFolderCopy size={20} />,
-      Function: () => {},
-    },
+    // {
+    //   name: "Move Folder",
+    //   Icon: <MdOutlineDriveFileMove size={20} />,
+    //   Function: () => {},
+    // },
+    // {
+    //   name: "Copy Folder",
+    //   Icon: <MdFolderCopy size={20} />,
+    //   Function: () => {},
+    // },
     {
       name: "Rename Folder",
       Icon: <MdOutlineDriveFileRenameOutline size={20} />,
       Function: (id) => {
-        dispatch({
-          type: "setRenameFolderPopup",
-          renameFolderPopupAction: { value: true, id: id },
-        });
+        dispatch({type: "setRenameFolderPopup",renameFolderPopupAction: { value: true, id: id }});
       },
     },
     {
       name: "Delete Folder",
       Icon: <MdDeleteOutline size={20} />,
-      Function: (fId, fData) => {
+      Function: async (fId, fData) => {
+        dispatch({ type: "setRefreshHomeData", refreshHomeDataAction: true });
+        dispatch({type: "setRefreshTabs",refreshTabsAction: true});
+        const folders = await getDoc(doc(fdb, 'users', localStorage.getItem('userEmail').trim()))
+        const Tabs = folders.data().tabs
+        console.log("Tabs ==================================>",folders.data())
         getAllDescendantIds(fData.id)
           .then((allIds) => {
             console.log("All descendant IDs:", allIds);
             allIds.push(fData.id); // Include the folder itself
-            allIds.forEach(async (id) => {
-              await getDoc(doc(fdb, "files", id)).then(async (response) => {
+            allIds.forEach(async(id) => {
+              await getDoc(doc(fdb, "files", id)).then(async(response) => {
                 const owner = response.data().owner;
                 if (
                   localStorage
@@ -107,7 +116,10 @@ export const FolderSettingsData = () => {
                     .toLowerCase() === owner
                 ) {
                   await deleteDoc(doc(fdb, "files", id))
-                    .then(async () => {
+                    .then(async() => {
+                      await updateDoc(doc(fdb, 'users', localStorage.getItem('userEmail')), {
+                        tabs: Tabs.filter(data => data.id !== id)
+                      })
                       if (response.data().id == fId) {
                         await setDoc(
                           doc(fdb, "recycleBin", response.data().id),
@@ -120,12 +132,21 @@ export const FolderSettingsData = () => {
                         });
                       }
                     })
+                    .then(()=>{
+                      console.log('234')
+           
+
+                    })
                     .catch((error) => {
                       console.error("Error deleting document:", error);
                     });
                 }
               });
             });
+          }).then(()=>{
+            console.log('234')
+            // dispatch({ type: "setRefreshHomeData", refreshHomeDataAction: false });
+
           })
           .catch((error) => {
             console.error("Error fetching descendant IDs:", error);
@@ -152,7 +173,7 @@ export const FileSettingsData = (data) => {
             keywords: data.keywords,
             likes: data.likes,
             content: data.content,
-            url: data.urls,
+            url: data.Url,
             modifiedAt: data.modifiedAt,
             interactions: data.interactions,
             sharedWith: data.sharedWith,
@@ -230,6 +251,10 @@ export const FileSettingsData = (data) => {
                             head: false,
                           });
                         }
+                      }).then(()=>{
+                        console.log('234')
+                        dispatch({ type: "setRefreshHomeData", refreshHomeDataAction: true });
+
                       })
                       .catch((error) => {
                         console.error("Error deleting document:", error);
@@ -481,6 +506,24 @@ export const SavedFileSettingsData = () => {
             viewers: data.viewers,
             status: data.status,
           },
+        // dispatch({
+        //   type: "setFileViewerContent",
+        //   fileViewerContentAction: {
+        //     value: true,
+        //     id: data.id,
+        //     name: data.name,
+        //     keywords: data.keywords,
+        //     likes: data.likes,
+        //     content: data.content,
+        //     url: data.Url,
+        //     modifiedAt: data.modifiedAt,
+        //     interactions: data.interactions,
+        //     sharedWith: data.sharedWith,
+        //     viewers: data.viewers,
+        //     status: data.status,
+        //     likedBy: data.likedBy,
+        //     type: data.type,
+        //   },
         });
         // dispatch({ type: "setAddNewTextfile", addNewTextfileAction: true });
       },

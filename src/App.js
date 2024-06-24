@@ -24,6 +24,7 @@ import DeleteFiles from "./Pages/DeleteFiles/index.js";
 import SharedFiles from "./Pages/SharedFiles/index.js";
 import OpenedFile from "./Pages/Home/Components/OpenedFile.jsx";
 import OpenedSharedFile from "./Pages/Home/Components/OpenedSharedFile.jsx";
+import OpenedSavedFile from "./Pages/Home/Components/OpenedSavedFile.jsx";
 import OpenedSearchFile from "./Pages/Home/Components/OpenedSearchFile.jsx";
 
 import Help from "./Pages/Help/index.js";
@@ -127,8 +128,9 @@ const App = () => {
         </div>
 
         {logoutPopup ? <LogOut /> : null}
-        {fileViewerContent.value ? <OpenedFile /> : null}
+        {fileViewerContent?.value ? <OpenedFile /> : null}
         {state.sharedFileViewerContent.value ? <OpenedSharedFile /> : null}
+        {state.savedFileViewerContent.value ? <OpenedSavedFile /> : null}
         {searchFileViewerContent.value ? <OpenedSearchFile /> : null}
 
 
@@ -162,7 +164,6 @@ const App = () => {
                 <Route path="/savedfiles" element={<SavedFiles />} />
                 <Route path="/publicfiles" element={<PublicFiles getFilesData={getFilesData} data={data}/>} />
                 <Route path="/publicfiles/:folderID" element={<PublicFiles getFilesData={getFilesData} data={data}/>} />
-                {/* <Route path="/publicfiles" element={<PublicFiles getFilesData={getFilesData} data={data}/>} /> */}
                 <Route path="/seachfiles" element={<SeachFiles />} />
                 <Route path="/sharedFiles" element={<SharedFiles />} />
                 <Route path="/deletefiles" element={<DeleteFiles />} />

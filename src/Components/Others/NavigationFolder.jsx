@@ -1,9 +1,33 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import PathFolder from '../../Pages/Home/Components/PathFolder'
 import Data from "../../Apis/Folder.json";
 import { RxCross2 } from "react-icons/rx";
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { fdb } from '../../Firebase/firebaseConfig';
+import AppContext from "../../Context_Api/AppContext.js";
 
-function NavigationFolder({ closeFolders ,folderName }) {
+function NavigationFolder({ closeFolders, folderName }) {
+
+  const [HomeFolder, setHomeFolder] = useState([])
+  const { state, dispatch } = useContext(AppContext);
+
+
+  const homeFolderFunction = async () => {
+
+
+    await getDocs(query(collection(fdb, "files"), where("owner", "==", localStorage.getItem("userEmail").split('@')[0].trim().toLowerCase()), where('type', '==', 'folder'), where("parent", "==", state.homeCurrentFoler.name == "My Computer" ? "" : state.homeFolderPath[state.homeFolderPath.length - 1])))
+      .then((querySnapshot) => { setHomeFolder([]); querySnapshot.forEach((doc) => { setHomeFolder((prev) => [...prev, doc.data()]) }) })
+
+
+
+  }
+
+  useEffect(() => {
+    homeFolderFunction()
+  }, [state.refreshHomeData])
+
+  console.log(HomeFolder)
+
 
   return (
 
@@ -13,16 +37,20 @@ function NavigationFolder({ closeFolders ,folderName }) {
 
         <div className='w-full bg-red-00 flex justify-between center pr-2'>
 
-          <PathFolder name={folderName} />
+          {/* <PathFolder name={[{name:"Home",id:""}]} /> */}
 
           <div className=' absolute  bg-red-00 right-[2px] top-[2px]'>
             <RxCross2 size={20} className='hover:cursor-pointer ' color={"black"} onClick={closeFolders} />
           </div>
         </div>
 
-        <div className='flex flex-col pl-8'>
+        <div className='flex flex-col pl-2'>
 
-          {Data.map((data, index) => data.parent == "My Folders" ? <PathFolder key={index} name={data.name} /> : null)}
+          {HomeFolder.map((data, index) => 
+          
+          <PathFolder key={index} data={data} />
+          // console.log(data.name)
+          )}
 
         </div>
 
@@ -32,7 +60,6 @@ function NavigationFolder({ closeFolders ,folderName }) {
 
         <div>5 Folders</div>
 
-        <div>Size 1.7GB</div>
 
       </div>
 

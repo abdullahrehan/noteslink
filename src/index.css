@@ -55,6 +55,9 @@ code {
   .w-minus-250px {
     width: calc(100% - 250px);
   }
+  .w-full-minus-170 {
+    width: calc(100% - 170px);
+  }
   .w-minus-220px {
     width: calc(100% - 220px);
   }

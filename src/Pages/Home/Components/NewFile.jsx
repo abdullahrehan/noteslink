@@ -15,6 +15,7 @@ import { MdPublicOff } from "react-icons/md";
 import { setDoc, doc, getDocs, where, query, collection } from 'firebase/firestore';
 import { fdb } from '../../../Firebase/firebaseConfig.js';
 import { useNavigate, useParams } from "react-router-dom";
+import loader from '../../../Assets/Images/loader.gif'
 
 function NewFile() {
 
@@ -59,6 +60,14 @@ function NewFile() {
     }
 
     const createFile = async () => {
+
+        if(fileName===null||fileName==""){
+            alert("Please Enter File Name")
+        }
+        else{
+
+    setFileSaved(true)
+
         function extractKeywords(str) {
             const wordsArray = str.split(/\s+/).filter(word => word.length > 0)
 
@@ -309,8 +318,10 @@ function NewFile() {
             editors: [],
             viewers: [],
             urls: [fileLink],
+            likes:0,
+            likedBy:[]
         }
-        console.log(data.id)
+
         const userEmail = localStorage.getItem("userEmail").split("@")[0].trim().toLowerCase();
         const folderIdValue = folderID === undefined ? "" : folderID;
 
@@ -318,24 +329,25 @@ function NewFile() {
             collection(fdb, "files"),
             where("owner", "==", userEmail),
             where("parent", "==", folderIdValue),
-            where("name", "==", fileName)
+            where("name", "==", fileName),
+            where("type", "==",'file')
         );
 
         const querySnapshot = await getDocs(fileQuery);
 
         if (querySnapshot.empty) {
-            setFileSaved(true)
 
             await setDoc(doc(fdb, "files", data.id), data);
 
             setFileSaved(false);
             setTimeout(() => {
                 dispatch({ type: 'setAddNewTextfile', addNewTextfileAction: false });
-                dispatch({ type: "setRefreshData", refreshDataAction: true });
+                dispatch({ type: "setLoadHomeFiles", loadHomeFilesAction: true });
             }, 100);
         } else {
             alert("File Name Already exists, use a different name!");
         }
+    }
 
     }
     return (
@@ -354,9 +366,9 @@ function NewFile() {
 
                     <div className='w-[33%] h-full flex items-end justify-start gap-1'>
 
-                        {settingsIcon.map(data =>
+                        {settingsIcon.map((data,index) =>
 
-                            <div className={`w-[30px] h-[30px] bg-gray-00 hover:cursor-pointer shadow-[inset_-12px_-8px_40px_#46464620]  center rounded-full `} onClick={() => setSaveOptions(!openSaveOptions)}>
+                            <div key={index+1} className={`w-[30px] h-[30px] bg-gray-00 hover:cursor-pointer shadow-[inset_-12px_-8px_40px_#46464620]  center rounded-full `} onClick={() => setSaveOptions(!openSaveOptions)}>
 
                                 <div className='font-medium '>{data.icon}
 
@@ -371,7 +383,7 @@ function NewFile() {
 
                         <div className='flex gap-5 items-center bg-red-00'>
                             <div className=' h-full '></div>
-                            <input className='pt-2 pb-1 h-[40px] w-auto font-medium text-2xl bg-[#0000] outline-none text-center center' placeholder='FileName' onChange={(e) => setFileName(e.target.value)} value={fileName} />
+                            <input className='pt-2 pb-1 h-[40px] w-auto font-medium text-2xl bg-[#0000] outline-none text-center center' placeholder='File Name' onChange={(e) => setFileName(e.target.value)} value={fileName} />
                         </div>
 
                         <div className='h-[1px] w-[90%] bg-black  text-lg font-medium'></div>
@@ -434,11 +446,10 @@ function NewFile() {
 
                         </div>
 
-                        <div className='w-full h-[60%] bg-red-00 flex center justify-between'>
+                        <div className='w-[100%] h-[60%] bg-red-00 flex center'>
 
-                            <div className='text-base bg-[#2D2D2D] py-3 px-8 rounded-[5px] text-white w-auto hover:cursor-pointer hover:bg-[#434343] '
-                                onClick={createFile}>Save</div>
-                            <div className='w-[150px]'></div>
+                            <button  className={`text-base  bg-[#2D2D2D] py-3 px-8 rounded-[5px] text-white w-auto hover:cursor-pointer hover:bg-[#434343] `}
+                                onClick={createFile}>Save</button>
 
                         </div>
 
@@ -449,8 +460,9 @@ function NewFile() {
                 <div className={`h-full ${renameFilePopup.value || fileSaved ? "flex" : "hidden"} center w-full absolute top-0 left-0 bg-[#0002] backdrop-blur-sm  rounded-[5px] flex flex-col center`}>
 
                     <div className='text-base gap-2 items-center flex font-medium'>
-                        <div><FaRegFileAlt /></div>
-                        <div>File Saved</div>
+                        {/* <div><FaRegFileAlt /></div> */}
+                        <img src={loader} className='w-[35px]'/>
+                        {/* <div>File Saved</div> */}
                     </div>
 
                 </div>

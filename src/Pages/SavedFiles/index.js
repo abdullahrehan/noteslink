@@ -74,7 +74,7 @@ function Index() {
           {data.length!==0 ? (
               <>
               <div className="h-[40px] w-full bg-red-00">
-              <FolderPath path={path} />
+              {/* <FolderPath path={path} /> */}
             </div>
             <AllFiles
               data={data}

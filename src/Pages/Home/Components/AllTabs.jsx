@@ -5,7 +5,7 @@ import AppContext from '../../../Context_Api/AppContext.js'
 import TabsLoader from './Loaders/TabsLoader'
 import Tabs from './Tabs'
 
-function AllTabs({ setLoading,tabsLoading ,setTabsLoading }) {
+function AllTabs({ setLoading }) {
 
     const { state, dispatch } = useContext(AppContext)
     const [currentTabIndex, setCurrentTabIndex] = useState(0)
@@ -19,9 +19,8 @@ function AllTabs({ setLoading,tabsLoading ,setTabsLoading }) {
         const fetchTabs = async () => {
 
             const data = await getDoc(doc(fdb, 'users', localStorage.getItem("userEmail")))
-
+            console.log(data.data())    
             setTabs(data.data().tabs)
-            setTabsLoading(false)
             dispatch({type: "setRefreshTabs", refreshTabsAction: false});
         }
 
@@ -29,21 +28,24 @@ function AllTabs({ setLoading,tabsLoading ,setTabsLoading }) {
 
     }, [state.email,state.refreshTabs])
 
+    // console.log(tabs)
+
+
     return (
 
         <div className='w-full h-full center '>
 
             <div className='w-[99.5%] h-full flex flex-col '>
 
-                <div className={`flex w-full h-full ${tabsLoading ? "bg-slate-500 " : "bg-[#373737]"} items-end rounded-[3px]`}>
+                <div className={`flex w-full h-full ${state.refreshTabs ? "bg-slate-500 " : "bg-[#373737]"} items-end rounded-[3px] ${state.refreshTabs?"gap-[1px]":""}`}>
 
                     <div className='w-[8px] h-full bg-white'>
 
-                        <div className={`w-[8px] h-full ${tabsLoading ? "bg-slate-500 " : "bg-[#373737]"} ${currentTabIndex == 0 ? "rounded-tl-[3px] rounded-bl-[3px] rounded-br-[7px]" : null}`}></div>
+                        <div className={`w-[8px] h-full ${state.refreshTabs ? "bg-slate-500 " : "bg-[#373737]"} ${currentTabIndex == 0 ? "rounded-tl-[3px] rounded-bl-[3px] rounded-br-[7px]" : null}`}></div>
 
                     </div>
 
-                    {tabsLoading ?
+                    {state.refreshTabs ?
 
                         ["","","",""].map((data, index) =>
                            
@@ -55,7 +57,7 @@ function AllTabs({ setLoading,tabsLoading ,setTabsLoading }) {
                                 index={index}
                                 setCurrentTabIndex={(data) => setCurrentTabIndex(data)}
                                 tabType={0}
-                                tabs={tabs}
+                                tabs={tabs.length>1?tabs[0]:tabs}
                                 setTabs={(data) => setTabs(data)}
                                 currentTabIndex={0}
                             />

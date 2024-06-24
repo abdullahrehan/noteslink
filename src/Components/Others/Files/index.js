@@ -4,7 +4,7 @@ import MainFiles from "./File_Folder_Structure/MainFiles";
 import FileLoader from "../../../Pages/Home/Components/Loaders/FileLoader";
 import AppContext from "../../../Context_Api/AppContext.js";
 
-function AllFiles({ page, data, homeFilesSettingRef, loading }) {
+function AllFiles({ page, data, homeFilesSettingRef }) {
  
   const { state, dispatch } = useContext(AppContext);
 
@@ -23,7 +23,7 @@ function AllFiles({ page, data, homeFilesSettingRef, loading }) {
      
       {state.homeCurrentFoler.data.length!==0 ? 
       
-       loading ? 
+       state.loadHomeFiles || state.refreshHomeData ? 
             
         <FileLoader />
       

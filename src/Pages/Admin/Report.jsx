@@ -98,7 +98,7 @@ function Report() {
           <thead className='sticky top-0 bg-white'>
             <tr>
               <th className="px-4 py-2">#</th>
-              <th className="px-4 py-2">Title</th>
+              {/* <th className="px-4 py-2">Title</th> */}
               {/* <th className="px-4 py-2">Type</th> */}
               <th className="px-4 py-2">File ID</th>
               {/* <th className="px-4 py-2">Initiated By</th> */}
@@ -116,11 +116,11 @@ function Report() {
               !loader ? tableData.map((data, index) =>
                 <tr className='hover:bg-[#0001] hover:cursor-pointer'>
                   <td className="border px-4 py-2 text-center font-bold">{index + 1}</td>
-                  <td className="border px-4 py-2 text-center">{data.data.name}</td>
-                  <td className="border px-4 py-2 text-center">{data.data.fileId.substring(0,5)}....</td>
+                  {/* <td className="border px-4 py-2 text-center">{data.data.name}</td> */}
+                  <td className="border px-4 py-2 text-center">{data.data.fileId}....</td>
                   {/* <td className="border px-4 py-2 text-center">{data.data.reportedBy}</td> */}
                   <td className="border px-4 py-2 text-center">{data.data.owner}</td>
-                  <td className="border px-4 py-2 text-center ">{data.data.details.join(", ")}</td>
+                  <td className="border px-4 py-2 text-center ">{data.data.details?.join(", ")}</td>
                   <td className="border px-4 py-2 text-center ">{data.data.reason}</td>
                   <td className="border px-4 py-2 text-center ">{data.data.status}</td>
 

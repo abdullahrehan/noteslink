@@ -1,8 +1,20 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { IoIosArrowForward } from "react-icons/io";
 import tabFolderIcon from "../../../Assets/Images/tabFolderIcon.png";
+import { useNavigate } from 'react-router-dom';
+import AppContext from "../../../Context_Api/AppContext.js";
 
-function PathFolder({ name, children }) {
+function PathFolder({ data, children }) {
+
+  const navigate = useNavigate();
+  const { state, dispatch } = useContext(AppContext);
+
+  const goToFolder=()=>{
+    navigate(`/noteslink/${data.id}`)
+    dispatch({ type: "setRefreshHomeData", refreshHomeDataAction: true });
+
+  }
+
   return (
     <div>
       <div className='flex h-[30px] w-[200px] bg-#0002] flex items-center'>
@@ -13,19 +25,19 @@ function PathFolder({ name, children }) {
         <div>
           <img src={tabFolderIcon} className='w-[20px]' />
         </div>
-        <div className='text-sm pl-2 hover:underline hover:underline-offset-1 hover:cursor-pointer'>
-          {name}
+        <div className='text-sm pl-2 hover:underline hover:underline-offset-1 hover:cursor-pointer' onClick={goToFolder}>
+          {data.name}
         </div>
       </div>
-      {children && (
+      {/* {children && (
         <ul>
           {children.map(child => (
             <li key={child.name}>
               <PathFolder name={child.name} children={child.children} />
             </li>
-          ))}
-        </ul>
-      )}
+          ))} */}
+        {/* </ul> */}
+      {/* )} */}
 
     </div>
   );

@@ -25,6 +25,7 @@ import PopUp from '../../../Components/Others/PopUp.jsx'
 import { Document, Packer, Paragraph, TextRun } from 'docx';
 import { saveAs } from 'file-saver';
 import jsPDF from 'jspdf';
+import loader from '../../../Assets/Images/loader.gif'
 
 
 function OpenedFile() {
@@ -144,6 +145,7 @@ function OpenedFile() {
 
     const saveFileChanges = async () => {
         // console.log(state.fileViewerContent)
+        // console.log(state.fileViewerContent.content,fileName)
         setFileSaved(true)
         await updateDoc(doc(fdb, 'files', state.fileViewerContent.id),
             {
@@ -151,7 +153,15 @@ function OpenedFile() {
                 content: fileContent.split('\n'),
                 url: fileLink == null ? [] : fileLink
             })
-            .then(() => { setFileSaved(false); dispatch({ type: "setRefreshData", refreshDataAction: true }) })
+            .then(() => { 
+                setFileSaved(false);
+                dispatch({
+                    type: "setFileViewerContent",
+                    fileViewerContentAction: {
+                      value: false,
+                    }})        
+                dispatch({ type: "setLoadHomeFiles", loadHomeFilesAction: true }); })
+
 
     }
 
@@ -390,8 +400,10 @@ function OpenedFile() {
                 <div className={`h-full ${renameFilePopup.value || fileSaved ? "flex" : "hidden"} center w-full absolute top-0 left-0 bg-[#0002] backdrop-blur-sm  rounded-[5px] flex flex-col center`}>
 
                     <div className='text-base gap-2 items-center flex font-medium'>
-                        <div><FaRegFileAlt /></div>
-                        <div>File Saved</div>
+                        {/* <div><FaRegFileAlt /></div> */}
+                        {/* <div>File Saved</div> */}
+                        <img src={loader} className='w-[35px]'/>
+
                     </div>
 
                 </div>

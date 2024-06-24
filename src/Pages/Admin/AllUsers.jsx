@@ -136,7 +136,7 @@ function AllUsers() {
                                 <td className="border px-4 py-2 text-center font-bold">{index + 1}</td>
                                 <td className="border px-4 py-2 text-center">{data.name}</td>
                                 <td className="border px-4 py-2 text-center">{data.emailAddress}</td>
-                                <td className="border px-4 py-2 text-center">{data.status}</td>
+                                <td className="border px-4 py-2 text-center">{data.status?data.status:"restricted"}</td>
 
                                 {data.status == "open" && (<td className="border px-4 py-2 text-center">
                                     <button onClick={() => handleLimitAccount(data.emailAddress)} className="bg-red-400 w-[180px] hover:bg-yellow-700 text-white py-2 px-4 rounded">

@@ -7,11 +7,13 @@ import { doc, updateDoc } from "firebase/firestore";
 import { auth, fdb } from "../../Firebase/firebaseConfig.js";
 import { IoIosArrowBack } from "react-icons/io";
 import { getAuth, signInWithEmailAndPassword, updatePassword } from "firebase/auth";
+import user from "../../Assets/Images/user.png";
+import loader from "../../Assets/Images/loader.gif";
 
 function Index() {
   const { state, dispatch } = useContext(AppContext);
-  const [image, setImage] = useState("https://via.placeholder.com/150");
-  const [uploading, setUploading] = useState(false);
+  const [image, setImage] = useState(state.profilePic);
+  const [uploadingLoader, setUploadingLoader] = useState(false);
 
   const [password,setPassword]=useState()
   const [newPassword,setNewPassword]=useState()
@@ -31,7 +33,7 @@ function Index() {
   };
 
   const uploadImageToCloudinary = async (file) => {
-    setUploading(true);
+    setUploadingLoader(true);
 
     console.log(file);
 
@@ -49,12 +51,13 @@ function Index() {
       await updateDoc(doc(fdb, "users", localStorage.getItem("userEmail")), {
         picture: response.data.secure_url,
       }).then(() => {
+        dispatch({ type: "setProfilePic", profilePicAction: response.data.secure_url });
         setImage(response.data.secure_url);
       });
-      setUploading(false);
+      setUploadingLoader(false);
     } catch (error) {
       console.error("Error uploading image:", error);
-      setUploading(false);
+      setUploadingLoader(false);
     }
   };
 
@@ -114,10 +117,10 @@ function Index() {
               </div>
 
               {/* Second div */}
-              <div className="flex flex-col justify-center items-center w-full h-3/10 ">
-                <div className="rounded-full w-[250px]  h-[250px] rounded-full  overflow-hidden ">
+              <div className="relative flex flex-col justify-center items-center w-full h-3/10 ">
+                <div className="rounded-full z-10 w-[250px]  h-[250px] rounded-full  overflow-hidden ">
                   <img
-                    src={state.profilePic}
+                    src={image?image:user}
                     alt="Profile"
                     className="w-full h-full object-cover cursor-pointer"
                     onClick={handleImageClick}
@@ -128,6 +131,9 @@ function Index() {
                     style={{ display: "none" }}
                     onChange={handleFileChange}
                   />
+                </div>
+                <div className={`absolute t-0 l-0 ${uploadingLoader?"center":"hidden"} bg-gray-200 z-20 w-[250px] h-[250px] rounded-full text-lg `}>
+                  <img src={loader} className="w-[35px]"/>
                 </div>
               </div>
 
@@ -155,14 +161,6 @@ function Index() {
                   <div className="h-full center hover:cursor-pointer" onClick={()=>setDisplayScreen(1)}>
                     <MdModeEditOutline size={16} />
                   </div>
-                </div>
-              </div>
-
-              {/* Sixth div */}
-              <div className="flex flex-col justify-center items-center w-full h-1/10 ">
-                <div className="flex w-[80%] flex-row gap-3 items-start">
-                  <div className="font-semibold">Public Files :</div>
-                  <div>5</div>
                 </div>
               </div>
 

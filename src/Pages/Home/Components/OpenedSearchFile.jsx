@@ -15,7 +15,7 @@ import { AiOutlineLike } from "react-icons/ai";
 import { BiLike } from "react-icons/bi";
 import { BiSolidLike } from "react-icons/bi";
 import { LuEye } from "react-icons/lu";
-import { doc, updateDoc, getDocs, query, collection } from 'firebase/firestore';
+import { doc, updateDoc, getDocs, query, collection, setDoc, addDoc } from 'firebase/firestore';
 import { fdb } from '../../../Firebase/firebaseConfig.js';
 import { IoIosShareAlt } from "react-icons/io";
 
@@ -73,10 +73,30 @@ function OpenedSeachFile() {
         }
     }
 
-    const submit = () => {
+    const submit = async () => {
 
-        console.log(details, reason)
+        console.log(data,details, reason)
+        let reports
+        if (data.strikeStatus == null) {
+            reports = 1
+        } else {
+            reports = data.strikeStatus + 1
+            console.log(reports)
+        }
+        await updateDoc(doc(fdb, 'files', data.id), {
+            strikeStatus: reports
+        }).then(async () => {
+            await addDoc(collection(fdb, 'reports'), {
+                fileId: data.id,
+                owner: data.owner,
+                reason: reason,
+                details: details,
+                reportedBy: localStorage.getItem('userEmail').split('@')[0].toLowerCase().trim(),
+                status: "pending"
+            }).then(() => {
 
+            })
+        })
 
         setOpenReport(false)
     }
@@ -97,7 +117,7 @@ function OpenedSeachFile() {
                 console.log('Bookmark Removed')
             })
         }
-        else{
+        else {
             await updateDoc(doc(fdb, 'files', data.id), {
                 bookmarks: [...data.bookmarks, localStorage.getItem('userEmail').split('@')[0]]
             }).then(() => {

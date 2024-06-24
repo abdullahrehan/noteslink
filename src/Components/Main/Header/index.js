@@ -2,6 +2,7 @@ import React, { useContext, useRef, useState } from "react";
 import { FiMenu } from "react-icons/fi";
 import { FaRegBell } from "react-icons/fa";
 import profile from "../../../Assets/Images/profile.png";
+import userImage from "../../../Assets/Images/user.png";
 import Account from "./Account";
 import Notification from './Notification'
 import AppContext from '../../../Context_Api/AppContext.js'
@@ -53,7 +54,7 @@ function Index({menuButton,heading}) {
           <div className="pl-2 center h-full pr-4 center bg-red-00">
             <div className={`w-[45px] h-[45px] rounded-full center bg-red-00 hover:cursor-pointer  ${openAccountSettings ? "bg-gradient-to-tr from-pink-400 to-blue-400 ":null} transition duration-700 ease-in-out`} onClick={openAccountSettingFunction}>
               <div className="w-[93%] h-[93%] rounded-full center overflow-hidden">
-              <img src={state.profilePic} />
+              <img src={state.profilePic ? state.profilePic : userImage} />
               </div>
             </div>
           </div>
