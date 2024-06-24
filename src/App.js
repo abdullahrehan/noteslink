@@ -28,7 +28,7 @@ import OpenedSavedFile from "./Pages/Home/Components/OpenedSavedFile.jsx";
 import OpenedSearchFile from "./Pages/Home/Components/OpenedSearchFile.jsx";
 
 import Help from "./Pages/Help/index.js";
-import Settings from "./Pages/Settings/index.js";
+import AppIcon from "./Assets/Images/AppIcon.png";
 import UserFeedback from "./Pages/UserFeedback/UserFeedback.jsx";
 import NotFound from "./Pages/NotFound/index.js";
 import HomeReRoute from "./Pages/HomeReRoute/HomeReRoute.jsx";
@@ -111,7 +111,19 @@ const App = () => {
   
 
   return (
-    <div className="bg-red-00 w-full h-[100vh] selection:bg-red-300 select-none">
+    <>
+    <div className="w-full h-[100vh] bg-green-00 center lg:hidden">
+
+      <div className="w-[500px] center flex-col  h-[600px] rounded-[4px] bg-red-00 mb-10 gap-5">
+        <div><img src={AppIcon} className="w-[250px]"/></div>
+        <div className="font-semibold">Download The App </div>
+        <div>
+          <a className="px-4 py-3 bg-gray-600 text-white rounded-[4px]" href="https://drive.google.com/file/d/1g3pOK9xwlSbd-cbRxdPu5Quw2SkpxR6O/view?usp=drivesdk">Download</a>
+        </div>
+      </div>
+
+    </div>
+    <div className="bg-red-00 lg:block hidden w-full h-[100vh] selection:bg-red-300 select-none">
       
       <div className="w-full h-[65px]">
 
@@ -181,9 +193,9 @@ const App = () => {
         </div>
 
       </div>
-
     </div>
-  );
+    </>
+ );
 };
 
 export default App;

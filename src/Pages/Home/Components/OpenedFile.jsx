@@ -45,7 +45,7 @@ function OpenedFile() {
     const [mappedEmails, setMappedEmails] = useState([])
     const [downloadFile, setdownloadFile] = useState(false)
     const [Likes, setLikes] = useState(state.fileViewerContent.likes)
-    const [fileLiked, setFileLiked] = useState(state.fileViewerContent.likedBy.includes(localStorage.getItem("userEmail").split("@")[0]))
+    const [fileLiked, setFileLiked] = useState(state.fileViewerContent.likedBy?.includes(localStorage.getItem("userEmail").split("@")[0]))
 
     let allEmails = [];
     const likeIcon = useRef()

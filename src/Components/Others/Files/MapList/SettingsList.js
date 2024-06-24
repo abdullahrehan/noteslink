@@ -365,13 +365,13 @@ export const PublicFileSettingsData = () => {
         }
       },
     },
-    {
-      name: "Delete File",
-      Icon: <MdDeleteOutline size={20} />,
-      Function: () => {
-        dispatch({ type: "setDeletFilePopup", deletFilePopupAction: true });
-      },
-    },
+    // {
+    //   name: "Delete File",
+    //   Icon: <MdDeleteOutline size={20} />,
+    //   Function: () => {
+    //     dispatch({ type: "setDeletFilePopup", deletFilePopupAction: true });
+    //   },
+    // },
   ];
 };
 
@@ -533,11 +533,15 @@ export const SavedFileSettingsData = () => {
       Icon: <BsPeople size={20} />,
       Function: () => {},
     },
-    {
-      name: "Delete File",
-      Icon: <MdDeleteOutline size={20} />,
-      Function: () => {},
-    },
+    // {
+    //   name: "Delete File",
+    //   Icon: <MdDeleteOutline size={20} />,
+    //   Function: () => {
+
+
+
+    //   },
+    // },
   ];
 };
 async function getAllDescendantIds(parentId) {
