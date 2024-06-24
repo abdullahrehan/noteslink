@@ -17,7 +17,6 @@ function MainFiles({page, content ,id, visibility, data,name , index , homeFiles
 
     }
 
-    console.log(data)
 
    
     return (

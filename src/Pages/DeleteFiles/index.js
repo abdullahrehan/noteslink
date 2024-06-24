@@ -35,7 +35,7 @@ function Index() {
     const q = await getDocs(
       query(
         collection(fdb, "recycleBin"),
-        where("owner", "==", state.email.split("@")[0].trim().toLowerCase()),
+        where("owner", "==", localStorage.getItem("userEmail").split("@")[0].trim().toLowerCase()),
         where("head", "==", true),
       )
     )

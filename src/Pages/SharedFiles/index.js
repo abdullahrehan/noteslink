@@ -26,7 +26,7 @@ function Index() {
       query(
         collection(fdb, "files"),
         where(
-          "bookmarks",
+          "sharedWith",
           "array-contains",
           localStorage.getItem("userEmail").split("@")[0].trim().toLowerCase()
         )
@@ -35,6 +35,7 @@ function Index() {
       .then((querySnapshot) => {
         setData([]);
         querySnapshot.forEach((doc) => {
+          console.log(doc.data())
           setData((prev) => [...prev, doc.data()]);
         });
       })
@@ -48,6 +49,8 @@ function Index() {
   useEffect(() => {
     getData();
   }, []);
+
+  console.log(data)
 
 
   return (

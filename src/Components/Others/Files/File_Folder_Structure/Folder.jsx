@@ -72,7 +72,7 @@ function Folder({ page,id,visibility,data,name,index, homeFilesSettingRef }) {
                     id={id}
                     data={data}
                     // FolderSettingsData={visibility=="public" || visibility=="private" ? FolderSettingsData() : visibility=="saved" ? SavedFolderSettingsData():null}
-                    FolderSettingsData={page=="home"?FolderSettingsData(data):page=="public files"?PublicFolderSettingsData(data):page=="search files"?SearchFolderSettingsData(data):page=="delete files"?DeleteFileSettingsData(data):page=="saved files"?SavedFileSettingsData(data):page=="shared files"?null:null}
+                    FolderSettingsData={page=="home"?FolderSettingsData(data):page=="public files"?PublicFolderSettingsData(data):page=="search files"?SearchFolderSettingsData(data):page=="delete files"?DeleteFileSettingsData(data):page=="saved files"?SavedFileSettingsData(data):page=="shared files"?SharedFileSettingsData(data):null}
                     closeFileSettings={() =>dispatch({ type: 'setOpenFileSettings', openFileSettingsAction:{ value: false, event: null, index: null }})}
                 />
 

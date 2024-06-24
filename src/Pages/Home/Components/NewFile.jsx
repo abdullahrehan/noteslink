@@ -12,7 +12,7 @@ import { FaRegFileAlt } from "react-icons/fa";
 import { IoIosArrowDown } from "react-icons/io";
 import { MdPublic } from "react-icons/md";
 import { MdPublicOff } from "react-icons/md";
-import { setDoc, doc } from 'firebase/firestore';
+import { setDoc, doc, getDocs, where, query, collection } from 'firebase/firestore';
 import { fdb } from '../../../Firebase/firebaseConfig.js';
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -43,250 +43,249 @@ function NewFile() {
         }
     }
 
-    const makeId=(length)=> {
-       
+    const makeId = (length) => {
+
         let result = ''
         const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
         const charactersLength = characters.length
         let counter = 0
-       
+
         while (counter < length) {
             result += characters.charAt(Math.floor(Math.random() * charactersLength))
             counter += 1
         }
-       
+
         return result
     }
 
     const createFile = async () => {
-        function extractKeywords (str) {
+        function extractKeywords(str) {
             const wordsArray = str.split(/\s+/).filter(word => word.length > 0)
-        
-            if (wordsArray.length > 10) {
-              const stopWords = [
-                ' ',
-                'a',
-                'b',
-                'c',
-                'd',
-                'e',
-                'f',
-                'g',
-                'h',
-                'i',
-                'j',
-                'k',
-                'l',
-                'm',
-                'n',
-                'o',
-                'p',
-                'q',
-                'r',
-                's',
-                't',
-                'u',
-                'v',
-                'w',
-                'x',
-                'y',
-                'z',
-                'a',
-                'used',
-                'about',
-                'above',
-                'after',
-                'again',
-                'against',
-                'all',
-                'am',
-                'an',
-                'and',
-                'any',
-                'are',
-                "aren't",
-                'as',
-                'at',
-                'be',
-                'because',
-                'been',
-                'before',
-                'being',
-                'below',
-                'between',
-                'both',
-                'but',
-                'by',
-                "can't",
-                'cannot',
-                'could',
-                "couldn't",
-                'did',
-                "didn't",
-                'do',
-                'does',
-                "doesn't",
-                'doing',
-                "don't",
-                'down',
-                'during',
-                'each',
-                'few',
-                'for',
-                'from',
-                'further',
-                'had',
-                "hadn't",
-                'has',
-                "hasn't",
-                'have',
-                "haven't",
-                'having',
-                'he',
-                "he'd",
-                "he'll",
-                "he's",
-                'her',
-                'here',
-                "here's",
-                'hers',
-                'herself',
-                'him',
-                'himself',
-                'his',
-                'how',
-                "how's",
-                'i',
-                "i'd",
-                "i'll",
-                "i'm",
-                "i've",
-                'if',
-                'in',
-                'into',
-                'is',
-                "isn't",
-                'it',
-                "it's",
-                'its',
-                'itself',
-                "let's",
-                'me',
-                'more',
-                'most',
-                "mustn't",
-                'my',
-                'myself',
-                'no',
-                'nor',
-                'not',
-                'of',
-                'off',
-                'on',
-                'once',
-                'only',
-                'or',
-                'other',
-                'ought',
-                'our',
-                'ours',
-                'ourselves',
-                'out',
-                'over',
-                'own',
-                'same',
-                "shan't",
-                'she',
-                "she'd",
-                "she'll",
-                "she's",
-                'should',
-                "shouldn't",
-                'so',
-                'some',
-                'such',
-                'than',
-                'that',
-                "that's",
-                'the',
-                'their',
-                'theirs',
-                'them',
-                'themselves',
-                'then',
-                'there',
-                "there's",
-                'these',
-                'they',
-                "they'd",
-                "they'll",
-                "they're",
-                "they've",
-                'this',
-                'those',
-                'through',
-                'to',
-                'too',
-                'under',
-                'until',
-                'up',
-                'very',
-                'was',
-                "wasn't",
-                'we',
-                "we'd",
-                "we'll",
-                "we're",
-                "we've",
-                'were',
-                "weren't",
-                'what',
-                "what's",
-                'when',
-                "when's",
-                'where',
-                "where's",
-                'which',
-                'while',
-                'who',
-                "who's",
-                'whom',
-                'why',
-                "why's",
-                'with',
-                "won't",
-                'would',
-                "wouldn't",
-                'you',
-                "you'd",
-                "you'll",
-                "you're",
-                "you've",
-                'your',
-                'yours',
-                'yourself',
-                'yourselves',
-              ]
-              const cleanedStr = str.toLowerCase().replace(/[.,]/g, '')
-              const words = cleanedStr.split(/\s+/)
-              // console.log(stopWords);
-              const filteredWords = words.filter(word => !stopWords.includes(word))
-              const frequencyMap = filteredWords.reduce((map, word) => {
-                map[word] = (map[word] || 0) + 1
-                return map
-              }, {})
-        
-              const frequencyArray = Object.entries(frequencyMap)
-              frequencyArray.sort((a, b) => b[1] - a[1])
-              const topN = 10
-              const keywords = frequencyArray.slice(0, topN).map(item => item[0])
-              return keywords
-            } else {
-              return []
-            }
-          }
 
-        setFileSaved(true)
+            if (wordsArray.length > 10) {
+                const stopWords = [
+                    ' ',
+                    'a',
+                    'b',
+                    'c',
+                    'd',
+                    'e',
+                    'f',
+                    'g',
+                    'h',
+                    'i',
+                    'j',
+                    'k',
+                    'l',
+                    'm',
+                    'n',
+                    'o',
+                    'p',
+                    'q',
+                    'r',
+                    's',
+                    't',
+                    'u',
+                    'v',
+                    'w',
+                    'x',
+                    'y',
+                    'z',
+                    'a',
+                    'used',
+                    'about',
+                    'above',
+                    'after',
+                    'again',
+                    'against',
+                    'all',
+                    'am',
+                    'an',
+                    'and',
+                    'any',
+                    'are',
+                    "aren't",
+                    'as',
+                    'at',
+                    'be',
+                    'because',
+                    'been',
+                    'before',
+                    'being',
+                    'below',
+                    'between',
+                    'both',
+                    'but',
+                    'by',
+                    "can't",
+                    'cannot',
+                    'could',
+                    "couldn't",
+                    'did',
+                    "didn't",
+                    'do',
+                    'does',
+                    "doesn't",
+                    'doing',
+                    "don't",
+                    'down',
+                    'during',
+                    'each',
+                    'few',
+                    'for',
+                    'from',
+                    'further',
+                    'had',
+                    "hadn't",
+                    'has',
+                    "hasn't",
+                    'have',
+                    "haven't",
+                    'having',
+                    'he',
+                    "he'd",
+                    "he'll",
+                    "he's",
+                    'her',
+                    'here',
+                    "here's",
+                    'hers',
+                    'herself',
+                    'him',
+                    'himself',
+                    'his',
+                    'how',
+                    "how's",
+                    'i',
+                    "i'd",
+                    "i'll",
+                    "i'm",
+                    "i've",
+                    'if',
+                    'in',
+                    'into',
+                    'is',
+                    "isn't",
+                    'it',
+                    "it's",
+                    'its',
+                    'itself',
+                    "let's",
+                    'me',
+                    'more',
+                    'most',
+                    "mustn't",
+                    'my',
+                    'myself',
+                    'no',
+                    'nor',
+                    'not',
+                    'of',
+                    'off',
+                    'on',
+                    'once',
+                    'only',
+                    'or',
+                    'other',
+                    'ought',
+                    'our',
+                    'ours',
+                    'ourselves',
+                    'out',
+                    'over',
+                    'own',
+                    'same',
+                    "shan't",
+                    'she',
+                    "she'd",
+                    "she'll",
+                    "she's",
+                    'should',
+                    "shouldn't",
+                    'so',
+                    'some',
+                    'such',
+                    'than',
+                    'that',
+                    "that's",
+                    'the',
+                    'their',
+                    'theirs',
+                    'them',
+                    'themselves',
+                    'then',
+                    'there',
+                    "there's",
+                    'these',
+                    'they',
+                    "they'd",
+                    "they'll",
+                    "they're",
+                    "they've",
+                    'this',
+                    'those',
+                    'through',
+                    'to',
+                    'too',
+                    'under',
+                    'until',
+                    'up',
+                    'very',
+                    'was',
+                    "wasn't",
+                    'we',
+                    "we'd",
+                    "we'll",
+                    "we're",
+                    "we've",
+                    'were',
+                    "weren't",
+                    'what',
+                    "what's",
+                    'when',
+                    "when's",
+                    'where',
+                    "where's",
+                    'which',
+                    'while',
+                    'who',
+                    "who's",
+                    'whom',
+                    'why',
+                    "why's",
+                    'with',
+                    "won't",
+                    'would',
+                    "wouldn't",
+                    'you',
+                    "you'd",
+                    "you'll",
+                    "you're",
+                    "you've",
+                    'your',
+                    'yours',
+                    'yourself',
+                    'yourselves',
+                ]
+                const cleanedStr = str.toLowerCase().replace(/[.,]/g, '')
+                const words = cleanedStr.split(/\s+/)
+                // console.log(stopWords);
+                const filteredWords = words.filter(word => !stopWords.includes(word))
+                const frequencyMap = filteredWords.reduce((map, word) => {
+                    map[word] = (map[word] || 0) + 1
+                    return map
+                }, {})
+
+                const frequencyArray = Object.entries(frequencyMap)
+                frequencyArray.sort((a, b) => b[1] - a[1])
+                const topN = 10
+                const keywords = frequencyArray.slice(0, topN).map(item => item[0])
+                return keywords
+            } else {
+                return []
+            }
+        }
+
         const data = {
             id: makeId(40),
             name: fileName,
@@ -294,7 +293,7 @@ function NewFile() {
             status: fileTypeSetting,
             keywords: extractKeywords(fileContent),
             content: [fileContent],
-            parent: folderID==undefined?"":folderID,
+            parent: folderID == undefined ? "" : folderID,
             path: [""],
             interactions: 0,
             likes: 0,
@@ -312,19 +311,36 @@ function NewFile() {
             urls: [fileLink],
         }
         console.log(data.id)
-        await setDoc(doc(fdb, "files", data.id), data).then(() => {
-           
-            setFileSaved(false)
-            setTimeout(() => {dispatch({ type: 'setAddNewTextfile', addNewTextfileAction: false });
-            dispatch({ type: "setRefreshData", refreshDataAction: true });
+        const userEmail = localStorage.getItem("userEmail").split("@")[0].trim().toLowerCase();
+        const folderIdValue = folderID === undefined ? "" : folderID;
 
-            }, 100)
+        const fileQuery = query(
+            collection(fdb, "files"),
+            where("owner", "==", userEmail),
+            where("parent", "==", folderIdValue),
+            where("name", "==", fileName)
+        );
 
-        })
+        const querySnapshot = await getDocs(fileQuery);
+
+        if (querySnapshot.empty) {
+            setFileSaved(true)
+
+            await setDoc(doc(fdb, "files", data.id), data);
+
+            setFileSaved(false);
+            setTimeout(() => {
+                dispatch({ type: 'setAddNewTextfile', addNewTextfileAction: false });
+                dispatch({ type: "setRefreshData", refreshDataAction: true });
+            }, 100);
+        } else {
+            alert("File Name Already exists, use a different name!");
+        }
+
     }
     return (
-       
-       <div className='fixed z-40 top-0 left-0 w-[100vw] h-[100vh] bg-[#0009]  center '>
+
+        <div className='fixed z-40 top-0 left-0 w-[100vw] h-[100vh] bg-[#0009]  center '>
 
             <div className={`h-[92%]  w-[50%] bg-[#EAEAEA] relative rounded-[5px] relative  flex flex-col center`}>
 
@@ -404,9 +420,9 @@ function NewFile() {
                     </div>
 
                     <div className={`w-[100%]  bg-green-00 transition-all duration-500 ease-in-out overflow-hidden  border-black ${openSaveOptions ? 'h-[150px]' : 'h-[0px]'} rounded-tl-[5px] rounded-[5px] borde-t-[px]`}>
-                      
+
                         <div className='w-full relative h-[40%] bg-red-00 flex items-center justify-between pr-2 pl-2 '>
-                      
+
                             <div className='flex text-base gap-2'>
                                 <div className='font-medium'>Link</div>
                                 <div className='min-w-[200px] h-[30px] rounded-[4px overflow-hidden bg-green-00 flex items-center border-gray-400 border-b-[1px]'><input placeholder='https://www.youtube.com/' className='w-full text-sm pl-2 h-full bg-[#0000] outline-none ' onChange={(e) => setFileLink(e.target.value)} /></div>
@@ -423,7 +439,7 @@ function NewFile() {
                             <div className='text-base bg-[#2D2D2D] py-3 px-8 rounded-[5px] text-white w-auto hover:cursor-pointer hover:bg-[#434343] '
                                 onClick={createFile}>Save</div>
                             <div className='w-[150px]'></div>
-                       
+
                         </div>
 
                     </div>

@@ -401,7 +401,7 @@ export const SearchFileSettingsData = () => {
             likes: data.interactions,
             value: true,
             id: data.id,
-            bookmarks:data.bookmarks,
+            bookmarks: data.bookmarks,
             name: data.name,
             content: data.content,
             url: data.urls,
@@ -521,26 +521,68 @@ export const DeleteFileSettingsData = () => {
     {
       name: "Restore",
       Icon: <FaRegFolderOpen size={20} />,
-      Function: (data) => {
-        console.log(data);
-        dispatch({
-          type: "setSavedFileViewerContent",
-          savedFileViewerContentAction: {
-            owner: data.owner,
-            likes: data.interactions,
-            value: true,
-            id: data.id,
-            name: data.name,
-            content: data.content,
-            url: data.urls,
-            modifiedAt: data.modifiedAt,
-            interactions: data.interactions,
-            sharedWith: data.sharedWith,
-            viewers: data.viewers,
-            status: data.status,
-          },
-        });
-        // dispatch({ type: "setAddNewTextfile", addNewTextfileAction: true });
+      Function: async (fId, fData) => {
+        console.log("delete pressed");
+        if (fData.type === "folder") {
+          getAllDescendantIds(fData.id)
+            .then((allIds) => {
+              console.log("All descendant IDs:", allIds);
+              allIds.push(fData.id); // Include the folder itself
+              allIds.forEach(async (id) => {
+                await getDocs(doc(fdb, "recycleBin", id)).then(async (response) => {
+                  const owner = response.data().owner;
+                  if (
+                    localStorage
+                      .getItem("userEmail")
+                      .split("@")[0]
+                      .toLowerCase() === owner
+                  ) {
+                    await deleteDoc(doc(fdb, "recycleBin", id))
+                      .then(async () => {
+                        if (response.data().id == fId) {
+                          await setDoc(
+                            doc(fdb, "files", response.data().id),
+                            { ...response.data(), head: true }
+                          );
+                        } else {
+                          await setDoc(doc(fdb, "recycleBin", response.data().id), {
+                            ...response.data(),
+                            head: false,
+                          });
+                        }
+                      })
+                      .catch((error) => {
+                        console.error("Error deleting document:", error);
+                      });
+                  } else {
+                  }
+                });
+              });
+            })
+            .catch((error) => {
+              console.error("Error fetching descendant IDs:", error);
+              // setWaiting(false);
+            });
+        } else {
+          await getDoc(doc(fdb, "recycleBin", fId)).then(async (response) => {
+            const owner = response.data().owner;
+            if (
+              localStorage.getItem("userEmail").split("@")[0].toLowerCase() ===
+              owner
+            ) {
+              await setDoc(doc(fdb, "files", response.data().id), {
+                ...response.data(),
+                head: true,
+              });
+              await deleteDoc(doc(fdb, "recycleBin", response.data().id))
+                .then(async () => {})
+                .catch((error) => {
+                  console.error("Error deleting document:", error);
+                });
+            } else {
+            }
+          });
+        }
       },
     },
     {
@@ -572,7 +614,6 @@ export const DeleteFileSettingsData = () => {
   ];
 };
 
-
 export const SharedFileSettingsData = () => {
   const { state, dispatch } = useContext(AppContext);
 
@@ -603,9 +644,18 @@ export const SharedFileSettingsData = () => {
       },
     },
     {
-      name: "Delete File",
+      name: "Remove Access",
       Icon: <BsPeople size={20} />,
-      Function: async (id, selected) => {},
+      Function: async (id, selected) => {
+        let data = selected.sharedWith.filter(
+          (data) => data !== localStorage.getItem("userEmail").split("@")[0]
+        )
+        console.log(selected.sharedWith,data)
+        console.log('here')
+        await updateDoc(doc(fdb, "files", id), {
+          sharedWith: data
+        });
+      },
     },
   ];
 };

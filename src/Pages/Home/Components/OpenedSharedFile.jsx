@@ -214,7 +214,7 @@ function OpenedFile() {
                     <div className='w-[33%] h-full flex justify-end items-end pr-1 pb-2 bg-red-00 gap-3 '>
 
                         <div className='hover:cursor-pointer' onClick={()=>setdownloadFile(true)}><FiDownload size={22} /></div>
-                        <div className='w-[100px] h-[25px] relative rounded-[2px] borde border-gray-500 center hover:cursor-pointer shadow-[0_3px_10px_rgb(0,0,0,0.2)] ' onClick={() => setOpenFileTypeSetting(!openFileTypeSetting)}>
+                        {/* <div className='w-[100px] h-[25px] relative rounded-[2px] borde border-gray-500 center hover:cursor-pointer shadow-[0_3px_10px_rgb(0,0,0,0.2)] ' onClick={() => setOpenFileTypeSetting(!openFileTypeSetting)}>
                             <div className='w-[70%] center text-base gap-1'><MdPublic size={15} />{state.sharedFileViewerContent.status == "public" ? "Public" : "Private"}</div>
                             <div className='w-[30%] h-full  center bg-red-00' >
                                 <IoIosArrowDown size={16} />
@@ -226,7 +226,7 @@ function OpenedFile() {
                                 <button className='w-[90%] h-[45%] flex items-center pl-1 gap-1 hover:cursor-pointer hover:bg-gray-200 text-base' disabled={state.sharedFileViewerContent.status == "private" ? true : false} onClick={() => changeFileType("private")}><MdPublicOff size={15} />Private</button>
 
                             </div>
-                        </div>
+                        </div> */}
                     </div>
 
 
@@ -266,10 +266,10 @@ function OpenedFile() {
                             </div>
 
 
-                            <div className={`flex text-base gap-2 shadow-[inset_-12px_-8px_40px_#46464620] absolute right-[50px] transition-all duration-200 ease-linear  ${openSaveOptions ? "delay-200 top-[10px]" : "-top-[32px]"}  w-[32px] h-[32px] bg-gray-300 hover:bg-gray-400 hover:cursor-pointer center rounded-full `}>
+                            {/* <div className={`flex text-base gap-2 shadow-[inset_-12px_-8px_40px_#46464620] absolute right-[50px] transition-all duration-200 ease-linear  ${openSaveOptions ? "delay-200 top-[10px]" : "-top-[32px]"}  w-[32px] h-[32px] bg-gray-300 hover:bg-gray-400 hover:cursor-pointer center rounded-full `}>
                                 <div className='font-medium ' onClick={() => setShowSharedEmail(true)}><IoIosShareAlt size={16} /></div>
 
-                            </div>
+                            </div> */}
 
                         </div>
 
