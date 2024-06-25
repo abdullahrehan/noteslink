@@ -100,6 +100,8 @@ const App = () => {
       getUserData()
       .then(()=>getFilesData())
       dispatch({ type: "setRefreshData", refreshDataAction: true });
+      dispatch({type: "setRefreshTabs", refreshTabsAction: true});
+
     }
 
     if (Cookies.get("isAdmin") === "true") {

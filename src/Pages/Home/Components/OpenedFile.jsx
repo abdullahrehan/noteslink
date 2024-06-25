@@ -151,7 +151,7 @@ function OpenedFile() {
             {
                 name: fileName,
                 content: fileContent.split('\n'),
-                url: fileLink == null ? [] : fileLink
+                Url: fileLink == null ? [] : fileLink
             })
             .then(() => { 
                 setFileSaved(false);
@@ -235,15 +235,15 @@ function OpenedFile() {
     }
 
     useEffect(() => {
-
+console.log(state.fileViewerContent.url !== undefined ? state.fileViewerContent.url[0] : undefined);
         if (state.fileViewerContent.value) {
             setFileName(state.fileViewerContent.name);
-            setFileLink(state.fileViewerContent.urls !== undefined ? state.fileViewerContent.urls[0] : undefined);
+            setFileLink(state.fileViewerContent.url !== undefined ? state.fileViewerContent.url[0] : undefined);
             setFileContent(state.fileViewerContent.content);
         }
         else if (state.sharedFileViewerContent.value) {
             setFileName(state.sharedFileViewerContent.name);
-            setFileLink(state.sharedFileViewerContent.urls !== undefined ? state.sharedFileViewerContent.urls[0] : undefined);
+            setFileLink(state.sharedFileViewerContent.url !== undefined ? state.sharedFileViewerContent.url[0] : undefined);
             setFileContent(state.sharedFileViewerContent.content);
         }
 
@@ -347,7 +347,7 @@ function OpenedFile() {
                         <div className='w-full relative h-[40%] bg-red-00 flex items-center justify-between pr-2 pl-2 '>
                             <div className='flex text-base gap-2'>
                                 <div className='font-medium'>Link</div>
-                                <div className='min-w-[200px] h-[30px] rounded-[4px overflow-hidden bg-green-00 flex items-center border-gray-400 border-b-[1px]'><input placeholder='https://www.youtube.com/' className='w-full text-sm pl-2 h-full bg-[#0000] outline-none ' onChange={(e) => setFileLink(e.target.value)} /></div>
+                                <div className='min-w-[200px] h-[30px] rounded-[4px overflow-hidden bg-green-00 flex items-center border-gray-400 border-b-[1px]'><input placeholder='https://www.youtube.com/' className='w-full text-sm pl-2 h-full bg-[#0000] outline-none ' onChange={(e) => setFileLink(e.target.value)} value={fileLink}/></div>
 
                             </div>
 

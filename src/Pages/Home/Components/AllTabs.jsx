@@ -18,6 +18,8 @@ function AllTabs({ setLoading }) {
 
         const fetchTabs = async () => {
 
+            console.log(localStorage.getItem("userEmail"));
+
             const data = await getDoc(doc(fdb, 'users', localStorage.getItem("userEmail")))
             console.log(data.data())    
             setTabs(data.data().tabs)
@@ -28,12 +30,12 @@ function AllTabs({ setLoading }) {
 
     }, [state.email,state.refreshTabs])
 
-    // console.log(tabs)
+    console.log(tabs)
 
 
     return (
 
-        <div className='w-full h-full center '>
+        <div className='w-full h-full center ' >
 
             <div className='w-[99.5%] h-full flex flex-col '>
 
@@ -57,7 +59,7 @@ function AllTabs({ setLoading }) {
                                 index={index}
                                 setCurrentTabIndex={(data) => setCurrentTabIndex(data)}
                                 tabType={0}
-                                tabs={tabs.length>1?tabs[0]:tabs}
+                                tabs={tabs}
                                 setTabs={(data) => setTabs(data)}
                                 currentTabIndex={0}
                             />

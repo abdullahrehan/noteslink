@@ -71,17 +71,25 @@ function SignUp({ setSignUpSuccessfull }) {
                     name: username,
                     emailAddress: email,
                     userType: "user",
-                    tabs: { id: "", name: "My Computer" }, status: 'open'
+                    tabs: [{ id: "", name: "My Computer" }],
+                    status: 'open'
                 }).then(async () => {
 
 
-                    Cookies.set('userEmail', JSON.stringify(email), { expires: 7 });
-                    localStorage.setItem('userEmail', JSON.stringify(email))
-                    localStorage.setItem('isLogin', true)
-                    dispatch({ type: "setName", Name: username });
-                    dispatch({ type: "setEmail", Email: email });
+
+                    // Cookies.set('userEmail', JSON.stringify(email), { expires: 7 });
+                    // localStorage.setItem('userEmail', JSON.stringify(email))
+                    // localStorage.setItem('isLogin', true)
+                    // dispatch({ type: "setName", Name: username });
+                    // dispatch({ type: "setEmail", Email: email });
                     setSignUpSuccessfull(false)
-                    navigate("/noteslink")
+                    setShowConfirmPassword("")
+                    setPassword("")
+                    setEmail("")
+                    setUsername("")
+                    setConfirmPassword("")
+                    alert("Account Created successfully . You can now Log in .")
+                    // navigate("/noteslink")
 
                 }
                 ).catch(err => console.log(err))
@@ -187,7 +195,7 @@ function SignUp({ setSignUpSuccessfull }) {
 
                 <button className="px-5 py-3 bg-[#535353] rounded-[4px] text-white text-base hover:cursor-pointer hover:bg-[#2D2D2D]" onClick={onSignUp}>
 
-                    SignUp
+                    Create Account
 
                 </button>
 

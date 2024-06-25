@@ -163,7 +163,7 @@ export const FileSettingsData = (data) => {
       name: "Open File",
       Icon: <FaRegFolderOpen size={20} />,
       Function: () => {
-        // console.log(data)
+        console.log(data)
         dispatch({
           type: "setFileViewerContent",
           fileViewerContentAction: {
